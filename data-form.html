@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Parish Financial Report</title>
+  <link rel="stylesheet" href="style.css" type="text/css">
+  <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+</head>
+<body>
+  <script>
+    var myDataRef = new Firebase('https://qba6bmkso0x.firebaseio-demo.com/');
+  </script>
+  <section class=form>
+  <h1>Parish Information</h1>
+  <p><label>Parish: <input name=parish_name size=50></label>
+  <p><label>City: <input name=city size=30></label>
+  <label>State: <input name=state size=2></label>
+  <label>ZIP: <input name=zip size=10></label>
+
+  <p><label>Priest: <input name=priest_name size=30></label>
+  <label>Phone: <input name=priest_phone size=15 type=tel></label>
+  <label>Email: <input name=priest_email size=40 type=email></label>
+
+  <p><label>President: <input name=pres_name size=30></label>
+  <label>Phone: <input name=pres_phone size=15 type=tel></label>
+  <label>Email: <input name=pres_email size=40 type=email></label>
+
+  <p><label>Treasurer: <input name=treas_name size=30></label>
+  <label>Phone: <input name=treas_phone size=15 type=tel></label>
+  <label>Email: <input name=treas_email size=40 type=email></label>
+  </section>
+  <section>
+<h1>Financial Data</h1>
+<p>In the following sections, please report the financial activities of your parish for the specified calendar years. You may use a reporting basis that is consistent with the regular accounting practices at your parish. It should be possible to tie your report to the financial statements you are submitting with this report.
+<h3>A. Gross Income</h3>
+<p>Please report gross income for  your parish below. Include all parish income from all sources and for all purposes.
+<table>
+  <thead>
+    <tr><th>2014<th>2013</tr>
+  </thead>
+  <tbody>
+    <tr><td><input class="money" name="-2014" type="text" size=10><td><input class="money" name="-2013" type="text" size=10></tr>
+  </tbody>
+</table>
+<p>If the above numbers do not appear verbatim on your P&L, please explain the calculation here:
+<p><textarea name=income-explanation placeholder="Explanation of gross income calculation" cols=70 rows=3></textarea>
+
+<h3>B. Gross Expenses</h3>
+<p>Please report gross expenses for your parish below. Include all parish expenses for all purposes from all funds, except depreciation.
+<table>
+  <thead>
+    <tr><th>2014<th>2013</tr>
+  </thead>
+  <tbody>
+    <tr><td><input class="money" name="-2014" type="text" size=10><td><input class="money" name="-2013" type="text" size=10></tr>
+  </tbody>
+</table>
+<p>If the above numbers do not appear verbatim on your P&L, please explain the calculation here:
+<p><textarea name=expense-explanation placeholder="Explanation of gross expense calculation" cols=70 rows=3></textarea>
+
+<h3>C. Deductions</h3>
+<p>Please report deductible expenses in the sections below. For all sections, please bear in mind the following:
+<ul>
+  <li>An expense can only be deducted if it was included in gross parish expenses above.
+  <li>No part of the parish priest's salary is ever deductible, even if the priest is engaged in an activity that would otherwise be considered deductible, such as fundraising or religious education.
+</ul>
+<h3>C1. Archdiocese National Ministries Commitment</h3>
+<p>Please report your parish's payments to the Archdiocese for the National Ministries Commitment. Do not include payments for clergy pension or other benefits.
+<table>
+  <thead>
+    <tr><th>2014<th>2013</tr>
+  </thead>
+  <tbody>
+    <tr><td><input class="money" name="-2014" type="text" size=10><td><input class="money" name="-2013" type="text" size=10></tr>
+  </tbody>
+</table>
+<p><label>Line(s) on P&L containing these amounts: <input name="-line" type="text" size=30></label>
+
+<h3>C2. Donations to the Archdiocese or National Ministries</h3>
+<p>If your parish made additional donations to the Archdiocese or to its ministries, please report those here.
+<table>
+  <thead>
+    <tr><th><th>2014<th>2013</tr>
+  </thead>
+  <tbody>
+    <tr><th scope="row">Archdiocese<td><input class="money" name="hchc-2014" type="text" size=10><td><input class="money" name="hchc-2013" type="text" size=10></tr>
+    <tr><th scope="row">Hellenic College/Holy Cross<td><input class="money" name="hchc-2014" type="text" size=10><td><input class="money" name="hchc-2013" type="text" size=10></tr>
+    <tr><th scope="row">St. Basil Academy<td><input class="money" name="-2014" type="text" size=10><td><input class="money" name="-2013" type="text" size=10></tr>
+    <tr><th scope="row">St. Michael Home<td><input class="money" name="-2014" type="text" size=10><td><input class="money" name="-2013" type="text" size=10></tr>
+    <tr><th scope="row">St. Photios Shrine<td><input class="money" name="-2014" type="text" size=10><td><input class="money" name="-2013" type="text" size=10></tr>
+    <tr><th scope="row">Ionian Village<td><input class="money" name="-2014" type="text" size=10><td><input class="money" name="-2013" type="text" size=10></tr>
+    <tr><th scope="row">Order of St. Andrew<td><input class="money" name="-2014" type="text" size=10><td><input class="money" name="-2013" type="text" size=10></tr>
+    <tr><th scope="row">Other<td><input class="money" name="-2014" type="text" size=10><td><input class="money" name="-2013" type="text" size=10></tr>
+  </tbody>
+  <tfoot>
+    <tr><th scope="row">Total<td class=money>$1,234,567<td class=money>$1,234,567</tr>
+  </tfoot>
+</table>
+<p><label>Line(s) on P&L containing these amounts: <input name="arch-donations-line" type="text" size=30></label>
+<p>If you included an amount for "Other", please provide a breakdown by ministry and year here:
+<p><textarea name=other_arch_donations placeholder="Breakdown of donations to other Archdiocesen ministries" cols=70 rows=3></textarea>
+
+<h3>C3. Donations to Assembly of Bishops Authorized Ministries</h3>
+<p>If your parish made donations to any of the following organizations, please report the total of those donations below.
+<ul>
+  <li>IOCC (International Orthodox Christian Charities)
+  <li>OCMC (Orthodox Christian Mission Center)
+  <li>OCF (Orthodox Christian Fellowship)
+  <li>Orthodox Christian Prison Ministries
+  <li>EOCS (Eastern Orthodox Committee on Scouting)
+  <li>OCN (Orthodox Christian Network)
+  <li>OCEC (Orthodox Christian Education Commission)
+  <li>OCAMPR (Orthodox Christian Association of Medicine, Psychology and Religion)
+  <li>Orthodox Christian Education Commission.
+</ul>
+<table>
+  <thead>
+    <tr><th>2014<th>2013</tr>
+  </thead>
+  <tbody>
+    <tr><td><input class="money" name="-2014" type="text" size=10><td><input class="money" name="-2013" type="text" size=10></tr>
+  </tbody>
+</table>
+<p><label>Line(s) on P&L containing these amounts: <input name="-line" type="text" size=20></label>
+
+<h3>C4. Donations to the Metropolis</h3>
+<p>If your parish made payments or donations to support the Metropolis or any of its ministries, please report the total below.
+<table>
+  <thead>
+    <tr><th>2014<th>2013</tr>
+  </thead>
+  <tbody>
+    <tr><td><input class="money" name="-2014" type="text" size=10><td><input class="money" name="-2013" type="text" size=10></tr>
+  </tbody>
+</table>
+<p><label>Line(s) on P&L containing these amounts: <input name="-line" type="text" size=20></label>
+
+<h3>C5. Donations to the Ecumenical Patriarchate</h3>
+<p>If your parish made donations to support the Ecumenical Patriarchate or any of its Patriarchal Institutions, please report the total below.
+<table>
+  <thead>
+    <tr><th>2014<th>2013</tr>
+  </thead>
+  <tbody>
+    <tr><td><input class="money" name="-2014" type="text" size=10><td><input class="money" name="-2013" type="text" size=10></tr>
+  </tbody>
+</table>
+<p><label>Line(s) on P&L containing these amounts: <input name="-line" type="text" size=20></label>
+
+<h3>C6. Capital Improvement Projects</h3>
+<p>Please report deductible capital improvement expenses below in accordance with the following guidelines:
+<ul>
+  <li>The expenses must have been for projects of significant cost and lasting value, such as land purchases, facility construction, iconography, and interior decor (<i>e.g.</i> pews, iconostasion, proskinitaria, <i>etc.</i>).
+  <li>As with all deductions, this deduction only applies for amounts that were included in parish gross expenses (section B, above). If you did not report the capital improvement as an expense, do not take the deduction.
+  <li>For loan payments, see sections C7 and C8 below.
+  <li>Do not deduct an aggregation of small maintenance expenses that do not significantly extend the life of the facility or its major components, or that can be expected to occur on a regular basis every year.
+</ul>
+<table>
+  <thead>
+    <tr><th>2014<th>2013</tr>
+  </thead>
+  <tbody>
+    <tr><td><input class="money" name="-2014" type="text" size=10><td><input class="money" name="-2013" type="text" size=10></tr>
+  </tbody>
+</table>
+<p><label>Line(s) on P&L containing these amounts: <input name="-line" type="text" size=20></label>
+<p>Please list the projects included in the above figures. For each project, indicate the start date, anticipated completion date, and estimated total cost.
+<p><textarea name=other_arch_donations placeholder="List of capital projects" cols=70 rows=6></textarea>
+
+<h3>C7. Construction Loan Interest</h3>
+<p>Please report interest paid on construction loans below.
+<p>Construction loans are short-term, interest-only loans in which the balance increases as payments are made on an ongoing construction project. If your parish's loan requires fixed monthly payments over a period of years and the balance is going down, not up, it is a mortgage and should be reported in section C8 below.
+<table>
+  <thead>
+    <tr><th>2014<th>2013</tr>
+  </thead>
+  <tbody>
+    <tr><td><input class="money" name="-2014" type="text" size=10><td><input class="money" name="-2013" type="text" size=10></tr>
+  </tbody>
+</table>
+<p><label>Line(s) on P&L containing these amounts: <input name="-line" type="text" size=20></label>
+
+<h3>C8. Mortgage Payments</h3>
+<p>Please report the deductible portion of your parish's mortgage payments below. Payments on a mortgage are deductible to the extent they are included in the gross expenses reported in section B, above. For example,
+<ul>
+  <li>If you reported only the interest portion of your mortgage payments as an expense in section B, then only the interest portion is deductible.
+  <li>If you included both interest and principal in section B, both are deductible.
+</ul>
+<table>
+  <thead>
+    <tr><th>2014<th>2013</tr>
+  </thead>
+  <tbody>
+    <tr><td><input class="money" name="-2014" type="text" size=10><td><input class="money" name="-2013" type="text" size=10></tr>
+  </tbody>
+</table>
+<p><label>Line(s) on P&L containing these amounts: <input name="-line" type="text" size=20></label>
+
+<h3>C9. Fundraising Expenses</h3>
+<p>Please report deductible fundraising expenses below, in accordance with the following guidelines:
+<ul>
+  <li>The expenses must have been directly caused by a fundraising activity, such that if the fundraising activity had not been undertaken, the expenses would not have been incurred.
+  <li>Expenses associated with the regular parish stewardship program are not deductible.
+  <li>Do not deduct a portion of regular parish expenses such as the priest's salary or facility maintenance as fundraising expenses.
+  <li>Expenses associated with rental property or businesses operated in parish facilities should not be considered part of the parish and should be excluded from parish gross expenses. However, in order to be excluded, such expenses must actually be measured separately from other parish expenses.
+  <li>As with all deductions, this deduction only applies for amounts that were included in parish gross expenses (section B, above).
+  <li>Utility expenses for fundraising events may be deducted only if they were actually measured apart from regular parish usage.
+</ul>
+<p>Expenses that are typically deducted in this section cover food, materials, rental expenses, and special labor for events such as festivals, dinner dances, and golf outings.
+<table>
+  <thead>
+    <tr><th>2014<th>2013</tr>
+  </thead>
+  <tbody>
+    <tr><td><input class="money" name="-2014" type="text" size=10><td><input class="money" name="-2013" type="text" size=10></tr>
+  </tbody>
+</table>
+<p><label>Line(s) on P&L containing these amounts: <input name="-line" type="text" size=20></label>
+
+<h3>C10. Greek School and Day School Expenses</h3>
+<p>Please report deductible Greek School and Day School expenses below, in accordance with the following guidelines:
+<ul>
+  <li>Expenses must be directly attributable to the operation of the school.
+  <li>Expenses that are typically deducted include teacher salaries, payroll taxes, insurance, equipment, supplies, and books. Other expenses may be deductible if they are directly attributable to the program. 
+  <li>Day School expenses are deductible if the school operates 5 days a week for at least 3 hours each day.
+  <li>As with all deductions, this deduction only applies for amounts that were included in parish gross expenses (section B, above).
+</ul>
+<table>
+  <thead>
+    <tr><th>2014<th>2013</tr>
+  </thead>
+  <tbody>
+    <tr><td><input class="money" name="-2014" type="text" size=10><td><input class="money" name="-2013" type="text" size=10></tr>
+  </tbody>
+</table>
+<p>Below, please identify the line(s) on the P&L containing these expenses. If the expenses are over $10,000, please provide these additional details:
+<ul>
+  <li>Whether income from the school is included in the P&L statements and parish gross income in section A, above. If so, please provide a reference to the lines on the P&L containing school income.
+  <li>Whether any part of the deducted expenses represent an allocation of facilities, maintenance, cleaning, or other expenses that are not directly measured separately from the parish. If so, please provide a breakdown of the expenses between directly measured and allocated amounts, and an explanation of how you arrived at the allocated amounts and why you think they are accurate.
+</ul>
+<p><textarea name= placeholder="Explanation of school expenses" cols=70 rows=9></textarea>
+
+<h3>C11. Religious Education Expenses</h3>
+<p>Please report deductible expenses for religious education below, in accordance with the following guidelines:
+<ul>
+  <li>Sunday School, catechism classes, lecture series and seminars are all examples of religious education programs that may have deductible expenses.
+  <li>The parish priest's salary is never a deductible expense. However, payments to other teachers or visiting speakers may be deducted.
+  <li>Any other expense directly attributable to the program may be deducted, such as payroll taxes, insurance, equipment, supplies, books <i>etc.</i>
+</ul>
+<table>
+  <thead>
+    <tr><th>2014<th>2013</tr>
+  </thead>
+  <tbody>
+    <tr><td><input class="money" name="-2014" type="text" size=10><td><input class="money" name="-2013" type="text" size=10></tr>
+  </tbody>
+</table>
+<p><label>Line(s) on P&L containing these amounts: <input name="-line" type="text" size=20></label>
+
+<h3>C12. Funds paid for catastrophic risk insurance or other unusual circumstances</h3>
+<p>If your parish is subject to large and unusual expenses due to its location, please report them below as they may be deductible. Examples of unusual deductible expenses include:
+<ul>
+  <li>Flood and earthquake insurance.
+  <li>Unusually large taxes from uncommon local ordinances.
+</ul>
+<p>Please note that fire and liability insurance are never deductible because they are not unusual.
+<table>
+  <thead>
+    <tr><th>2014<th>2013</tr>
+  </thead>
+  <tbody>
+    <tr><td><input class="money" name="-2014" type="text" size=10><td><input class="money" name="-2013" type="text" size=10></tr>
+  </tbody>
+</table>
+<p>Please explain the above expenses.
+<p><textarea name= placeholder="Explanation of unusual expenses" cols=70 rows=4></textarea>
+
+<h3>C13. Funds paid for moving expenses of Clergy</h3>
+<p>Please report moving expenses for clergy below.
+<table>
+  <thead>
+    <tr><th>2014<th>2013</tr>
+  </thead>
+  <tbody>
+    <tr><td><input class="money" name="-2014" type="text" size=10><td><input class="money" name="-2013" type="text" size=10></tr>
+  </tbody>
+</table>
+<p><label>Line(s) on P&L containing these amounts: <input name="-line" type="text" size=20></label>
+
+<h3>C14. Outreach and Evangelism</h3>
+<p>Please report deductible outreach and evangelism expenses below, in accordance with the following guidelines:
+<ul>
+  <li>Expenses for charitable outreach programs of the parish are deductible.
+  <li>Charitable donations are deductible.
+  <li>Scholarships are deductible.
+  <li>Expenses for outreach and evangelism to the larger community are generally deductible.
+  <li>Expenses for parish ministries that primarily benefit parishioners and are not directly targeted toward the needy are generally <em>not</em> deductible.
+</ul> 
+<table>
+  <thead>
+    <tr><th>2014<th>2013</tr>
+  </thead>
+  <tbody>
+    <tr><td><input class="money" name="-2014" type="text" size=10><td><input class="money" name="-2013" type="text" size=10></tr>
+  </tbody>
+</table>
+<p>Please identify the line(s) on the P&L containing these amounts. If the amounts exceed $10,000 in any year, please provide more details on what they are for.
+<p><textarea name= placeholder="Explanation of outreach and evangelism expenses" cols=70 rows=4></textarea>
+
+<h3>C15. National Clergy Laity Congress</h3>
+<p>Please report expenses for sending delegates to the Archdiocese Clergy Laity Congress below. Please do not include expenses associated with other meetings or organizations. Note that the Clergy Laity Congress happens only once every two years so you should only have expenses for it on even years.
+<table>
+  <thead>
+    <tr><th>2014<th>2013</tr>
+  </thead>
+  <tbody>
+    <tr><td><input class="money" name="-2014" type="text" size=10><td><input class="money" name="-2013" type="text" size=10></tr>
+  </tbody>
+</table>
+<p><label>Line(s) on P&L containing these amounts: <input name="-line" type="text" size=20></label>
+
+<h3>C16. Other Deductions Approved by Hierarch</h3>
+<p>Please report any special deductions that have been approved by your hierarch below.
+<table>
+  <thead>
+    <tr><th>2014<th>2013</tr>
+  </thead>
+  <tbody>
+    <tr><td><input class="money" name="-2014" type="text" size=10><td><input class="money" name="-2013" type="text" size=10></tr>
+  </tbody>
+</table>
+<p><label>Line(s) on P&L containing these amounts: <input name="-line" type="text" size=20></label>
+<p>Please explain the special deductions.
+<p><textarea name=other_arch_donations placeholder="Explanation of special deductions" cols=70 rows=3></textarea>
+
+
+</section>
+</body>
+</html>

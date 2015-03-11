@@ -1,0 +1,18 @@
+body {
+	width: 7.5in;
+	margin-left: 0.5in;
+	margin-right: 0.5in;
+	text-align: justify;
+}
+label {
+	display: inline-block;
+}
+*.money {
+	text-align: right;
+}
+th[scope="row"] {
+	text-align: left;
+}
+section.form {
+	text-align: left;
+}
