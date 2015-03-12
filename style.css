@@ -1,11 +1,18 @@
 body {
 	width: 7.5in;
-	margin-left: 0.5in;
-	margin-right: 0.5in;
+	margin-left: auto;
+	margin-right: auto;
 	text-align: justify;
 }
 label {
 	display: inline-block;
+}
+span.input-block {
+	display: inline-block;
+	text-align: left;
+	vertical-align: top;
+}
+span.padded-label {
 }
 *.money {
 	text-align: right;
