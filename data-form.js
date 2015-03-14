@@ -5,7 +5,6 @@ app.controller("Ctrl", function($scope, $firebaseObject) {
   url_parser.href = document.URL;
   var pathname = url_parser.pathname;
   var patharray = pathname.split('/');
-  console.log('patharray: ' + patharray);
   if (patharray[1] === 'metropolis' &&
       patharray[3] === 'parish' &&
       patharray[5] === 'data-form') {
@@ -13,9 +12,9 @@ app.controller("Ctrl", function($scope, $firebaseObject) {
     $scope.parish_id = patharray[4];
     $scope.year = patharray[6];
     var ref = new Firebase("https://qba6bmkso0x.firebaseio-demo.com"
-                           + "/metropolis/" + metropolis_id
-                           + "/parish/" + parish_id
-                           + "/data-form/" + year);
+                           + "/metropolis/" + $scope.metropolis_id
+                           + "/parish/" + $scope.parish_id
+                           + "/data-form/" + $scope.year);
 
     // download the data into a local object
     var syncObject = $firebaseObject(ref);
