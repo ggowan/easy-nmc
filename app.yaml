@@ -6,6 +6,10 @@ threadsafe: yes
 
 handlers:
 
+- url: /metropolis/[A-Z]+/parish/[-a-z]*/data-form/20[0-9][0-9]
+  static_files: data-form.html
+  upload: data-form.html
+
 - url: /parish/2016/(.*\.(gif|png|jpg|html|css|js))$
   static_files: \1
   upload: .*\.(gif|png|jpg|html|css|js)$
