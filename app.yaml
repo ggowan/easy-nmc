@@ -9,12 +9,15 @@ handlers:
 - url: /metropolis/[A-Z]+/parish/[-a-z]*/data-form/20[0-9][0-9]
   static_files: data-form.html
   upload: data-form.html
+  secure: always
 
-- url: /parish/2016/(.*\.(gif|png|jpg|html|css|js))$
-  static_files: \1
-  upload: .*\.(gif|png|jpg|html|css|js)$
+- url: /metropolis/[A-Z]+/admin
+  static_files: admin.html
+  upload: admin.html
+  secure: always
 
 - url: /(.*\.(gif|png|jpg|html|css|js))$
   static_files: \1
   upload: .*\.(gif|png|jpg|html|css|js)$
+  secure: always
 

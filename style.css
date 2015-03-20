@@ -1,29 +1,40 @@
 body {
-	width: 7.5in;
-	margin-left: auto;
-	margin-right: auto;
-	text-align: justify;
+  width: 7.5in;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: justify;
 }
 label {
-	display: inline-block;
+  display: inline-block;
 }
 span.input-block {
-	display: inline-block;
-	text-align: left;
-	vertical-align: top;
+  display: inline-block;
+  text-align: left;
+  vertical-align: top;
 }
 span.padded-label {
 }
 *.money {
-	text-align: right;
+  text-align: right;
 }
 th[scope="row"] {
-	text-align: left;
+  text-align: left;
 }
 section.form {
-	text-align: left;
+  text-align: left;
 }
 input.ng-invalid.ng-touched {
-	background-color: #FA787E;
+  background-color: #FF999E;
 }
-
+div.warning {
+  position: fixed;
+  top: 0.1in;
+  right: 0.1in;
+  background-color: #C80000;
+  color: #FFFFFF;
+  padding: 0.2em 1em;
+  font-size: 140%;
+  border-radius: 0.3em;
+  box-shadow: 0.3em 0.3em 0.15em #AFAFAF;
+  text-align: center;
+}
