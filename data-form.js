@@ -14,6 +14,19 @@ function getQueryParams(search) {
   return queryParams;
 }
 
+function sumNumbers(a, b) {
+  if (angular.isNumber(a)) {
+    if (angular.isNumber(b)) {
+      return a + b;
+    } else {
+      return a;
+    }
+  } else if (angular.isNumber(b)) {
+    return b;
+  }
+  return 0;
+}
+
 // Binds the firebase data to a field in the AngularJS scope.
 function bindFirebase($scope, $firebaseObject, ref) {
   var dataFormRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id
@@ -22,10 +35,31 @@ function bindFirebase($scope, $firebaseObject, ref) {
 
   // Setup synchronization between AngularJS and Firebase using AngularFire.
   $firebaseObject(dataFormRef).$bindTo($scope, "firebaseData");
-  $firebaseObject(ref.child(".info")).$bindTo($scope, "firebaseInfo");
+  $firebaseObject(ref.child(".info")).$bindTo($scope, "firebaseInfo").then(function() {
+    $scope.archMinTotal = function(yearObj) {
+      if (yearObj === undefined) return 0;
+      var total = [
+          yearObj.arch_don, yearObj.hchc, yearObj.stmichael, yearObj.stphotios,
+          yearObj.ionian, yearObj.standrew, yearObj.other_arch
+      ].reduce(sumNumbers);
+      return total;
+    };
+    $scope.totalDeductions = function(yearObj) {
+      if (yearObj === undefined) return 0;
+      var total = [
+          yearObj.nmc, $scope.archMinTotal(yearObj), yearObj.auth_min, yearObj.metro,
+          yearObj.patriarch, yearObj.cap, yearObj.const_loan, yearObj.mort,
+          yearObj.fundraising, yearObj.school, yearObj.religious_ed, yearObj.unusual,
+          yearObj.moving, yearObj.outreach, yearObj.clergy_laity, yearObj.other_hier
+      ].reduce(sumNumbers);
+      return total;
+    };
+    $scope.finishedLoading = true;
+  });
 }
 
 app.controller("Ctrl", function($scope, $firebaseObject) {
+  $scope.finishedLoading = false;
   var url_parser = document.createElement('a');
   url_parser.href = document.URL;
   var pathname = url_parser.pathname;
@@ -71,7 +105,7 @@ function looksLikeNumber(val) {
   if (!angular.isString(val)) return false;
   // Make sure there are no extraneous characters and it looks like a number,
   // optionally currency formatted.
-  return /^\s*\$?[,0-9]+\.?\d*\s*$/.test(val);
+  return /^\s*\$?\s*[,0-9]+\.?\d*\s*$/.test(val);
 }
 
 app.directive('dollars', ['currencyFilter', function(currencyFilter) {
@@ -110,7 +144,7 @@ app.directive('dollars', ['currencyFilter', function(currencyFilter) {
           return true;
         }
         if (angular.isNumber(modelValue)) {
-          return modelValue >= 0.0 && modelValue <= 10000000;
+          return modelValue >= 0.0 && modelValue <= 100000000;
         } else {
           return true;
         }

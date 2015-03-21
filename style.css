@@ -17,9 +17,6 @@ span.padded-label {
 *.money {
   text-align: right;
 }
-th[scope="row"] {
-  text-align: left;
-}
 section.form {
   text-align: left;
 }
@@ -37,4 +34,17 @@ div.warning {
   border-radius: 0.3em;
   box-shadow: 0.3em 0.3em 0.15em #AFAFAF;
   text-align: center;
+}
+th {
+  text-align: center;
+}
+th[scope="row"] {
+  text-align: left;
+}
+table.summary {
+  border-collapse: collapse;
+}
+table.summary td, table.summary th {
+  border: thin solid black;
+  padding: 0.1em 0.5em
 }
