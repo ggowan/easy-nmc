@@ -110,8 +110,8 @@
     <tr><th scope="row">Other<td><input class="money" dollars ng-model="firebaseData.Y2013.other_arch" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.other_arch" type="text" size=10></tr>
   </tbody>
   <tfoot>
-    <tr><th scope="row">Total<td class=money>{{ arch_min_total(firebaseData.Y2013) | currency : $ : 0 }}
-    <td class=money>{{ arch_min_total(firebaseData.Y2014) | currency : $ : 0 }}</td></tr>
+    <tr><th scope="row">Total<td class=money>{{ archMinTotal(firebaseData.Y2013) | currency : $ : 0 }}
+    <td class=money>{{ archMinTotal(firebaseData.Y2014) | currency : $ : 0 }}</td></tr>
   </tfoot>
 </table>
 <p><label>Line(s) on P&L containing these amounts: <input ng-model="firebaseData.arch_don_lines" type="text" size=30></label>
