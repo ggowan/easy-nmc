@@ -23,13 +23,16 @@ section.form {
 input.ng-invalid.ng-touched {
   background-color: #FF999E;
 }
-div.warning {
+div.error-container {
   position: fixed;
-  top: 0.1in;
-  right: 0.1in;
+  top: 0em;
+  right: 0.5em;
+}
+div.offline-warning, div.error-message {
   background-color: #C80000;
   color: #FFFFFF;
   padding: 0.2em 1em;
+  margin: 0.5em 0em;
   font-size: 140%;
   border-radius: 0.3em;
   box-shadow: 0.3em 0.3em 0.15em #AFAFAF;

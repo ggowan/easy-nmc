@@ -15,12 +15,18 @@
 
   <script src="/data-form.js"></script>
 </head>
-<body ng-controller="Ctrl" ng-cloak ng-show="finishedLoading">
-  <div ng-show="!firebaseInfo.connected" class="warning">
+<body ng-controller="Ctrl" ng-cloak>
+  <div class="error-container" ng-show="infoFinishedLoading && !firebaseInfo.connected || error">
+  <div ng-show="error" class="error-message">
+  Error: {{ error.code }}<br>
+  <small>Do you have the correct URL?</small>
+  </div>
+  <div ng-show="infoFinishedLoading && !firebaseInfo.connected" class="offline-warning">
   You are offline<br>
   <small>Reconnect for changes to be saved</small>
-  </div>
-  <form novalidate name="form" ng-model-options="{ allowInvalid: true }">
+  </div> <!-- offline-warning -->
+  </div> <!-- error-container -->
+  <form novalidate name="form" ng-model-options="{ allowInvalid: true }" ng-show="dataFinishedLoading">
   <section class=form>
   <h1>National Ministries Commitment Data Form for 2016</h1>
   <h2>Parish Information</h2>
@@ -403,7 +409,6 @@
 <p>Chairperson of parish audit committee: <input size=25 ng-model=firebaseData.audit_approval_name placeholder="Name">
 
 </section>
-
 <section style="color:#6C6C6C;font-size:80%">
 <div>Debug Info</div>
 <div>firebaseData: {{firebaseData}}</div>

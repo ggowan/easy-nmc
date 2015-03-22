@@ -34,8 +34,7 @@ function bindFirebase($scope, $firebaseObject, ref) {
                               + "/data-form/" + $scope.year);
 
   // Setup synchronization between AngularJS and Firebase using AngularFire.
-  $firebaseObject(dataFormRef).$bindTo($scope, "firebaseData");
-  $firebaseObject(ref.child(".info")).$bindTo($scope, "firebaseInfo").then(function() {
+  $firebaseObject(dataFormRef).$bindTo($scope, "firebaseData").then(function() {
     $scope.archMinTotal = function(yearObj) {
       if (yearObj === undefined) return 0;
       var total = [
@@ -54,7 +53,14 @@ function bindFirebase($scope, $firebaseObject, ref) {
       ].reduce(sumNumbers);
       return total;
     };
-    $scope.finishedLoading = true;
+    $scope.dataFinishedLoading = true;
+  }, function(error) {
+    $scope.error = error;
+  });
+  $firebaseObject(ref.child(".info")).$bindTo($scope, "firebaseInfo").then(function() {
+    $scope.infoFinishedLoading = true;
+  }, function(error) {
+    $scope.error = error;
   });
 }
 
