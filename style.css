@@ -4,6 +4,15 @@ body {
   margin-right: auto;
   text-align: justify;
 }
+
+h1, h2, h3, h4 {
+  margin-top: 1em;
+  margin-bottom: 0.3em;
+}
+p {
+  margin-top: 0.3em;
+  margin-bottom: 0.6em;
+}
 label {
   display: inline-block;
 }
@@ -16,9 +25,6 @@ span.padded-label {
 }
 *.money {
   text-align: right;
-}
-section.form {
-  text-align: left;
 }
 input.ng-invalid.ng-touched {
   background-color: #FF999E;
@@ -43,11 +49,15 @@ th {
 }
 th[scope="row"] {
   text-align: left;
+  font-weight: normal;
 }
-table.summary {
+table.bordered-table {
   border-collapse: collapse;
 }
-table.summary td, table.summary th {
-  border: thin solid black;
+table.bordered-table td, table.bordered-table th {
+  border: thin solid gray;
   padding: 0.1em 0.5em
+}
+table.bordered-table th.indent {
+  padding-left: 1.5em;
 }

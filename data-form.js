@@ -29,17 +29,38 @@ function sumNumbers(a, b) {
 
 // Binds the firebase data to a field in the AngularJS scope.
 function bindFirebase($scope, $firebaseObject, ref) {
-  var dataFormRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id
-                              + "/parish/" + $scope.parish_id
-                              + "/data-form/" + $scope.year);
+  var parishRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id
+                            + "/parish/" + $scope.parish_id);
+  parishRef.child("name").on("value", function(snap) {
+    $scope.parish_name = snap.val();
+  }, function(error) {
+    $scope.error = error;
+  });
+  parishRef.child("city").on("value", function(snap) {
+    $scope.parish_city = snap.val();
+  }, function(error) {
+    $scope.error = error;
+  });
+  parishRef.child("state").on("value", function(snap) {
+    $scope.parish_state = snap.val();
+  }, function(error) {
+    $scope.error = error;
+  });
+  parishRef.child("drive_folder").on("value", function(snap) {
+    $scope.parish_drive_folder = snap.val();
+  }, function(error) {
+    $scope.error = error;
+  });
+
+  var dataFormRef = parishRef.child("/data-form/" + $scope.year);
 
   // Setup synchronization between AngularJS and Firebase using AngularFire.
   $firebaseObject(dataFormRef).$bindTo($scope, "firebaseData").then(function() {
     $scope.archMinTotal = function(yearObj) {
       if (yearObj === undefined) return 0;
       var total = [
-          yearObj.arch_don, yearObj.hchc, yearObj.stmichael, yearObj.stphotios,
-          yearObj.ionian, yearObj.standrew, yearObj.other_arch
+          yearObj.arch_don, yearObj.hchc, yearObj.stbasil, yearObj.stmichael,
+          yearObj.stphotios, yearObj.ionian, yearObj.standrew, yearObj.other_arch
       ].reduce(sumNumbers);
       return total;
     };
