@@ -59,18 +59,26 @@ function bindFirebase($scope, $firebaseObject, ref) {
     $scope.archMinTotal = function(yearObj) {
       if (yearObj === undefined) return 0;
       var total = [
-          yearObj.arch_don, yearObj.hchc, yearObj.stbasil, yearObj.stmichael,
-          yearObj.stphotios, yearObj.ionian, yearObj.standrew, yearObj.other_arch
+        yearObj.arch_don, yearObj.hchc, yearObj.stbasil, yearObj.stmichael,
+        yearObj.stphotios, yearObj.ionian, yearObj.standrew, yearObj.other_arch
+      ].reduce(sumNumbers);
+      return total;
+    };
+    $scope.authMinTotal = function(yearObj) {
+      if (yearObj === undefined) return 0;
+      var total = [
+        yearObj.iocc, yearObj.ocmc, yearObj.ocf, yearObj.prison_min,
+        yearObj.eocs, yearObj.ocn, yearObj.ocec, yearObj.ocampr, yearObj.ed_comm
       ].reduce(sumNumbers);
       return total;
     };
     $scope.totalDeductions = function(yearObj) {
       if (yearObj === undefined) return 0;
       var total = [
-          yearObj.nmc, $scope.archMinTotal(yearObj), yearObj.auth_min, yearObj.metro,
-          yearObj.patriarch, yearObj.cap, yearObj.const_loan, yearObj.mort,
-          yearObj.fundraising, yearObj.school, yearObj.religious_ed, yearObj.unusual,
-          yearObj.moving, yearObj.outreach, yearObj.clergy_laity, yearObj.other_hier
+        yearObj.nmc, $scope.archMinTotal(yearObj), yearObj.auth_min, yearObj.metro,
+        yearObj.patriarch, yearObj.cap, yearObj.const_loan, yearObj.mort,
+        yearObj.fundraising, yearObj.school, yearObj.religious_ed, yearObj.unusual,
+        yearObj.moving, yearObj.outreach, yearObj.clergy_laity, yearObj.other_hier
       ].reduce(sumNumbers);
       return total;
     };
