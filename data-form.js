@@ -187,4 +187,3 @@ app.directive('dollars', ['currencyFilter', function(currencyFilter) {
     }
   };
 }]);
-
