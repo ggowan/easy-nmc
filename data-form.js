@@ -75,7 +75,7 @@ function bindFirebase($scope, $firebaseObject, ref) {
     $scope.totalDeductions = function(yearObj) {
       if (yearObj === undefined) return 0;
       var total = [
-        yearObj.nmc, $scope.archMinTotal(yearObj), yearObj.auth_min, yearObj.metro,
+        yearObj.nmc, $scope.archMinTotal(yearObj), $scope.authMinTotal(yearObj), yearObj.metro,
         yearObj.patriarch, yearObj.cap, yearObj.const_loan, yearObj.mort,
         yearObj.fundraising, yearObj.school, yearObj.religious_ed, yearObj.unusual,
         yearObj.moving, yearObj.outreach, yearObj.clergy_laity, yearObj.other_hier
@@ -93,8 +93,7 @@ function bindFirebase($scope, $firebaseObject, ref) {
   });
 }
 
-app.controller("Ctrl", function($scope, $firebaseObject) {
-  $scope.finishedLoading = false;
+function setupSession($scope, $firebaseObject, ref, auth) {
   var url_parser = document.createElement('a');
   url_parser.href = document.URL;
   var pathname = url_parser.pathname;
@@ -103,21 +102,6 @@ app.controller("Ctrl", function($scope, $firebaseObject) {
   $scope.metropolis_id = patharray[2];
   $scope.parish_id = patharray[4];
   $scope.year = patharray[6];
-  var ref = new Firebase("https://intense-heat-7228.firebaseio.com/");
-
-  var auth = ref.getAuth();
-  if (!auth) {
-    ref.authAnonymously(function(error, authData) {
-      if (error) {
-        console.log("Login Failed!", error);
-      } else {
-        console.log("Authenticated successfully with payload:", authData);
-        auth = authData;
-      }
-    });
-  } else {
-    console.log("Already authenticated: ", auth);
-  }
   if ("key" in queryParams) {
     var userProfile = ref.child("easy-nmc/user").child(auth.uid);
     var keys = userProfile.child("access-key");
@@ -131,6 +115,25 @@ app.controller("Ctrl", function($scope, $firebaseObject) {
     });
   } else {
     bindFirebase($scope, $firebaseObject, ref);
+  }
+}
+
+app.controller("Ctrl", function($scope, $firebaseObject) {
+  var ref = new Firebase("https://intense-heat-7228.firebaseio.com/");
+
+  var auth = ref.getAuth();
+  if (!auth) {
+    ref.authAnonymously(function(error, authData) {
+      if (error) {
+        console.log("Login Failed!", error);
+      } else {
+        console.log("Authenticated successfully with payload:", authData);
+        setupSession($scope, $firebaseObject, ref, authData);
+      }
+    });
+  } else {
+    console.log("Already authenticated: ", auth);
+    setupSession($scope, $firebaseObject, ref, auth);
   }
 });
 
