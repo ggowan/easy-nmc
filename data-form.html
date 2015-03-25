@@ -30,8 +30,8 @@
   <section class=form>
   <h1>National Ministries Allocation Data Form</h1>
   <p>Please use this form to report your parish's financial information for the National Ministries Allocation Process. The due date for completing this form is <strong>May 15, 2015</strong>. Please bear in mind that the form must be reviewed and approved by the parish priest, president, treasurer, and internal audit committee chairperson by that date.
-  <p>As you enter data into this form, your changes will be automatically saved as you type, as long as there is a working internet connection. A red error message will appear if the connection is lost or the data is not being saved.
-  <p>You may share this form electronically by sending the complete URL to another person. Please note that the URL contains a randomized key that provides access to the form. Every person who has the key will have the ability to view the form and modify its contents.
+  <p>Your changes will be automatically saved as you type, as long as there is a working internet connection. A red error message will appear if the connection is lost or the data is not being saved.
+  <p>You may share this form by sending the complete URL to another person. Please note that the URL contains a randomized key that allows the recipient to view the form and modify its contents.
   <h3>General Information</h3>
   <p><strong>Parish:</strong> {{ parish_name }} in {{ parish_city }}, {{ parish_state }}<br>
   <p><strong>Priest:</strong> <input size=20 ng-model=firebaseData.priest_name placeholder="Priest's Name">
@@ -52,9 +52,12 @@
   </section>
   <section>
 <h3>Financial Data</h3>
-<p>In the following sections, please report the financial activities of your parish for the specified calendar years. You may use a reporting basis that is consistent with the regular accounting systems at your parish. It should be possible to tie your report to the financial statements you are submitting with this report.
+<p>In the following sections, please report the financial activities of your parish for the specified calendar years, including any indirect support received from organizations or individuals. The Archdiocese Finance Committee and Archdiocese Legal Committee have approved the following text to clarify how and when to report indirect support, as required under the Archdiocese Regulations:
+<blockquote>
+All expenses incurred and paid by a supporting foundation, private foundation, public charity, an individual, or any other entity: (i) on behalf of a parish, (ii) are required to operate a parish, or (iii) or maintain parish related assets, are required to be included on Line B of the Archdiocese Allocation Form. The Archdiocese Finance Committee shall have the discretion to work with a parish to impute expenses to a parish and such discretion shall be binding.
+</blockquote>
 <h4>A. Gross Income</h4>
-<p>Please report gross income for  your parish below. Include all parish income from all sources and for all purposes.
+<p>Please report gross income for your parish below. Include all parish income from all sources and for all purposes, including income imputed to the parish based on indirect support.
 <table>
   <thead>
     <tr><th>2013<th>2014</tr>
@@ -67,7 +70,7 @@
 <p><textarea ng-model=firebaseData.income_explanation placeholder="Explanation of gross income calculation" cols=70 rows=3></textarea>
 
 <h4>B. Gross Expenses</h4>
-<p>Please report gross expenses for your parish below. Include all parish expenses for all purposes from all funds, except depreciation.
+<p>Please report gross expenses for your parish below. Include expenses for all purposes from all funds, including expenses imputed to the parish based on indirect support. Do not include depreciation. 
 <table>
   <thead>
     <tr><th>2013<th>2014</tr>
@@ -76,9 +79,8 @@
     <tr><td><input class="money" dollars ng-model="firebaseData.Y2013.expenses" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.expenses" type="text" size=10></tr>
   </tbody>
 </table>
-<p>If the above numbers do not appear exactly as in your P&L, please explain the calculation here:
-<p><textarea ng-model=firebaseData.expense_explanation placeholder="Explanation of gross expense calculation" cols=70 rows=3></textarea>
-
+<p>If the above numbers do not appear exactly as in your P&L, please explain the calculation below.
+<p><textarea ng-model=firebaseData.expense_explanation placeholder="Explanation of gross expense calculation" cols=70 rows=5></textarea>
 <h4>C. Deductions</h4>
 <p>Please report deductible expenses in the sections below. For all sections, please bear in mind the following:
 <ul>
@@ -403,7 +405,7 @@
 <p><strong>Internal Audit Committee Chair</strong>: <input size=25 ng-model=firebaseData.audit_approval_name placeholder="Name">
 <h3>Final Steps</h3>
 <ol>
-  <li>Upload financial statements for 2013 and 2014 to Google Drive in <a target="drive-folder" ng-href="https://drive.google.com/drive/#folders/{{parish_drive_folder}}">this folder</a>. Please include profit & loss statements and balance sheets for each year.
+  <li>Upload financial statements for 2013 and 2014 to <a target="drive-folder" ng-href="https://drive.google.com/drive/#folders/{{parish_drive_folder}}">this Google Drive folder</a>. Please include profit & loss statements and balance sheets for each year.
   <li>Print a copy of this form for your records.
 </ol>
 </section>
