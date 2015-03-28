@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="easyNmcMetro">
+<head>
+  <title>NMC Admin</title>
+  <link rel="stylesheet" href="/style.css" type="text/css">
+
+  <!-- AngularJS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+
+  <!-- Firebase -->
+  <script src="https://cdn.firebase.com/js/client/2.2.2/firebase.js"></script>
+
+  <!-- AngularFire -->
+  <script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
+
+  <script src="/shared.js"></script>
+  <script src="/admin.js"></script>
+</head>
+<body ng-controller="Ctrl" ng-cloak ng-show="parishIdsFinishedLoading && infoFinishedLoading">
+<table class="bordered-table">
+<thead>
+<tr><th>Parish ID</th><th>Parish Name</th><th>City</th><th>State</th><th>Data Forms</th><th>Access Key</th></tr>
+</thead>
+<tbody>
+<tr ng-repeat="(parish_id, parish_data) in parishIds">
+<td>{{ parish_id }}</td>
+<td><input type="text" ng-model=parish_data.name size=25></td>
+<td><input type="text" ng-model=parish_data.city size=15></td>
+<td><input type="text" ng-model=parish_data.state size=2></td>
+<td><a target="data-form" ng-href="parish/{{parish_id}}/data-form/2016?key={{parish_data.access_key}}">2016</a></td>
+<td><small>{{ parish_data.access_key }}</small></td>
+</tr>
+</tbody>
+</table>
+<p><label>New Parish ID: <input type="text" ng-model=new_parish_id size=20></label> <button ng-click="addParish(new_parish_id)">Add Parish</button>
+</body>
+</html>

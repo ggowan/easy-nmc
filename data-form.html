@@ -13,6 +13,7 @@
   <!-- AngularFire -->
   <script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
 
+  <script src="/shared.js"></script>
   <script src="/data-form.js"></script>
 </head>
 <body ng-controller="Ctrl" ng-cloak>
@@ -54,7 +55,7 @@
 <h3>Financial Data</h3>
 <p>In the following sections, please report the financial activities of your parish for the specified calendar years. You may use a reporting basis that is consistent with the regular accounting systems at your parish. It should be possible to tie your report to the financial statements you are submitting with this report.
 <h4>A. Gross Income</h4>
-<p>Please report gross income for  your parish below. Include all parish income from all sources and for all purposes.
+<p>Please report gross income for your parish below. Include all parish income from all sources and for all purposes, including income imputed to the parish from indirect support.
 <table>
   <thead>
     <tr><th>2013<th>2014</tr>
@@ -67,7 +68,7 @@
 <p><textarea ng-model=firebaseData.income_explanation placeholder="Explanation of gross income calculation" cols=70 rows=3></textarea>
 
 <h4>B. Gross Expenses</h4>
-<p>Please report gross expenses for your parish below. Include all parish expenses for all purposes from all funds, except depreciation.
+<p>Please report gross expenses for your parish below. Include expenses for all purposes from all funds, including expenses imputed to the parish from indirect support. Do not include depreciation. 
 <table>
   <thead>
     <tr><th>2013<th>2014</tr>

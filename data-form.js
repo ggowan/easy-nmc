@@ -1,19 +1,5 @@
 var app = angular.module("easyNmc", ["firebase"]);
 
-// Adapted from http://stackoverflow.com/a/2880929 by Andy E.
-function getQueryParams(search) {
-  var match,
-      pl     = /\+/g,  // Regex for replacing addition symbol with a space
-      search = /([^&=]+)=?([^&]*)/g,
-      decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
-      query  = window.location.search.substring(1);
-
-  var queryParams = {};
-  while (match = search.exec(query))
-     queryParams[decode(match[1])] = decode(match[2]);
-  return queryParams;
-}
-
 function sumNumbers(a, b) {
   if (angular.isNumber(a)) {
     if (angular.isNumber(b)) {
@@ -29,30 +15,30 @@ function sumNumbers(a, b) {
 
 // Binds the firebase data to a field in the AngularJS scope.
 function bindFirebase($scope, $firebaseObject, ref) {
-  var parishRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id
-                            + "/parish/" + $scope.parish_id);
-  parishRef.child("name").on("value", function(snap) {
+  var metroRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id);
+  var parishIdRef = metroRef.child("/parish-id/" + $scope.parish_id);
+  parishIdRef.child("name").on("value", function(snap) {
     $scope.parish_name = snap.val();
   }, function(error) {
     $scope.error = error;
   });
-  parishRef.child("city").on("value", function(snap) {
+  parishIdRef.child("city").on("value", function(snap) {
     $scope.parish_city = snap.val();
   }, function(error) {
     $scope.error = error;
   });
-  parishRef.child("state").on("value", function(snap) {
+  parishIdRef.child("state").on("value", function(snap) {
     $scope.parish_state = snap.val();
   }, function(error) {
     $scope.error = error;
   });
+  /*
   parishRef.child("drive_folder").on("value", function(snap) {
     $scope.parish_drive_folder = snap.val();
   }, function(error) {
     $scope.error = error;
-  });
-
-  var dataFormRef = parishRef.child("/data-form/" + $scope.year);
+  });*/
+  var dataFormRef = metroRef.child("/data-form/" + $scope.year + "/parish/" + $scope.parish_id);
 
   // Setup synchronization between AngularJS and Firebase using AngularFire.
   $firebaseObject(dataFormRef).$bindTo($scope, "firebaseData").then(function() {
