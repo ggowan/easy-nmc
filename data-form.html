@@ -17,7 +17,11 @@
   <script src="/data-form.js"></script>
 </head>
 <body ng-controller="Ctrl" ng-cloak>
-  <div class="error-container" ng-show="infoFinishedLoading && !firebaseInfo.connected || error">
+  <div class="fixed-panel">
+  <div style="text-align: right">
+  <button class="image-button" ng-show="dataFinishedLoading" ng-style="editing() ? {'background-color': '#93FA86', 'border-color': '#93FA86'} : {}" ng-click="toggleEditing()">
+  <img alt="pencil icon" src="/pencil-icon.png" width=36 height=36></button>
+  </div>
   <div ng-show="error" class="error-message">
   Error: {{ error.code }}<br>
   <small>Do you have the correct URL?</small>
@@ -33,22 +37,31 @@
   <p>Please use this form to report your parish's financial information for the National Ministries Allocation Process. The due date for completing this form is <strong>May 15, 2015</strong>. Please bear in mind that the form must be reviewed and approved by the parish priest, president, treasurer, and internal audit committee chairperson by that date.
   <p>As you enter data into this form, your changes will be automatically saved as you type, as long as there is a working internet connection. A red error message will appear if the connection is lost or the data is not being saved.
   <p>You may share this form electronically by sending the complete URL to another person. Please note that the URL contains a randomized key that provides access to your data. Every person who has the key will have the ability to view the form and modify its contents.
+  <p>Please follow these steps to verify your changes are being saved, so you don't lose any work:
+  <ol>
+    <li>Click the pencil button in the top right corner. It should turn green to indicate you are editing the form.
+    <li>Make a small change to one of the fields in the form.
+    <li>Refresh the page in your browser.
+    <li>Verify your changes are still there. If so, that means the form is working correctly and your changes are being saved. You may continue making the rest of your changes.
+  </ol>
+  <p>If you have any trouble, please feel free to contact Geoffrey Gowan for assistance at <a href="mailto:geoffrey.gowan@gmail.com">geoffrey.gowan@gmail.com</a> or (510) 230-7650.
+
   <h3>General Information</h3>
   <p><strong>Parish:</strong> {{ parish_name }} in {{ parish_city }}, {{ parish_state }}<br>
-  <p><strong>Priest:</strong> <input size=20 ng-model=firebaseData.priest_name placeholder="Priest's Name">
-  <input size=12 ng-model=firebaseData.priest_phone type=tel placeholder="Phone">
-  <input size=25 ng-model=firebaseData.priest_email type=email placeholder="Email Address"><br>
-  <p><strong>President:</strong> <input size=20 ng-model=firebaseData.pres_name placeholder="President's Name">
-  <input size=12 ng-model=firebaseData.pres_phone type=tel placeholder="Phone">
-  <input size=25 ng-model=firebaseData.pres_email type=email placeholder="Email Address"><br>
-  <p><strong>Treasurer:</strong> <input size=20 ng-model=firebaseData.treas_name placeholder="Treasurer's Name">
-  <input size=12 ng-model=firebaseData.treas_phone type=tel placeholder="Phone">
-  <input size=25 ng-model=firebaseData.treas_email type=email placeholder="Email Address"><br>
+  <p><strong>Priest:</strong> <input size=20 ng-readonly="!editing()" ng-model=firebaseData.priest_name placeholder="Priest's Name">
+  <input size=12 ng-readonly="!editing()" ng-model=firebaseData.priest_phone type=tel placeholder="Phone">
+  <input size=25 ng-readonly="!editing()" ng-model=firebaseData.priest_email type=email placeholder="Email Address"><br>
+  <p><strong>President:</strong> <input size=20 ng-readonly="!editing()" ng-model=firebaseData.pres_name placeholder="President's Name">
+  <input size=12 ng-readonly="!editing()" ng-model=firebaseData.pres_phone type=tel placeholder="Phone">
+  <input size=25 ng-readonly="!editing()" ng-model=firebaseData.pres_email type=email placeholder="Email Address"><br>
+  <p><strong>Treasurer:</strong> <input size=20 ng-readonly="!editing()" ng-model=firebaseData.treas_name placeholder="Treasurer's Name">
+  <input size=12 ng-readonly="!editing()" ng-model=firebaseData.treas_phone type=tel placeholder="Phone">
+  <input size=25 ng-readonly="!editing()" ng-model=firebaseData.treas_email type=email placeholder="Email Address"><br>
 
   <p>If the person preparing this form is not the treasurer, please provide the following:<br>
-  <strong>Preparer:</strong> <input size=20 ng-model=firebaseData.preparer_name placeholder="Preparer's Name">
-  <input size=12 ng-model=firebaseData.preparer_phone type=tel placeholder="Phone">
-  <input size=25 ng-model=firebaseData.preparer_email type=email placeholder="Email Address">
+  <strong>Preparer:</strong> <input size=20 ng-readonly="!editing()" ng-model=firebaseData.preparer_name placeholder="Preparer's Name">
+  <input size=12 ng-readonly="!editing()" ng-model=firebaseData.preparer_phone type=tel placeholder="Phone">
+  <input size=25 ng-readonly="!editing()" ng-model=firebaseData.preparer_email type=email placeholder="Email Address">
 
   </section>
   <section>
@@ -61,11 +74,11 @@
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-model="firebaseData.Y2013.income" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.income" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.income" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.income" type="text" size=10></tr>
   </tbody>
 </table>
 <p>If the above numbers do not appear exactly as in your P&L, please explain the calculation here:
-<p><textarea ng-model=firebaseData.income_explanation placeholder="Explanation of gross income calculation" cols=70 rows=3></textarea>
+<p><textarea ng-readonly="!editing()" ng-model=firebaseData.income_explanation placeholder="Explanation of gross income calculation" cols=70 rows=3></textarea>
 
 <h4>B. Gross Expenses</h4>
 <p>Please report gross expenses for your parish below. Include expenses for all purposes from all funds, including expenses imputed to the parish from indirect support. Do not include depreciation. 
@@ -74,11 +87,11 @@
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-model="firebaseData.Y2013.expenses" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.expenses" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.expenses" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.expenses" type="text" size=10></tr>
   </tbody>
 </table>
 <p>If the above numbers do not appear exactly as in your P&L, please explain the calculation here:
-<p><textarea ng-model=firebaseData.expense_explanation placeholder="Explanation of gross expense calculation" cols=70 rows=3></textarea>
+<p><textarea ng-readonly="!editing()" ng-model=firebaseData.expense_explanation placeholder="Explanation of gross expense calculation" cols=70 rows=3></textarea>
 
 <h4>C. Deductions</h4>
 <p>Please report deductible expenses in the sections below. For all sections, please bear in mind the following:
@@ -93,10 +106,10 @@
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" name="nmc-2013" dollars ng-model="firebaseData.Y2013.nmc" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.nmc" type="text" size=10></tr>
+    <tr><td><input class="money" name="nmc-2013" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.nmc" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.nmc" type="text" size=10></tr>
   </tbody>
 </table>
-<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-model="firebaseData.nmc_lines" type="text" size=20></label>
+<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.nmc_lines" type="text" size=20></label>
 
 <h4>C2. Donations to the Archdiocese or National Ministries</h4>
 <p>If your parish made additional donations to the Archdiocese or to its ministries, please report those here.
@@ -105,23 +118,23 @@
     <tr><th style="border: none"><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><th scope="row">Archdiocese (do not include allocation)<td><input class="money" dollars ng-model="firebaseData.Y2013.arch_don" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.arch_don" type="text" size=10></tr>
-    <tr><th scope="row">Hellenic College/Holy Cross<td><input class="money" dollars ng-model="firebaseData.Y2013.hchc" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.hchc" type="text" size=10></tr>
-    <tr><th scope="row">St. Basil Academy<td><input class="money" dollars ng-model="firebaseData.Y2013.stbasil" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.stbasil" type="text" size=10></tr>
-    <tr><th scope="row">St. Michael Home<td><input class="money" dollars ng-model="firebaseData.Y2013.stmichael" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.stmichael" type="text" size=10></tr>
-    <tr><th scope="row">St. Photios Shrine<td><input class="money" dollars ng-model="firebaseData.Y2013.stphotios" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.stphotios" type="text" size=10></tr>
-    <tr><th scope="row">Ionian Village<td><input class="money" dollars ng-model="firebaseData.Y2013.ionian" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.ionian" type="text" size=10></tr>
-    <tr><th scope="row">Order of St. Andrew<td><input class="money" dollars ng-model="firebaseData.Y2013.standrew" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.standrew" type="text" size=10></tr>
-    <tr><th scope="row">Other<td><input class="money" dollars ng-model="firebaseData.Y2013.other_arch" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.other_arch" type="text" size=10></tr>
+    <tr><th scope="row">Archdiocese (do not include allocation)<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.arch_don" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.arch_don" type="text" size=10></tr>
+    <tr><th scope="row">Hellenic College/Holy Cross<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.hchc" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.hchc" type="text" size=10></tr>
+    <tr><th scope="row">St. Basil Academy<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.stbasil" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.stbasil" type="text" size=10></tr>
+    <tr><th scope="row">St. Michael Home<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.stmichael" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.stmichael" type="text" size=10></tr>
+    <tr><th scope="row">St. Photios Shrine<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.stphotios" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.stphotios" type="text" size=10></tr>
+    <tr><th scope="row">Ionian Village<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.ionian" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.ionian" type="text" size=10></tr>
+    <tr><th scope="row">Order of St. Andrew<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.standrew" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.standrew" type="text" size=10></tr>
+    <tr><th scope="row">Other<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.other_arch" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.other_arch" type="text" size=10></tr>
   </tbody>
   <tfoot>
     <tr><th scope="row">Total<td class=money>{{ archMinTotal(firebaseData.Y2013) | currency : $ : 0 }}
     <td class=money>{{ archMinTotal(firebaseData.Y2014) | currency : $ : 0 }}</td></tr>
   </tfoot>
 </table>
-<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-model="firebaseData.arch_don_lines" type="text" size=20></label>
+<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.arch_don_lines" type="text" size=20></label>
 <p>If you included an amount for "Other", please provide a breakdown by ministry and year here:
-<p><textarea ng-model=firebaseData.other_arch_don_breakdown placeholder="Breakdown of donations to other Archdiocesen ministries" cols=70 rows=3></textarea>
+<p><textarea ng-readonly="!editing()" ng-model=firebaseData.other_arch_don_breakdown placeholder="Breakdown of donations to other Archdiocesen ministries" cols=70 rows=3></textarea>
 
 <h4>C3. Donations to Assembly of Bishops Authorized Ministries</h4>
 <p>If your parish made donations to any of the following organizations, please report those here.
@@ -130,22 +143,22 @@
     <tr><th style="border: none"><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><th scope="row">IOCC (International Orthodox Christian Charities)<td><input class="money" dollars ng-model="firebaseData.Y2013.iocc" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.iocc" type="text" size=10></tr>
-    <tr><th scope="row">OCMC (Orthodox Christian Mission Center)<td><input class="money" dollars ng-model="firebaseData.Y2013.ocmc" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.ocmc" type="text" size=10></tr>
-    <tr><th scope="row">OCF (Orthodox Christian Fellowship)<td><input class="money" dollars ng-model="firebaseData.Y2013.ocf" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.ocf" type="text" size=10></tr>
-    <tr><th scope="row">Orthodox Christian Prison Ministries<td><input class="money" dollars ng-model="firebaseData.Y2013.prison_min" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.prison_min" type="text" size=10></tr>
-    <tr><th scope="row">EOCS (Eastern Orthodox Committee on Scouting)<td><input class="money" dollars ng-model="firebaseData.Y2013.eocs" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.eocs" type="text" size=10></tr>
-    <tr><th scope="row">OCN (Orthodox Christian Network)<td><input class="money" dollars ng-model="firebaseData.Y2013.ocn" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.ocn" type="text" size=10></tr>
-    <tr><th scope="row">OCEC (Orthodox Christian Education Commission)<td><input class="money" dollars ng-model="firebaseData.Y2013.ocec" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.ocec" type="text" size=10></tr>
-    <tr><th scope="row">OCAMPR (Orthodox Christian Association of Medicine, Psychology and Religion)<td><input class="money" dollars ng-model="firebaseData.Y2013.ocampr" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.ocampr" type="text" size=10></tr>
-    <tr><th scope="row">Orthodox Christian Education Commission<td><input class="money" dollars ng-model="firebaseData.Y2013.ed_comm" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.ed_comm" type="text" size=10></tr>
+    <tr><th scope="row">IOCC (International Orthodox Christian Charities)<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.iocc" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.iocc" type="text" size=10></tr>
+    <tr><th scope="row">OCMC (Orthodox Christian Mission Center)<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.ocmc" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.ocmc" type="text" size=10></tr>
+    <tr><th scope="row">OCF (Orthodox Christian Fellowship)<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.ocf" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.ocf" type="text" size=10></tr>
+    <tr><th scope="row">Orthodox Christian Prison Ministries<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.prison_min" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.prison_min" type="text" size=10></tr>
+    <tr><th scope="row">EOCS (Eastern Orthodox Committee on Scouting)<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.eocs" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.eocs" type="text" size=10></tr>
+    <tr><th scope="row">OCN (Orthodox Christian Network)<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.ocn" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.ocn" type="text" size=10></tr>
+    <tr><th scope="row">OCEC (Orthodox Christian Education Commission)<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.ocec" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.ocec" type="text" size=10></tr>
+    <tr><th scope="row">OCAMPR (Orthodox Christian Association of Medicine, Psychology and Religion)<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.ocampr" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.ocampr" type="text" size=10></tr>
+    <tr><th scope="row">Orthodox Christian Education Commission<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.ed_comm" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.ed_comm" type="text" size=10></tr>
   </tbody>
   <tfoot>
     <tr><th scope="row">Total<td class=money>{{ authMinTotal(firebaseData.Y2013) | currency : $ : 0 }}
     <td class=money>{{ authMinTotal(firebaseData.Y2014) | currency : $ : 0 }}</td></tr>
   </tfoot>
 </table>
-<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-model="firebaseData.auth_min_lines" type="text" size=20></label>
+<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.auth_min_lines" type="text" size=20></label>
 
 <h4>C4. Donations to the Metropolis</h4>
 <p>If your parish made payments or donations to support the Metropolis or any of its ministries, please report the total below.
@@ -154,10 +167,10 @@
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-model="firebaseData.Y2013.metro" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.metro" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.metro" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.metro" type="text" size=10></tr>
   </tbody>
 </table>
-<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-model="firebaseData.metro_lines" type="text" size=20></label>
+<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.metro_lines" type="text" size=20></label>
 
 <h4>C5. Donations to the Ecumenical Patriarchate</h4>
 <p>If your parish made donations to support the Ecumenical Patriarchate or any of its Patriarchal Institutions, please report the total below.
@@ -166,10 +179,10 @@
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-model="firebaseData.Y2013.patriarch" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.patriarch" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.patriarch" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.patriarch" type="text" size=10></tr>
   </tbody>
 </table>
-<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-model="firebaseData.patriarch_lines" type="text" size=20></label>
+<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.patriarch_lines" type="text" size=20></label>
 
 <h4>C6. Capital Improvement Projects</h4>
 <p>Please report deductible capital improvement expenses below in accordance with the following guidelines:
@@ -184,12 +197,12 @@
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-model="firebaseData.Y2013.cap" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.cap" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.cap" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.cap" type="text" size=10></tr>
   </tbody>
 </table>
-<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-model="firebaseData.cap_lines" type="text" size=20></label>
+<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.cap_lines" type="text" size=20></label>
 <p>Please list the projects included in the above figures. For each project, indicate the start date, anticipated completion date, and estimated total cost.
-<p><textarea ng-model=firebaseData.cap_projects placeholder="List of capital projects" cols=70 rows=6></textarea>
+<p><textarea ng-readonly="!editing()" ng-model=firebaseData.cap_projects placeholder="List of capital projects" cols=70 rows=6></textarea>
 
 <h4>C7. Construction Loan Interest</h4>
 <p>Please report interest paid on construction loans below.
@@ -199,10 +212,10 @@
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-model="firebaseData.Y2013.const_loan" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.const_loan" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.const_loan" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.const_loan" type="text" size=10></tr>
   </tbody>
 </table>
-<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-model="firebaseData.const_loan_lines" type="text" size=20></label>
+<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.const_loan_lines" type="text" size=20></label>
 
 <h4>C8. Mortgage Payments</h4>
 <p>Please report the deductible portion of your parish's mortgage payments below. Payments on a mortgage are deductible to the extent they are included in the gross expenses reported in section B, above. For example,
@@ -215,10 +228,10 @@
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-model="firebaseData.Y2013.mort" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.mort" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.mort" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.mort" type="text" size=10></tr>
   </tbody>
 </table>
-<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-model="firebaseData.mort_lines" type="text" size=20></label>
+<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.mort_lines" type="text" size=20></label>
 
 <h4>C9. Fundraising Expenses</h4>
 <p>Please report deductible fundraising expenses below, in accordance with the following guidelines:
@@ -236,11 +249,11 @@
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-model="firebaseData.Y2013.fundraising" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.fundraising" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.fundraising" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.fundraising" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Please list the lines on the P&L containing these amounts:
-<p><textarea ng-model=firebaseData.fundraising_lines placeholder="Line(s) or account number(s) on P&L containing fundraising expenses" cols=70 rows=4></textarea>
+<p><textarea ng-readonly="!editing()" ng-model=firebaseData.fundraising_lines placeholder="Line(s) or account number(s) on P&L containing fundraising expenses" cols=70 rows=4></textarea>
 
 <h4>C10. Greek School and Day School Expenses</h4>
 <p>Please report deductible Greek School and Day School expenses below, in accordance with the following guidelines:
@@ -255,10 +268,10 @@
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-model="firebaseData.Y2013.school" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.school" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.school" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.school" type="text" size=10></tr>
   </tbody>
 </table>
-<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-model="firebaseData.school_lines" type="text" size=20></label>
+<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.school_lines" type="text" size=20></label>
 
 <h4>C11. Religious Education Expenses</h4>
 <p>Please report deductible expenses for religious education below, in accordance with the following guidelines:
@@ -273,10 +286,10 @@
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-model="firebaseData.Y2013.religious_ed" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.religious_ed" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.religious_ed" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.religious_ed" type="text" size=10></tr>
   </tbody>
 </table>
-<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-model="firebaseData.religious_ed_lines" type="text" size=20></label>
+<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.religious_ed_lines" type="text" size=20></label>
 
 <h4>C12. Funds paid for catastrophic risk insurance</h4>
 <p>Please report expenses for catastrophic risk insurance such as earthquake or flood insurance below. Please note that typical fire and liability insurance should not be included.
@@ -285,11 +298,11 @@
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-model="firebaseData.Y2013.unusual" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.unusual" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.unusual" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.unusual" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Please explain the above expenses.
-<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-model="firebaseData.catastrophic_lines" type="text" size=20></label>
+<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.catastrophic_lines" type="text" size=20></label>
 
 <h4>C13. Funds paid for moving expenses of Clergy</h4>
 <p>Please report expenses for relocating clergymen to your parish.
@@ -298,10 +311,10 @@
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-model="firebaseData.Y2013.moving" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.moving" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.moving" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.moving" type="text" size=10></tr>
   </tbody>
 </table>
-<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-model="firebaseData.moving_lines" type="text" size=20></label>
+<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.moving_lines" type="text" size=20></label>
 
 <h4>C14. Outreach and Evangelism</h4>
 <p>Please report deductible outreach and evangelism expenses below, in accordance with the following guidelines:
@@ -316,10 +329,10 @@
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-model="firebaseData.Y2013.outreach" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.outreach" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.outreach" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.outreach" type="text" size=10></tr>
   </tbody>
 </table>
-<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-model="firebaseData.outreach_lines" type="text" size=20></label>
+<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.outreach_lines" type="text" size=20></label>
 
 <h4>C15. National Clergy Laity Congress</h4>
 <p>Please report expenses for sending delegates to the Archdiocese Clergy Laity Congress below. Do not include expenses associated with metropolis assembly meetings or other organizations. Note that the Clergy Laity Congress happens only once every two years, so you should only have expenses for it on even years.
@@ -328,10 +341,10 @@
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-model="firebaseData.Y2013.clergy_laity" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.clergy_laity" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.clergy_laity" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.clergy_laity" type="text" size=10></tr>
   </tbody>
 </table>
-<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-model="firebaseData.clergy_laity_lines" type="text" size=20></label>
+<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.clergy_laity_lines" type="text" size=20></label>
 
 <h4>C16. Other Deductions Approved by Hierarch</h4>
 <p>Please report any special deductions that have been approved by your hierarch below.
@@ -340,12 +353,12 @@
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-model="firebaseData.Y2013.other_hier" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.other_hier" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.other_hier" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.other_hier" type="text" size=10></tr>
   </tbody>
 </table>
-<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-model="firebaseData.other_hier_lines" type="text" size=20></label>
+<p><label>Line(s) or account number(s) on P&L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.other_hier_lines" type="text" size=20></label>
 <p>Please explain the special deductions.
-<p><textarea ng-model=firebaseData.other_hier_explanation placeholder="Explanation of special deductions" cols=70 rows=3></textarea>
+<p><textarea ng-readonly="!editing()" ng-model=firebaseData.other_hier_explanation placeholder="Explanation of special deductions" cols=70 rows=3></textarea>
 
 <h4>Property and Liability Insurance</h4>
 <p>Please report the total amount paid for property and liability insurance for your parish. This is collected for informational purposes but is not a deductible expense.
@@ -354,7 +367,7 @@
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-model="firebaseData.Y2013.prop_liab" type="text" size=10><td><input class="money" dollars ng-model="firebaseData.Y2014.prop_liab" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.prop_liab" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.prop_liab" type="text" size=10></tr>
   </tbody>
 </table>
 
@@ -398,10 +411,10 @@
 <section>
 <h3>Approvals</h3>
 <p>Please enter your name below if you approve this report.
-<p><strong>Priest:</strong> <input size=25 ng-model=firebaseData.priest_approval_name placeholder="Name">
-<p><strong>President:</strong> <input size=25 ng-model=firebaseData.pres_approval_name placeholder="Name">
-<p><strong>Treasurer:</strong> <input size=25 ng-model=firebaseData.treas_approval_name placeholder="Name">
-<p><strong>Internal Audit Committee Chair</strong>: <input size=25 ng-model=firebaseData.audit_approval_name placeholder="Name">
+<p><strong>Priest:</strong> <input size=25 ng-readonly="!editing()" ng-model=firebaseData.priest_approval_name placeholder="Name">
+<p><strong>President:</strong> <input size=25 ng-readonly="!editing()" ng-model=firebaseData.pres_approval_name placeholder="Name">
+<p><strong>Treasurer:</strong> <input size=25 ng-readonly="!editing()" ng-model=firebaseData.treas_approval_name placeholder="Name">
+<p><strong>Internal Audit Committee Chair</strong>: <input size=25 ng-readonly="!editing()" ng-model=firebaseData.audit_approval_name placeholder="Name">
 <h3>Final Steps</h3>
 <ol>
   <li>Upload financial statements for 2013 and 2014 to Google Drive in <a target="drive-folder" ng-href="https://drive.google.com/drive/#folders/{{upload_folder}}">this folder</a>. Please include profit & loss statements and balance sheets for each year.

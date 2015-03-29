@@ -29,7 +29,7 @@ span.padded-label {
 input.ng-invalid.ng-touched {
   background-color: #FF999E;
 }
-div.error-container {
+div.fixed-panel {
   position: fixed;
   top: 0em;
   right: 0.5em;
@@ -60,4 +60,7 @@ table.bordered-table td, table.bordered-table th {
 }
 table.bordered-table th.indent {
   padding-left: 1.5em;
+}
+button.image-button {
+  border-width: medium;
 }

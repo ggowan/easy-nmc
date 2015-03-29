@@ -20,21 +20,25 @@ function bindFirebase($scope, $firebaseObject, ref) {
   parishIdRef.child("name").on("value", function(snap) {
     $scope.parish_name = snap.val();
   }, function(error) {
+    console.log("loading name failed: ", error);
     $scope.error = error;
   });
   parishIdRef.child("city").on("value", function(snap) {
     $scope.parish_city = snap.val();
   }, function(error) {
+    console.log("loading city failed: ", error);
     $scope.error = error;
   });
   parishIdRef.child("state").on("value", function(snap) {
     $scope.parish_state = snap.val();
   }, function(error) {
+    console.log("loading state failed: ", error);
     $scope.error = error;
   });
   parishIdRef.child("upload_folder").on("value", function(snap) {
     $scope.upload_folder = snap.val();
   }, function(error) {
+    console.log("loading upload_folder failed: ", error);
     $scope.error = error;
   });
   var dataFormRef = metroRef.child("/data-form/" + $scope.year + "/parish/" + $scope.parish_id);
@@ -67,13 +71,26 @@ function bindFirebase($scope, $firebaseObject, ref) {
       ].reduce(sumNumbers);
       return total;
     };
+    $scope.editing = function() {
+      return $scope.firebaseData.editing_user && $scope.firebaseData.editing_user === $scope.auth.uid
+          && $scope.infoFinishedLoading && $scope.firebaseInfo.connected;
+    };
+    $scope.toggleEditing = function() {
+      if ($scope.editing()) {
+        $scope.firebaseData.editing_user = '';
+      } else {
+        $scope.firebaseData.editing_user = $scope.auth.uid;
+      }
+    };
     $scope.dataFinishedLoading = true;
   }, function(error) {
+    console.log("loading firebaseData failed: ", error);
     $scope.error = error;
   });
   $firebaseObject(ref.child(".info")).$bindTo($scope, "firebaseInfo").then(function() {
     $scope.infoFinishedLoading = true;
   }, function(error) {
+    console.log("loading firebaseInfo failed: ", error);
     $scope.error = error;
   });
 }
@@ -87,6 +104,7 @@ function setupSession($scope, $firebaseObject, ref, auth) {
   $scope.metropolis_id = patharray[2];
   $scope.parish_id = patharray[4];
   $scope.year = patharray[6];
+  $scope.auth = auth;
   if ("key" in queryParams) {
     var userProfile = ref.child("easy-nmc/user").child(auth.uid);
     var keys = userProfile.child("access-key");
