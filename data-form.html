@@ -26,7 +26,7 @@
   Error: {{ error.code }}<br>
   <small>Do you have the correct URL?</small>
   </div>
-  <div ng-show="infoFinishedLoading && !firebaseInfo.connected" class="offline-warning">
+  <div ng-show="dataFinishedLoading && infoFinishedLoading && !firebaseInfo.connected" class="offline-warning">
   You are offline<br>
   <small>Reconnect for changes to be saved</small>
   </div> <!-- offline-warning -->
@@ -35,16 +35,16 @@
   <section class=form>
   <h1>National Ministries Allocation Data Form</h1>
   <p>Please use this form to report your parish's financial information for the National Ministries Allocation Process. The due date for completing this form is <strong>May 15, 2015</strong>. Please bear in mind that the form must be reviewed and approved by the parish priest, president, treasurer, and internal audit committee chairperson by that date.
-  <p>As you enter data into this form, your changes will be automatically saved as you type, as long as there is a working internet connection. A red error message will appear if the connection is lost or the data is not being saved.
-  <p>You may share this form electronically by sending the complete URL to another person. Please note that the URL contains a randomized key that provides access to your data. Every person who has the key will have the ability to view the form and modify its contents.
-  <p>Please follow these steps to verify your changes are being saved, so you don't lose any work:
+  <p>You may share this form by sending the complete URL to another person. Please note that the URL contains a randomized key that allows the recipient to view the form and modify its contents.
+  <p>In order to edit the form, please click the pencil button in the top-right corner. It should turn green to indicate you are editing the form. Only one person will be able to edit the form at a time. Your changes will be automatically saved as you type, as long as there is a working internet connection. A red error message will appear if the connection is lost or the data is not being saved. 
+  <p>Please follow these steps to verify that this form is working correctly on your web browser:
   <ol>
-    <li>Click the pencil button in the top right corner. It should turn green to indicate you are editing the form.
+    <li>Click the pencil button to enter editing mode (it should turn green).
     <li>Make a small change to one of the fields in the form.
     <li>Refresh the page in your browser.
-    <li>Verify your changes are still there. If so, that means the form is working correctly and your changes are being saved. You may continue making the rest of your changes.
+    <li>Verify your changes are still visible. If so, that means the form is working correctly and your changes are being saved.
   </ol>
-  <p>If you have any trouble, please feel free to contact Geoffrey Gowan for assistance at <a href="mailto:geoffrey.gowan@gmail.com">geoffrey.gowan@gmail.com</a> or (510) 230-7650.
+  <p>If the form does not seem to be working, try using a newer web browser, such as <a href="http://www.google.com/chrome/" target="chrome">Google Chrome</a>. You may also contact Geoffrey Gowan for assistance at <a href="mailto:geoffrey.gowan@gmail.com">geoffrey.gowan@gmail.com</a> or (510) 230-7650.
 
   <h3>General Information</h3>
   <p><strong>Parish:</strong> {{ parish_name }} in {{ parish_city }}, {{ parish_state }}<br>
@@ -66,7 +66,10 @@
   </section>
   <section>
 <h3>Financial Data</h3>
-<p>In the following sections, please report the financial activities of your parish for the specified calendar years. You may use a reporting basis that is consistent with the regular accounting systems at your parish. It should be possible to tie your report to the financial statements you are submitting with this report.
+<p>In the following sections, please report the financial activities of your parish for the specified calendar years, including any indirect support received from organizations or individuals. The Archdiocese Finance Committee and Archdiocese Legal Committee have approved the following text to clarify how and when to report indirect support, as required under the Archdiocese Regulations:
+<blockquote>
+All expenses incurred and paid by a supporting foundation, private foundation, public charity, an individual, or any other entity: (i) on behalf of a parish, (ii) are required to operate a parish, or (iii) or maintain parish related assets, are required to be included on Line B of the Archdiocese Allocation Form. The Archdiocese Finance Committee shall have the discretion to work with a parish to impute expenses to a parish and such discretion shall be binding.
+</blockquote>
 <h4>A. Gross Income</h4>
 <p>Please report gross income for your parish below. Include all parish income from all sources and for all purposes, including income imputed to the parish from indirect support.
 <table>
@@ -417,7 +420,7 @@
 <p><strong>Internal Audit Committee Chair</strong>: <input size=25 ng-readonly="!editing()" ng-model=firebaseData.audit_approval_name placeholder="Name">
 <h3>Final Steps</h3>
 <ol>
-  <li>Upload financial statements for 2013 and 2014 to Google Drive in <a target="drive-folder" ng-href="https://drive.google.com/drive/#folders/{{upload_folder}}">this folder</a>. Please include profit & loss statements and balance sheets for each year.
+  <li>Upload financial statements for 2013 and 2014 to <a target="drive-folder" ng-href="https://drive.google.com/drive/#folders/{{upload_folder}}">this Google Drive folder</a>. Please include profit & loss statements and balance sheets for each year.
   <li>Print a copy of this form for your records.
 </ol>
 </section>
