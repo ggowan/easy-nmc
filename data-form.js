@@ -32,12 +32,11 @@ function bindFirebase($scope, $firebaseObject, ref) {
   }, function(error) {
     $scope.error = error;
   });
-  /*
-  parishRef.child("drive_folder").on("value", function(snap) {
-    $scope.parish_drive_folder = snap.val();
+  parishIdRef.child("upload_folder").on("value", function(snap) {
+    $scope.upload_folder = snap.val();
   }, function(error) {
     $scope.error = error;
-  });*/
+  });
   var dataFormRef = metroRef.child("/data-form/" + $scope.year + "/parish/" + $scope.parish_id);
 
   // Setup synchronization between AngularJS and Firebase using AngularFire.
