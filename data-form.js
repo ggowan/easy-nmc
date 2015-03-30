@@ -99,12 +99,18 @@ function setupSession($scope, $firebaseObject, ref, auth) {
   var url_parser = document.createElement('a');
   url_parser.href = document.URL;
   var pathname = url_parser.pathname;
+  // On some browsers the pathname starts with a slash; on others it doesn't.
+  if (pathname.charAt(0) === '/') {
+    // Drop first slash.
+    pathname = pathname.substr(1);
+  }
   var patharray = pathname.split('/');
   var queryParams = getQueryParams(url_parser.search);
-  $scope.metropolis_id = patharray[2];
-  $scope.parish_id = patharray[4];
-  $scope.year = patharray[6];
+  $scope.metropolis_id = patharray[1];
+  $scope.parish_id = patharray[3];
+  $scope.year = patharray[5];
   $scope.auth = auth;
+  console.log("metropolis_id: ", $scope.metropolis_id, " parish_id: ", $scope.parish_id, " year: ", $scope.year);
   if ("key" in queryParams) {
     var userProfile = ref.child("easy-nmc/user").child(auth.uid);
     var keys = userProfile.child("access-key");
