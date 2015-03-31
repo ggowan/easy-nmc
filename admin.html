@@ -38,5 +38,19 @@
 </tbody>
 </table>
 <p><label>New Parish ID: <input type="text" ng-model=new_parish_id size=20></label><button ng-click="addParish(new_parish_id)">Add Parish</button>
+<table class="bordered-table">
+<thead>
+<tr><th>Parish Name</th><th>City</th><th>State</th><th>Form Address</th></tr>
+</thead>
+<tbody>
+<tr ng-repeat="(parish_id, parish_data) in parishIds">
+<td>{{parish_data.name}}</td>
+<td>{{parish_data.city}}</td>
+<td>{{parish_data.state}}</td>
+<td>https://easy-nmc.appspot.com/metropolis/{{metropolis_id}}/parish/{{parish_id}}/data-form/2016?key={{parish_data.access_key}}</td>
+</tr>
+</tbody>
+</table>
+
 </body>
 </html>
