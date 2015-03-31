@@ -36,7 +36,7 @@
   <h1>National Ministries Allocation Data Form</h1>
   <p>Please use this form to report your parish's financial information for the National Ministries Allocation Process. The due date for completing this form is <strong>May 15, 2015</strong>. Please bear in mind that the form must be reviewed and approved by the parish priest, president, treasurer, and internal audit committee chairperson by that date.
   <p>You may share this form by sending the complete URL to another person. Please note that the URL contains a randomized key that allows the recipient to view the form and modify its contents.
-  <p>In order to edit the form, please click the pencil button in the top-right corner. It should turn green to indicate you are editing the form. Only one person will be able to edit the form at a time. Your changes will be automatically saved as you type, as long as there is a working internet connection. A red error message will appear if the connection is lost or the data is not being saved. 
+  <p>In order to edit the form, please click the pencil button in the top-right corner. It should turn green to indicate you are editing the form. Only one person will be able to edit the form at a time. Your changes will be automatically saved as you type, as long as there is a working internet connection. A red error message will appear if the connection is lost or the data is not being saved.
   <p>Please follow these steps to verify that this form is working correctly on your web browser:
   <ol>
     <li>Click the pencil button to enter editing mode (it should turn green).
@@ -84,7 +84,7 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
 <p><textarea ng-readonly="!editing()" ng-model=firebaseData.income_explanation placeholder="Explanation of gross income calculation" cols=70 rows=3></textarea>
 
 <h4>B. Gross Expenses</h4>
-<p>Please report gross expenses for your parish below. Include expenses for all purposes from all funds, including expenses imputed to the parish from indirect support. Do not include depreciation. 
+<p>Please report gross expenses for your parish below. Include expenses for all purposes from all funds, including expenses imputed to the parish from indirect support. Do not include depreciation.
 <table>
   <thead>
     <tr><th>2013<th>2014</tr>
@@ -374,6 +374,82 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
   </tbody>
 </table>
 
+<h4>Stewardship</h4>
+<p>Please provide the following information about stewardship at your parish. This information is used to understand trends across the Metropolis and Archdiocese as well as at individual parishes.
+<table class="bordered-table">
+  <thead>
+    <tr><th style="border: none"><th>2012<th>2013<th>2014</tr>
+  </thead>
+  <tbody>
+    <tr>
+    <th scope="row">Stewardship or dues?
+    <td><select ng-disabled="!editing()" ng-model="firebaseData.Y2012.stew_or_dues"><option value="stew">Stewardship</option><option value="dues">Dues</option></select>
+    <td><select ng-disabled="!editing()" ng-model="firebaseData.Y2013.stew_or_dues"><option value="stew">Stewardship</option><option value="dues">Dues</option></select>
+    <td><select ng-disabled="!editing()" ng-model="firebaseData.Y2014.stew_or_dues"><option value="stew">Stewardship</option><option value="dues">Dues</option></select>
+    </tr>
+    <tr>
+    <th scope="row">Total # of paid members
+    <td class="number"><input class="number" ng-readonly="!editing()" ng-model="firebaseData.Y2012.num_members" type="text" size=10>
+    <td class="number"><input class="number" ng-readonly="!editing()" ng-model="firebaseData.Y2013.num_members" type="text" size=10>
+    <td class="number"><input class="number" ng-readonly="!editing()" ng-model="firebaseData.Y2014.num_members" type="text" size=10>
+    </tr>
+    <tr>
+    <th scope="row">How are members counted?
+    <td><select ng-disabled="!editing()" ng-model="firebaseData.Y2012.how_counted"><option value="family">Per Family</option><option value="individual">Individual</option></select>
+    <td><select ng-disabled="!editing()" ng-model="firebaseData.Y2013.how_counted"><option value="family">Per Family</option><option value="individual">Individual</option></select>
+    <td><select ng-disabled="!editing()" ng-model="firebaseData.Y2014.how_counted"><option value="family">Per Family</option><option value="individual">Individual</option></select>
+    </tr>
+    <tr>
+    <th scope="row">Total stewardship or dues income
+    <td class="money"><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2012.stew_income" type="text" size=10>
+    <td class="money"><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.stew_income" type="text" size=10>
+    <td class="money"><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.stew_income" type="text" size=10>
+    </tr>
+    <tr>
+    <th scope="row">Total parish income (all sources)
+    <td class="money"><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2012.income" type="text" size=10>
+    <td class="money">{{ (firebaseData.Y2013.income || 0) | currency : $ : 0 }}
+    <td class="money">{{ (firebaseData.Y2014.income || 0) | currency : $ : 0 }}
+    </tr>
+    <tr>
+    <th scope="row">Avg. stewardship or dues per member
+    <td class="money">{{ (firebaseData.Y2012.stew_income / firebaseData.Y2012.num_members) | currency : $ : 0 }}
+    <td class="money">{{ (firebaseData.Y2013.stew_income / firebaseData.Y2013.num_members) | currency : $ : 0 }}
+    <td class="money">{{ (firebaseData.Y2014.stew_income / firebaseData.Y2014.num_members) | currency : $ : 0 }}
+    </tr>
+    <tr>
+    <th scope="row">Stewardship/dues as % of total income
+    <td class="number">{{ (100 * firebaseData.Y2012.stew_income / firebaseData.Y2012.income) | number : 0 }}%
+    <td class="number">{{ (100 * firebaseData.Y2013.stew_income / firebaseData.Y2013.income) | number : 0 }}%
+    <td class="number">{{ (100 * firebaseData.Y2014.stew_income / firebaseData.Y2014.income) | number : 0 }}%
+    </tr>
+  </tbody>
+</table>
+<p><label>Number of new families who became members in 2014: <input class="number" ng-readonly="!editing()" ng-model="firebaseData.num_new_families" type="text" size=7></label>
+<p ng-show="firebaseData.Y2014.stew_or_dues === 'stew'">Number of members giving for year 2014:
+<label>$2,000 &amp; over: <input class="number" ng-readonly="!editing()" ng-model="firebaseData.num_stew_over_2000" type="text" size=7></label>
+<label>Between $1,000 - $1,999: <input class="number" ng-readonly="!editing()" ng-model="firebaseData.num_stew_1000_1999" type="text" size=7></label>
+<label>Between $800 - $999: <input class="number" ng-readonly="!editing()" ng-model="firebaseData.num_stew_800_999" type="text" size=7></label>
+<label>Between $500 - $799: <input class="number" ng-readonly="!editing()" ng-model="firebaseData.num_stew_500_799" type="text" size=7></label>
+<label>Between $300 - $499: <input class="number" ng-readonly="!editing()" ng-model="firebaseData.num_stew_300_499" type="text" size=7></label>
+<label>Less than $300: <input class="number" ng-readonly="!editing()" ng-model="firebaseData.num_stew_under_300" type="text" size=7></label>
+<p ng-show="firebaseData.Y2014.stew_or_dues === 'dues'">
+<label>$ Amount for Families: <input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.dues_family" type="text" size=7></label>
+<label>$ Amount for Singles: <input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.dues_single" type="text" size=7></label>
+<label>$ Amount for Seniors: <input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.dues_senior" type="text" size=7></label>
+<p>Stewardship and/or membership chairperson(s):<br>
+<input size=20 ng-readonly="!editing()" ng-model=firebaseData.stew_name1 placeholder="Name">
+<input size=12 ng-readonly="!editing()" ng-model=firebaseData.stew_phone1 type=tel placeholder="Phone">
+<input size=25 ng-readonly="!editing()" ng-model=firebaseData.stew_email1 type=email placeholder="Email Address"><br>
+<input size=20 ng-readonly="!editing()" ng-model=firebaseData.stew_name2 placeholder="Name">
+<input size=12 ng-readonly="!editing()" ng-model=firebaseData.stew_phone2 type=tel placeholder="Phone">
+<input size=25 ng-readonly="!editing()" ng-model=firebaseData.stew_email2 type=email placeholder="Email Address"><br>
+<input size=20 ng-readonly="!editing()" ng-model=firebaseData.stew_name3 placeholder="Name">
+<input size=12 ng-readonly="!editing()" ng-model=firebaseData.stew_phone3 type=tel placeholder="Phone">
+<input size=25 ng-readonly="!editing()" ng-model=firebaseData.stew_email3 type=email placeholder="Email Address"><br>
+<input size=20 ng-readonly="!editing()" ng-model=firebaseData.stew_name4 placeholder="Name">
+<input size=12 ng-readonly="!editing()" ng-model=firebaseData.stew_phone4 type=tel placeholder="Phone">
+<input size=25 ng-readonly="!editing()" ng-model=firebaseData.stew_email4 type=email placeholder="Email Address"><br>
 </section>
 <section>
 <h3>Summary</h3>
@@ -408,6 +484,9 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
 <tr><td style="border:none"></td><th scope=row>Property and Liability Insurance</th>
 <td class=money>{{ (firebaseData.Y2013.prop_liab || 0) | currency : $ : 0 }}</td>
 <td class=money>{{ (firebaseData.Y2014.prop_liab || 0) | currency : $ : 0 }}</td></tr>
+<tr><td style="border:none"></td><th scope=row>Stewardship/Dues Income</th>
+<td class=money>{{ (firebaseData.Y2013.stew_income || 0) | currency : $ : 0 }}</td>
+<td class=money>{{ (firebaseData.Y2014.stew_income || 0) | currency : $ : 0 }}</td></tr>
 </tbody>
 </table>
 </section>

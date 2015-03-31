@@ -23,7 +23,7 @@ span.input-block {
 }
 span.padded-label {
 }
-*.money {
+*.money, *.number {
   text-align: right;
 }
 input.ng-invalid.ng-touched {
@@ -50,6 +50,9 @@ th {
 th[scope="row"] {
   text-align: left;
   font-weight: normal;
+}
+td {
+  text-align: center;
 }
 table.bordered-table {
   border-collapse: collapse;
