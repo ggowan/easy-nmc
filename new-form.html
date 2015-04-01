@@ -12,37 +12,54 @@
       color: red;
     }
     @-webkit-keyframes fade-in {
-      from {color: white;}
-      to {color: black;}
+      from {opacity: 0;}
+      to {opacity: 1;}
     }
     @-moz-keyframes fade-in {
-      from {color: white;}
-      to {color: black;}
+      from {opacity: 0;}
+      to {opacity: 1;}
     }
     @keyframes fade-in {
-      from {color: white;}
-      to {color: black;}
+      from {opacity: 0;}
+      to {opacity: 1;}
     }
     *.fades-in {
       -webkit-animation-name: fade-in;
       -webkit-animation-duration: 2s;
-      -webkit-animation-delay: 1s;
+      -webkit-animation-delay: 0.5s;
       -webkit-animation-fill-mode: both;
-      
+
       -moz-animation-name: fade-in;
       -moz-animation-duration: 2s;
-      -moz-animation-delay: 1s;
+      -moz-animation-delay: 0.5s;
       -moz-animation-fill-mode: both;
-      
+
       animation-name: fade-in;
       animation-duration: 2s;
-      animation-delay: 1s;
+      animation-delay: 0.5s;
+      animation-fill-mode: both;
+    }
+
+    *.fades-in-later {
+      -webkit-animation-name: fade-in;
+      -webkit-animation-duration: 2s;
+      -webkit-animation-delay: 3s;
+      -webkit-animation-fill-mode: both;
+
+      -moz-animation-name: fade-in;
+      -moz-animation-duration: 2s;
+      -moz-animation-delay: 3s;
+      -moz-animation-fill-mode: both;
+
+      animation-name: fade-in;
+      animation-duration: 2s;
+      animation-delay: 3s;
       animation-fill-mode: both;
     }
   </style>
 </head>
 <body>
-<p>You owe<br><strong>$10,000,000!!!!</strong>
-<p class="fades-in">Happy April Fool's!
+<p>You owe <strong class="fades-in">$10,000,000!!!!</strong>
+<p class="fades-in-later">Happy April Fool's!
 </body>
 </html>
