@@ -80,8 +80,8 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.income" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.income" type="text" size=10></tr>
   </tbody>
 </table>
-<p>If the above numbers do not appear exactly as in your P&amp;L, please explain the calculation here:
-<p><textarea ng-readonly="!editing()" ng-model=firebaseData.income_explanation placeholder="Explanation of gross income calculation" cols=70 rows=3></textarea>
+<p>If the above numbers do not appear exactly as in your P&amp;L, please explain the calculation here:<br>
+<textarea ng-readonly="!editing()" ng-model=firebaseData.income_explanation placeholder="Explanation of gross income calculation" cols=70 rows=3></textarea>
 
 <h4>B. Gross Expenses</h4>
 <p>Please report gross expenses for your parish below. Include expenses for all purposes from all funds, including expenses imputed to the parish from indirect support. Do not include depreciation.
@@ -93,8 +93,8 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.expenses" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.expenses" type="text" size=10></tr>
   </tbody>
 </table>
-<p>If the above numbers do not appear exactly as in your P&amp;L, please explain the calculation here:
-<p><textarea ng-readonly="!editing()" ng-model=firebaseData.expense_explanation placeholder="Explanation of gross expense calculation" cols=70 rows=3></textarea>
+<p>If the above numbers do not appear exactly as in your P&amp;L, please explain the calculation here:<br>
+<textarea ng-readonly="!editing()" ng-model=firebaseData.expense_explanation placeholder="Explanation of gross expense calculation" cols=70 rows=3></textarea>
 
 <h4>C. Deductions</h4>
 <p>Please report deductible expenses in the sections below. For all sections, please bear in mind the following:
@@ -112,7 +112,8 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><td><input class="money" name="nmc-2013" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.nmc" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.nmc" type="text" size=10></tr>
   </tbody>
 </table>
-<p><label>Line(s) or account number(s) on P&amp;L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.nmc_lines" type="text" size=20></label>
+<p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
+<textarea ng-readonly="!editing()" ng-model=firebaseData.nmc_lines cols=70 rows=3></textarea>
 
 <h4>C2. Donations to the Archdiocese or National Ministries</h4>
 <p>If your parish made additional donations to the Archdiocese or to its ministries, please report those here.
@@ -135,9 +136,10 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <td class=money>{{ archMinTotal(firebaseData.Y2014) | currency : $ : 0 }}</td></tr>
   </tfoot>
 </table>
-<p><label>Line(s) or account number(s) on P&amp;L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.arch_don_lines" type="text" size=20></label>
-<p>If you included an amount for "Other", please provide a breakdown by ministry and year here:
-<p><textarea ng-readonly="!editing()" ng-model=firebaseData.other_arch_don_breakdown placeholder="Breakdown of donations to other Archdiocesen ministries" cols=70 rows=3></textarea>
+<p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
+<textarea ng-readonly="!editing()" ng-model=firebaseData.arch_don_lines cols=70 rows=3></textarea>
+<p>If you included an amount for "Other", please provide a breakdown by ministry and year here:<br>
+<textarea ng-readonly="!editing()" ng-model=firebaseData.other_arch_don_breakdown placeholder="Breakdown of donations to other Archdiocesen ministries" cols=70 rows=3></textarea>
 
 <h4>C3. Donations to Assembly of Bishops Authorized Ministries</h4>
 <p>If your parish made donations to any of the following organizations, please report those here.
@@ -161,7 +163,8 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <td class=money>{{ authMinTotal(firebaseData.Y2014) | currency : $ : 0 }}</td></tr>
   </tfoot>
 </table>
-<p><label>Line(s) or account number(s) on P&amp;L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.auth_min_lines" type="text" size=20></label>
+<p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
+<textarea ng-readonly="!editing()" ng-model=firebaseData.auth_min_lines cols=70 rows=3></textarea>
 
 <h4>C4. Donations to the Metropolis</h4>
 <p>If your parish made payments or donations to support the Metropolis or any of its ministries, please report the total below.
@@ -173,7 +176,8 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.metro" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.metro" type="text" size=10></tr>
   </tbody>
 </table>
-<p><label>Line(s) or account number(s) on P&amp;L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.metro_lines" type="text" size=20></label>
+<p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
+<textarea ng-readonly="!editing()" ng-model=firebaseData.metro_lines cols=70 rows=3></textarea>
 
 <h4>C5. Donations to the Ecumenical Patriarchate</h4>
 <p>If your parish made donations to support the Ecumenical Patriarchate or any of its Patriarchal Institutions, please report the total below.
@@ -185,7 +189,8 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.patriarch" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.patriarch" type="text" size=10></tr>
   </tbody>
 </table>
-<p><label>Line(s) or account number(s) on P&amp;L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.patriarch_lines" type="text" size=20></label>
+<p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
+<textarea ng-readonly="!editing()" ng-model=firebaseData.patriarch_lines cols=70 rows=3></textarea>
 
 <h4>C6. Capital Improvement Projects</h4>
 <p>Please report deductible capital improvement expenses below in accordance with the following guidelines:
@@ -203,9 +208,10 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.cap" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.cap" type="text" size=10></tr>
   </tbody>
 </table>
-<p><label>Line(s) or account number(s) on P&amp;L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.cap_lines" type="text" size=20></label>
-<p>Please list the projects included in the above figures. For each project, indicate the start date, anticipated completion date, and estimated total cost.
-<p><textarea ng-readonly="!editing()" ng-model=firebaseData.cap_projects placeholder="List of capital projects" cols=70 rows=6></textarea>
+<p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
+<textarea ng-readonly="!editing()" ng-model=firebaseData.cap_lines cols=70 rows=3></textarea>
+<p>Please list the projects included in the above figures. For each project, indicate the start date, anticipated completion date, and estimated total cost.<br>
+<textarea ng-readonly="!editing()" ng-model=firebaseData.cap_projects placeholder="List of capital projects" cols=70 rows=6></textarea>
 
 <h4>C7. Construction Loan Interest</h4>
 <p>Please report interest paid on construction loans below.
@@ -218,7 +224,8 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.const_loan" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.const_loan" type="text" size=10></tr>
   </tbody>
 </table>
-<p><label>Line(s) or account number(s) on P&amp;L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.const_loan_lines" type="text" size=20></label>
+<p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
+<textarea ng-readonly="!editing()" ng-model=firebaseData.const_loan_lines cols=70 rows=3></textarea>
 
 <h4>C8. Mortgage Payments</h4>
 <p>Please report the deductible portion of your parish's mortgage payments below. Payments on a mortgage are deductible to the extent they are included in the gross expenses reported in section B, above. For example,
@@ -234,7 +241,8 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.mort" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.mort" type="text" size=10></tr>
   </tbody>
 </table>
-<p><label>Line(s) or account number(s) on P&amp;L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.mort_lines" type="text" size=20></label>
+<p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
+<textarea ng-readonly="!editing()" ng-model=firebaseData.mort_lines cols=70 rows=3></textarea>
 
 <h4>C9. Fundraising Expenses</h4>
 <p>Please report deductible fundraising expenses below, in accordance with the following guidelines:
@@ -255,8 +263,8 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.fundraising" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.fundraising" type="text" size=10></tr>
   </tbody>
 </table>
-<p>Please list the lines on the P&amp;L containing these amounts:
-<p><textarea ng-readonly="!editing()" ng-model=firebaseData.fundraising_lines placeholder="Line(s) or account number(s) on P&amp;L containing fundraising expenses" cols=70 rows=4></textarea>
+<p>Please list the lines on the P&amp;L containing these amounts:<br>
+<textarea ng-readonly="!editing()" ng-model=firebaseData.fundraising_lines placeholder="Line(s) or account number(s) on P&amp;L containing fundraising expenses" cols=70 rows=4></textarea>
 
 <h4>C10. Greek School and Day School Expenses</h4>
 <p>Please report deductible Greek School and Day School expenses below, in accordance with the following guidelines:
@@ -274,7 +282,8 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.school" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.school" type="text" size=10></tr>
   </tbody>
 </table>
-<p><label>Line(s) or account number(s) on P&amp;L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.school_lines" type="text" size=20></label>
+<p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
+<textarea ng-readonly="!editing()" ng-model=firebaseData.school_lines cols=70 rows=3></textarea>
 
 <h4>C11. Religious Education Expenses</h4>
 <p>Please report deductible expenses for religious education below, in accordance with the following guidelines:
@@ -292,7 +301,8 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.religious_ed" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.religious_ed" type="text" size=10></tr>
   </tbody>
 </table>
-<p><label>Line(s) or account number(s) on P&amp;L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.religious_ed_lines" type="text" size=20></label>
+<p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
+<textarea ng-readonly="!editing()" ng-model=firebaseData.religious_ed_lines cols=70 rows=3></textarea>
 
 <h4>C12. Funds paid for catastrophic risk insurance</h4>
 <p>Please report expenses for catastrophic risk insurance such as earthquake or flood insurance below. Please note that typical fire and liability insurance should not be included.
@@ -305,7 +315,8 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
   </tbody>
 </table>
 <p>Please explain the above expenses.
-<p><label>Line(s) or account number(s) on P&amp;L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.catastrophic_lines" type="text" size=20></label>
+<p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
+<textarea ng-readonly="!editing()" ng-model=firebaseData.catastrophic_lines cols=70 rows=3></textarea>
 
 <h4>C13. Funds paid for moving expenses of Clergy</h4>
 <p>Please report expenses for relocating clergymen to your parish.
@@ -317,7 +328,8 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.moving" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.moving" type="text" size=10></tr>
   </tbody>
 </table>
-<p><label>Line(s) or account number(s) on P&amp;L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.moving_lines" type="text" size=20></label>
+<p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
+<textarea ng-readonly="!editing()" ng-model=firebaseData.moving_lines cols=70 rows=3></textarea>
 
 <h4>C14. Outreach and Evangelism</h4>
 <p>Please report deductible outreach and evangelism expenses below, in accordance with the following guidelines:
@@ -335,7 +347,8 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.outreach" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.outreach" type="text" size=10></tr>
   </tbody>
 </table>
-<p><label>Line(s) or account number(s) on P&amp;L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.outreach_lines" type="text" size=20></label>
+<p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
+<textarea ng-readonly="!editing()" ng-model=firebaseData.outreach_lines cols=70 rows=3></textarea>
 
 <h4>C15. National Clergy Laity Congress</h4>
 <p>Please report expenses for sending delegates to the Archdiocese Clergy Laity Congress below. Do not include expenses associated with metropolis assembly meetings or other organizations. Note that the Clergy Laity Congress happens only once every two years, so you should only have expenses for it on even years.
@@ -347,7 +360,8 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.clergy_laity" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.clergy_laity" type="text" size=10></tr>
   </tbody>
 </table>
-<p><label>Line(s) or account number(s) on P&amp;L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.clergy_laity_lines" type="text" size=20></label>
+<p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
+<textarea ng-readonly="!editing()" ng-model=firebaseData.clergy_laity_lines cols=70 rows=3></textarea>
 
 <h4>C16. Other Deductions Approved by Hierarch</h4>
 <p>Please report any special deductions that have been approved by your hierarch below.
@@ -359,9 +373,10 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.other_hier" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.other_hier" type="text" size=10></tr>
   </tbody>
 </table>
-<p><label>Line(s) or account number(s) on P&amp;L containing these amounts: <input ng-readonly="!editing()" ng-model="firebaseData.other_hier_lines" type="text" size=20></label>
-<p>Please explain the special deductions.
-<p><textarea ng-readonly="!editing()" ng-model=firebaseData.other_hier_explanation placeholder="Explanation of special deductions" cols=70 rows=3></textarea>
+<p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
+<textarea ng-readonly="!editing()" ng-model=firebaseData.other_hier_lines cols=70 rows=3></textarea>
+<p>Please explain the special deductions.<br>
+<textarea ng-readonly="!editing()" ng-model=firebaseData.other_hier_explanation placeholder="Explanation of special deductions" cols=70 rows=3></textarea>
 
 <h4>Property and Liability Insurance</h4>
 <p>Please report the total amount paid for property and liability insurance for your parish. This is collected for informational purposes but is not a deductible expense.

@@ -1,3 +1,9 @@
+var shared = {};
+
+// Left unspecified in master branch so that it must be specified in the
+// deployment branch.
+shared.firebaseBackend = "";
+
 // Adapted from http://stackoverflow.com/a/2880929 by Andy E.
 function getQueryParams(search) {
   var match,
