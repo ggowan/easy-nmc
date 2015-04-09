@@ -129,7 +129,7 @@ function setupSession($scope, $firebaseObject, ref, auth) {
 }
 
 app.controller("Ctrl", function($scope, $firebaseObject) {
-  var ref = new Firebase("https://intense-heat-7228.firebaseio.com/");
+  var ref = new Firebase(shared.firebaseBackend);
   var auth = ref.getAuth();
   console.log("auth: ", auth);
   if (auth && auth.provider !== "google") {
