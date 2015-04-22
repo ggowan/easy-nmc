@@ -5,10 +5,10 @@
   <link rel="stylesheet" href="/style.css" type="text/css">
 
   <!-- AngularJS -->
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
 
   <!-- Firebase -->
-  <script src="https://cdn.firebase.com/js/client/2.2.2/firebase.js"></script>
+  <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
 
   <!-- AngularFire -->
   <script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
@@ -48,20 +48,20 @@
 
   <h3>General Information</h3>
   <p><strong>Parish:</strong> {{ parish_name }} in {{ parish_city }}, {{ parish_state }}<br>
-  <p><strong>Priest:</strong> <input size=20 ng-readonly="!editing()" ng-model=firebaseData.priest_name placeholder="Priest's Name">
-  <input size=12 ng-readonly="!editing()" ng-model=firebaseData.priest_phone type=tel placeholder="Phone">
-  <input size=25 ng-readonly="!editing()" ng-model=firebaseData.priest_email type=email placeholder="Email Address"><br>
-  <p><strong>President:</strong> <input size=20 ng-readonly="!editing()" ng-model=firebaseData.pres_name placeholder="President's Name">
-  <input size=12 ng-readonly="!editing()" ng-model=firebaseData.pres_phone type=tel placeholder="Phone">
-  <input size=25 ng-readonly="!editing()" ng-model=firebaseData.pres_email type=email placeholder="Email Address"><br>
-  <p><strong>Treasurer:</strong> <input size=20 ng-readonly="!editing()" ng-model=firebaseData.treas_name placeholder="Treasurer's Name">
-  <input size=12 ng-readonly="!editing()" ng-model=firebaseData.treas_phone type=tel placeholder="Phone">
-  <input size=25 ng-readonly="!editing()" ng-model=firebaseData.treas_email type=email placeholder="Email Address"><br>
+  <p><strong>Priest:</strong> <input size=20 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.priest_name placeholder="Priest's Name">
+  <input size=12 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.priest_phone type=tel placeholder="Phone">
+  <input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.priest_email type=email placeholder="Email Address"><br>
+  <p><strong>President:</strong> <input size=20 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.pres_name placeholder="President's Name">
+  <input size=12 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.pres_phone type=tel placeholder="Phone">
+  <input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.pres_email type=email placeholder="Email Address"><br>
+  <p><strong>Treasurer:</strong> <input size=20 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.treas_name placeholder="Treasurer's Name">
+  <input size=12 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.treas_phone type=tel placeholder="Phone">
+  <input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.treas_email type=email placeholder="Email Address"><br>
 
   <p>If the person preparing this form is not the treasurer, please provide the following:<br>
-  <strong>Preparer:</strong> <input size=20 ng-readonly="!editing()" ng-model=firebaseData.preparer_name placeholder="Preparer's Name">
-  <input size=12 ng-readonly="!editing()" ng-model=firebaseData.preparer_phone type=tel placeholder="Phone">
-  <input size=25 ng-readonly="!editing()" ng-model=firebaseData.preparer_email type=email placeholder="Email Address">
+  <strong>Preparer:</strong> <input size=20 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.preparer_name placeholder="Preparer's Name">
+  <input size=12 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.preparer_phone type=tel placeholder="Phone">
+  <input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.preparer_email type=email placeholder="Email Address">
 
   </section>
   <section>
@@ -77,11 +77,11 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.income" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.income" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.income" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.income" type="text" size=10></tr>
   </tbody>
 </table>
 <p>If the above numbers do not appear exactly as in your P&amp;L, please explain the calculation here:<br>
-<textarea ng-readonly="!editing()" ng-model=firebaseData.income_explanation placeholder="Explanation of gross income calculation" cols=70 rows=3></textarea>
+<textarea ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.income_explanation placeholder="Explanation of gross income calculation" cols=70 rows=3></textarea>
 
 <h4>B. Gross Expenses</h4>
 <p>Please report gross expenses for your parish below. Include expenses for all purposes from all funds, including expenses imputed to the parish from indirect support. Do not include depreciation.
@@ -90,11 +90,11 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.expenses" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.expenses" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.expenses" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.expenses" type="text" size=10></tr>
   </tbody>
 </table>
 <p>If the above numbers do not appear exactly as in your P&amp;L, please explain the calculation here:<br>
-<textarea ng-readonly="!editing()" ng-model=firebaseData.expense_explanation placeholder="Explanation of gross expense calculation" cols=70 rows=3></textarea>
+<textarea ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.expense_explanation placeholder="Explanation of gross expense calculation" cols=70 rows=3></textarea>
 
 <h4>C. Deductions</h4>
 <p>Please report deductible expenses in the sections below. For all sections, please bear in mind the following:
@@ -109,11 +109,11 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" name="nmc-2013" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.nmc" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.nmc" type="text" size=10></tr>
+    <tr><td><input class="money" name="nmc-2013" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.nmc" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.nmc" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-model=firebaseData.nmc_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.nmc_lines cols=70 rows=3></textarea>
 
 <h4>C2. Donations to the Archdiocese or National Ministries</h4>
 <p>If your parish made additional donations to the Archdiocese or to its ministries, please report those here.
@@ -122,14 +122,14 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><th style="border: none"><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><th scope="row">Archdiocese (do not include allocation)<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.arch_don" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.arch_don" type="text" size=10></tr>
-    <tr><th scope="row">Hellenic College/Holy Cross<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.hchc" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.hchc" type="text" size=10></tr>
-    <tr><th scope="row">St. Basil Academy<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.stbasil" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.stbasil" type="text" size=10></tr>
-    <tr><th scope="row">St. Michael Home<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.stmichael" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.stmichael" type="text" size=10></tr>
-    <tr><th scope="row">St. Photios Shrine<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.stphotios" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.stphotios" type="text" size=10></tr>
-    <tr><th scope="row">Ionian Village<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.ionian" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.ionian" type="text" size=10></tr>
-    <tr><th scope="row">Order of St. Andrew<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.standrew" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.standrew" type="text" size=10></tr>
-    <tr><th scope="row">Other<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.other_arch" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.other_arch" type="text" size=10></tr>
+    <tr><th scope="row">Archdiocese (do not include allocation)<td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.arch_don" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.arch_don" type="text" size=10></tr>
+    <tr><th scope="row">Hellenic College/Holy Cross<td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.hchc" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.hchc" type="text" size=10></tr>
+    <tr><th scope="row">St. Basil Academy<td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.stbasil" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.stbasil" type="text" size=10></tr>
+    <tr><th scope="row">St. Michael Home<td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.stmichael" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.stmichael" type="text" size=10></tr>
+    <tr><th scope="row">St. Photios Shrine<td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.stphotios" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.stphotios" type="text" size=10></tr>
+    <tr><th scope="row">Ionian Village<td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.ionian" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.ionian" type="text" size=10></tr>
+    <tr><th scope="row">Order of St. Andrew<td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.standrew" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.standrew" type="text" size=10></tr>
+    <tr><th scope="row">Other<td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.other_arch" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.other_arch" type="text" size=10></tr>
   </tbody>
   <tfoot>
     <tr><th scope="row">Total<td class=money>{{ archMinTotal(firebaseData.Y2013) | currency : $ : 0 }}
@@ -137,9 +137,9 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
   </tfoot>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-model=firebaseData.arch_don_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.arch_don_lines cols=70 rows=3></textarea>
 <p>If you included an amount for "Other", please provide a breakdown by ministry and year here:<br>
-<textarea ng-readonly="!editing()" ng-model=firebaseData.other_arch_don_breakdown placeholder="Breakdown of donations to other Archdiocesen ministries" cols=70 rows=3></textarea>
+<textarea ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.other_arch_don_breakdown placeholder="Breakdown of donations to other Archdiocesen ministries" cols=70 rows=3></textarea>
 
 <h4>C3. Donations to Assembly of Bishops Authorized Ministries</h4>
 <p>If your parish made donations to any of the following organizations, please report those here.
@@ -148,15 +148,15 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><th style="border: none"><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><th scope="row">IOCC (International Orthodox Christian Charities)<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.iocc" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.iocc" type="text" size=10></tr>
-    <tr><th scope="row">OCMC (Orthodox Christian Mission Center)<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.ocmc" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.ocmc" type="text" size=10></tr>
-    <tr><th scope="row">OCF (Orthodox Christian Fellowship)<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.ocf" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.ocf" type="text" size=10></tr>
-    <tr><th scope="row">Orthodox Christian Prison Ministries<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.prison_min" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.prison_min" type="text" size=10></tr>
-    <tr><th scope="row">EOCS (Eastern Orthodox Committee on Scouting)<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.eocs" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.eocs" type="text" size=10></tr>
-    <tr><th scope="row">OCN (Orthodox Christian Network)<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.ocn" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.ocn" type="text" size=10></tr>
-    <tr><th scope="row">OCEC (Orthodox Christian Education Commission)<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.ocec" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.ocec" type="text" size=10></tr>
-    <tr><th scope="row">OCAMPR (Orthodox Christian Association of Medicine, Psychology and Religion)<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.ocampr" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.ocampr" type="text" size=10></tr>
-    <tr><th scope="row">Orthodox Christian Education Commission<td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.ed_comm" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.ed_comm" type="text" size=10></tr>
+    <tr><th scope="row">IOCC (International Orthodox Christian Charities)<td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.iocc" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.iocc" type="text" size=10></tr>
+    <tr><th scope="row">OCMC (Orthodox Christian Mission Center)<td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.ocmc" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.ocmc" type="text" size=10></tr>
+    <tr><th scope="row">OCF (Orthodox Christian Fellowship)<td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.ocf" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.ocf" type="text" size=10></tr>
+    <tr><th scope="row">Orthodox Christian Prison Ministries<td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.prison_min" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.prison_min" type="text" size=10></tr>
+    <tr><th scope="row">EOCS (Eastern Orthodox Committee on Scouting)<td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.eocs" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.eocs" type="text" size=10></tr>
+    <tr><th scope="row">OCN (Orthodox Christian Network)<td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.ocn" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.ocn" type="text" size=10></tr>
+    <tr><th scope="row">OCEC (Orthodox Christian Education Commission)<td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.ocec" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.ocec" type="text" size=10></tr>
+    <tr><th scope="row">OCAMPR (Orthodox Christian Association of Medicine, Psychology and Religion)<td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.ocampr" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.ocampr" type="text" size=10></tr>
+    <tr><th scope="row">Orthodox Christian Education Commission<td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.ed_comm" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.ed_comm" type="text" size=10></tr>
   </tbody>
   <tfoot>
     <tr><th scope="row">Total<td class=money>{{ authMinTotal(firebaseData.Y2013) | currency : $ : 0 }}
@@ -164,7 +164,7 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
   </tfoot>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-model=firebaseData.auth_min_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.auth_min_lines cols=70 rows=3></textarea>
 
 <h4>C4. Donations to the Metropolis</h4>
 <p>If your parish made payments or donations to support the Metropolis or any of its ministries, please report the total below.
@@ -173,11 +173,11 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.metro" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.metro" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.metro" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.metro" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-model=firebaseData.metro_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.metro_lines cols=70 rows=3></textarea>
 
 <h4>C5. Donations to the Ecumenical Patriarchate</h4>
 <p>If your parish made donations to support the Ecumenical Patriarchate or any of its Patriarchal Institutions, please report the total below.
@@ -186,11 +186,11 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.patriarch" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.patriarch" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.patriarch" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.patriarch" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-model=firebaseData.patriarch_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.patriarch_lines cols=70 rows=3></textarea>
 
 <h4>C6. Capital Improvement Projects</h4>
 <p>Please report deductible capital improvement expenses below in accordance with the following guidelines:
@@ -205,13 +205,13 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.cap" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.cap" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.cap" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.cap" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-model=firebaseData.cap_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.cap_lines cols=70 rows=3></textarea>
 <p>Please list the projects included in the above figures. For each project, indicate the start date, anticipated completion date, and estimated total cost.<br>
-<textarea ng-readonly="!editing()" ng-model=firebaseData.cap_projects placeholder="List of capital projects" cols=70 rows=6></textarea>
+<textarea ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.cap_projects placeholder="List of capital projects" cols=70 rows=6></textarea>
 
 <h4>C7. Construction Loan Interest</h4>
 <p>Please report interest paid on construction loans below.
@@ -221,11 +221,11 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.const_loan" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.const_loan" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.const_loan" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.const_loan" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-model=firebaseData.const_loan_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.const_loan_lines cols=70 rows=3></textarea>
 
 <h4>C8. Mortgage Payments</h4>
 <p>Please report the deductible portion of your parish's mortgage payments below. Payments on a mortgage are deductible to the extent they are included in the gross expenses reported in section B, above. For example,
@@ -238,11 +238,11 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.mort" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.mort" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.mort" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.mort" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-model=firebaseData.mort_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.mort_lines cols=70 rows=3></textarea>
 
 <h4>C9. Fundraising Expenses</h4>
 <p>Please report deductible fundraising expenses below, in accordance with the following guidelines:
@@ -260,11 +260,11 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.fundraising" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.fundraising" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.fundraising" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.fundraising" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Please list the lines on the P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-model=firebaseData.fundraising_lines placeholder="Line(s) or account number(s) on P&amp;L containing fundraising expenses" cols=70 rows=4></textarea>
+<textarea ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.fundraising_lines placeholder="Line(s) or account number(s) on P&amp;L containing fundraising expenses" cols=70 rows=4></textarea>
 
 <h4>C10. Greek School and Day School Expenses</h4>
 <p>Please report deductible Greek School and Day School expenses below, in accordance with the following guidelines:
@@ -279,11 +279,11 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.school" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.school" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.school" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.school" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-model=firebaseData.school_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.school_lines cols=70 rows=3></textarea>
 
 <h4>C11. Religious Education Expenses</h4>
 <p>Please report deductible expenses for religious education below, in accordance with the following guidelines:
@@ -298,11 +298,11 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.religious_ed" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.religious_ed" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.religious_ed" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.religious_ed" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-model=firebaseData.religious_ed_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.religious_ed_lines cols=70 rows=3></textarea>
 
 <h4>C12. Funds paid for catastrophic risk insurance</h4>
 <p>Please report expenses for catastrophic risk insurance such as earthquake or flood insurance below. Please note that typical fire and liability insurance should not be included.
@@ -311,12 +311,12 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.unusual" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.unusual" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.unusual" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.unusual" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Please explain the above expenses.
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-model=firebaseData.catastrophic_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.catastrophic_lines cols=70 rows=3></textarea>
 
 <h4>C13. Funds paid for moving expenses of Clergy</h4>
 <p>Please report expenses for relocating clergymen to your parish.
@@ -325,11 +325,11 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.moving" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.moving" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.moving" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.moving" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-model=firebaseData.moving_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.moving_lines cols=70 rows=3></textarea>
 
 <h4>C14. Outreach and Evangelism</h4>
 <p>Please report deductible outreach and evangelism expenses below, in accordance with the following guidelines:
@@ -344,11 +344,11 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.outreach" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.outreach" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.outreach" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.outreach" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-model=firebaseData.outreach_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.outreach_lines cols=70 rows=3></textarea>
 
 <h4>C15. National Clergy Laity Congress</h4>
 <p>Please report expenses for sending delegates to the Archdiocese Clergy Laity Congress below. Do not include expenses associated with metropolis assembly meetings or other organizations. Note that the Clergy Laity Congress happens only once every two years, so you should only have expenses for it on even years.
@@ -357,11 +357,11 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.clergy_laity" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.clergy_laity" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.clergy_laity" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.clergy_laity" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-model=firebaseData.clergy_laity_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.clergy_laity_lines cols=70 rows=3></textarea>
 
 <h4>C16. Other Deductions Approved by Hierarch</h4>
 <p>Please report any special deductions that have been approved by your hierarch below.
@@ -370,13 +370,13 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.other_hier" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.other_hier" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.other_hier" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.other_hier" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-model=firebaseData.other_hier_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.other_hier_lines cols=70 rows=3></textarea>
 <p>Please explain the special deductions.<br>
-<textarea ng-readonly="!editing()" ng-model=firebaseData.other_hier_explanation placeholder="Explanation of special deductions" cols=70 rows=3></textarea>
+<textarea ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.other_hier_explanation placeholder="Explanation of special deductions" cols=70 rows=3></textarea>
 
 <h4>Property and Liability Insurance</h4>
 <p>Please report the total amount paid for property and liability insurance for your parish. This is collected for informational purposes but is not a deductible expense.
@@ -385,7 +385,7 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.prop_liab" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.prop_liab" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.prop_liab" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.prop_liab" type="text" size=10></tr>
   </tbody>
 </table>
 
@@ -398,31 +398,31 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
   <tbody>
     <tr>
     <th scope="row">Stewardship or dues?
-    <td><select ng-disabled="!editing()" ng-model="firebaseData.Y2012.stew_or_dues"><option value="stew">Stewardship</option><option value="dues">Dues</option></select>
-    <td><select ng-disabled="!editing()" ng-model="firebaseData.Y2013.stew_or_dues"><option value="stew">Stewardship</option><option value="dues">Dues</option></select>
-    <td><select ng-disabled="!editing()" ng-model="firebaseData.Y2014.stew_or_dues"><option value="stew">Stewardship</option><option value="dues">Dues</option></select>
+    <td><select ng-disabled="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2012.stew_or_dues"><option value="stew">Stewardship</option><option value="dues">Dues</option></select>
+    <td><select ng-disabled="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.stew_or_dues"><option value="stew">Stewardship</option><option value="dues">Dues</option></select>
+    <td><select ng-disabled="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.stew_or_dues"><option value="stew">Stewardship</option><option value="dues">Dues</option></select>
     </tr>
     <tr>
     <th scope="row">Total # of paid members
-    <td class="number"><input class="number" ng-readonly="!editing()" ng-model="firebaseData.Y2012.num_members" type="text" size=10>
-    <td class="number"><input class="number" ng-readonly="!editing()" ng-model="firebaseData.Y2013.num_members" type="text" size=10>
-    <td class="number"><input class="number" ng-readonly="!editing()" ng-model="firebaseData.Y2014.num_members" type="text" size=10>
+    <td class="number"><input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2012.num_members" type="text" size=10>
+    <td class="number"><input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.num_members" type="text" size=10>
+    <td class="number"><input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.num_members" type="text" size=10>
     </tr>
     <tr>
     <th scope="row">How are members counted?
-    <td><select ng-disabled="!editing()" ng-model="firebaseData.Y2012.how_counted"><option value="family">Per Family</option><option value="individual">Individual</option></select>
-    <td><select ng-disabled="!editing()" ng-model="firebaseData.Y2013.how_counted"><option value="family">Per Family</option><option value="individual">Individual</option></select>
-    <td><select ng-disabled="!editing()" ng-model="firebaseData.Y2014.how_counted"><option value="family">Per Family</option><option value="individual">Individual</option></select>
+    <td><select ng-disabled="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2012.how_counted"><option value="family">Per Family</option><option value="individual">Individual</option></select>
+    <td><select ng-disabled="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.how_counted"><option value="family">Per Family</option><option value="individual">Individual</option></select>
+    <td><select ng-disabled="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.how_counted"><option value="family">Per Family</option><option value="individual">Individual</option></select>
     </tr>
     <tr>
     <th scope="row">Total stewardship or dues income
-    <td class="money"><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2012.stew_income" type="text" size=10>
-    <td class="money"><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2013.stew_income" type="text" size=10>
-    <td class="money"><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2014.stew_income" type="text" size=10>
+    <td class="money"><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2012.stew_income" type="text" size=10>
+    <td class="money"><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2013.stew_income" type="text" size=10>
+    <td class="money"><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2014.stew_income" type="text" size=10>
     </tr>
     <tr>
     <th scope="row">Total parish income (all sources)
-    <td class="money"><input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.Y2012.income" type="text" size=10>
+    <td class="money"><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2012.income" type="text" size=10>
     <td class="money">{{ (firebaseData.Y2013.income || 0) | currency : $ : 0 }}
     <td class="money">{{ (firebaseData.Y2014.income || 0) | currency : $ : 0 }}
     </tr>
@@ -440,31 +440,31 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     </tr>
   </tbody>
 </table>
-<p><label>Number of new families who became members in 2014: <input class="number" ng-readonly="!editing()" ng-model="firebaseData.num_new_families" type="text" size=7></label>
+<p><label>Number of new families who became members in 2014: <input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.num_new_families" type="text" size=7></label>
 <p ng-show="firebaseData.Y2014.stew_or_dues === 'stew'">Number of members giving for year 2014:
-<label>$2,000 &amp; over: <input class="number" ng-readonly="!editing()" ng-model="firebaseData.num_stew_over_2000" type="text" size=7></label>
-<label>Between $1,000 - $1,999: <input class="number" ng-readonly="!editing()" ng-model="firebaseData.num_stew_1000_1999" type="text" size=7></label>
-<label>Between $800 - $999: <input class="number" ng-readonly="!editing()" ng-model="firebaseData.num_stew_800_999" type="text" size=7></label>
-<label>Between $500 - $799: <input class="number" ng-readonly="!editing()" ng-model="firebaseData.num_stew_500_799" type="text" size=7></label>
-<label>Between $300 - $499: <input class="number" ng-readonly="!editing()" ng-model="firebaseData.num_stew_300_499" type="text" size=7></label>
-<label>Less than $300: <input class="number" ng-readonly="!editing()" ng-model="firebaseData.num_stew_under_300" type="text" size=7></label>
+<label>$2,000 &amp; over: <input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.num_stew_over_2000" type="text" size=7></label>
+<label>Between $1,000 - $1,999: <input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.num_stew_1000_1999" type="text" size=7></label>
+<label>Between $800 - $999: <input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.num_stew_800_999" type="text" size=7></label>
+<label>Between $500 - $799: <input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.num_stew_500_799" type="text" size=7></label>
+<label>Between $300 - $499: <input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.num_stew_300_499" type="text" size=7></label>
+<label>Less than $300: <input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.num_stew_under_300" type="text" size=7></label>
 <p ng-show="firebaseData.Y2014.stew_or_dues === 'dues'">
-<label>$ Amount for Families: <input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.dues_family" type="text" size=7></label>
-<label>$ Amount for Singles: <input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.dues_single" type="text" size=7></label>
-<label>$ Amount for Seniors: <input class="money" dollars ng-readonly="!editing()" ng-model="firebaseData.dues_senior" type="text" size=7></label>
+<label>$ Amount for Families: <input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.dues_family" type="text" size=7></label>
+<label>$ Amount for Singles: <input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.dues_single" type="text" size=7></label>
+<label>$ Amount for Seniors: <input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.dues_senior" type="text" size=7></label>
 <p>Stewardship and/or membership chairperson(s):<br>
-<input size=20 ng-readonly="!editing()" ng-model=firebaseData.stew_name1 placeholder="Name">
-<input size=12 ng-readonly="!editing()" ng-model=firebaseData.stew_phone1 type=tel placeholder="Phone">
-<input size=25 ng-readonly="!editing()" ng-model=firebaseData.stew_email1 type=email placeholder="Email Address"><br>
-<input size=20 ng-readonly="!editing()" ng-model=firebaseData.stew_name2 placeholder="Name">
-<input size=12 ng-readonly="!editing()" ng-model=firebaseData.stew_phone2 type=tel placeholder="Phone">
-<input size=25 ng-readonly="!editing()" ng-model=firebaseData.stew_email2 type=email placeholder="Email Address"><br>
-<input size=20 ng-readonly="!editing()" ng-model=firebaseData.stew_name3 placeholder="Name">
-<input size=12 ng-readonly="!editing()" ng-model=firebaseData.stew_phone3 type=tel placeholder="Phone">
-<input size=25 ng-readonly="!editing()" ng-model=firebaseData.stew_email3 type=email placeholder="Email Address"><br>
-<input size=20 ng-readonly="!editing()" ng-model=firebaseData.stew_name4 placeholder="Name">
-<input size=12 ng-readonly="!editing()" ng-model=firebaseData.stew_phone4 type=tel placeholder="Phone">
-<input size=25 ng-readonly="!editing()" ng-model=firebaseData.stew_email4 type=email placeholder="Email Address"><br>
+<input size=20 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_name1 placeholder="Name">
+<input size=12 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_phone1 type=tel placeholder="Phone">
+<input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_email1 type=email placeholder="Email Address"><br>
+<input size=20 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_name2 placeholder="Name">
+<input size=12 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_phone2 type=tel placeholder="Phone">
+<input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_email2 type=email placeholder="Email Address"><br>
+<input size=20 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_name3 placeholder="Name">
+<input size=12 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_phone3 type=tel placeholder="Phone">
+<input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_email3 type=email placeholder="Email Address"><br>
+<input size=20 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_name4 placeholder="Name">
+<input size=12 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_phone4 type=tel placeholder="Phone">
+<input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_email4 type=email placeholder="Email Address"><br>
 </section>
 <section>
 <h3>Summary</h3>
@@ -508,10 +508,10 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
 <section>
 <h3>Approvals</h3>
 <p>Please enter your name below if you approve this report.
-<p><strong>Priest:</strong> <input size=25 ng-readonly="!editing()" ng-model=firebaseData.priest_approval_name placeholder="Name">
-<p><strong>President:</strong> <input size=25 ng-readonly="!editing()" ng-model=firebaseData.pres_approval_name placeholder="Name">
-<p><strong>Treasurer:</strong> <input size=25 ng-readonly="!editing()" ng-model=firebaseData.treas_approval_name placeholder="Name">
-<p><strong>Internal Audit Committee Chair</strong>: <input size=25 ng-readonly="!editing()" ng-model=firebaseData.audit_approval_name placeholder="Name">
+<p><strong>Priest:</strong> <input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.priest_approval_name placeholder="Name">
+<p><strong>President:</strong> <input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.pres_approval_name placeholder="Name">
+<p><strong>Treasurer:</strong> <input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.treas_approval_name placeholder="Name">
+<p><strong>Internal Audit Committee Chair</strong>: <input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.audit_approval_name placeholder="Name">
 <h3>Final Steps</h3>
 <ol>
   <li>Submit profit &amp; loss statements and balance sheets for 2013 and 2014. You may do so using one of the following means:
