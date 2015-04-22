@@ -88,6 +88,7 @@ function bindFirebase($scope, $firebaseObject, ref) {
     } else {
       $scope.firebaseData.editing_user = $scope.auth.uid;
     }
+    $scope.firebaseData.$save();
   };
   $scope.firebaseInfo = $firebaseObject(ref.child(".info"));
   $scope.firebaseInfo.$loaded().then(function(data) {
