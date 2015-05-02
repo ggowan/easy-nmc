@@ -18,3 +18,4 @@ function getQueryParams(search) {
   return queryParams;
 }
 
+shared.APPROVAL_FIELDS = ['priest_approval_name', 'pres_approval_name', 'treas_approval_name', 'audit_approval_name'];
