@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="easyNmcMetroSummary">
+<head>
+  <title>NMC - Summary</title>
+  <link rel="stylesheet" href="/style.css" type="text/css">
+
+  <!-- AngularJS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+
+  <!-- Firebase -->
+  <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+
+  <!-- AngularFire -->
+  <script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
+
+  <!-- Google APIs -->
+  <script type="text/javascript" src="https://apis.google.com/js/client.js"></script>
+
+  <script src="/shared.js"></script>
+  <script src="/summary.js"></script>
+</head>
+<body ng-controller="Ctrl" ng-cloak ng-show="parishIdsFinishedLoading && infoFinishedLoading && formDataFinishedLoading">
+<table class="bordered-table">
+<thead>
+<tr>
+<th rowspan=2>Parish Name</th>
+<th rowspan=2>City</th>
+<th rowspan=2>State</th>
+<th rowspan=2>Parish Approval</th>
+<th rowspan=2>Data Form</th>
+<th rowspan=2>Upload Folder</th>
+<th colspan=2>Gross Expenses</th>
+</tr>
+<tr>
+<th>2013</th>
+<th>2014</th>
+</tr>
+</thead>
+<tbody>
+<tr ng-repeat="(parish_id, parish_data) in parishIds">
+<td>{{parish_data.name}}</td>
+<td>{{parish_data.city}}</td>
+<td>{{parish_data.state}}</td>
+<td>{{parishApproval(parish_id)}}</td>
+<td><a target="data-form" ng-href="parish/{{parish_id}}/data-form/2016?key={{parish_data.access_key}}">form</a></td>
+<td><a target="upload_folder" ng-href="https://drive.google.com/drive/#folders/{{parish_data.upload_folder}}" ng-show="parish_data.upload_folder">Drive</a></td>
+<td>{{yearField(parish_id, 2013, 'expenses')}}</td>
+<td>{{yearField(parish_id, 2014, 'expenses')}}</td>
+</tr>
+</tbody>
+</table>
+
+</body>
+</html>

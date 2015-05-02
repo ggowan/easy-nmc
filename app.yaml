@@ -16,6 +16,11 @@ handlers:
   upload: admin.html
   secure: always
 
+- url: /metropolis/[A-Z]+/summary
+  static_files: summary.html
+  upload: summary.html
+  secure: always
+
 - url: /(.*\.(gif|png|jpg|html|css|js))$
   static_files: \1
   upload: .*\.(gif|png|jpg|html|css|js)$
