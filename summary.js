@@ -16,18 +16,17 @@ function refreshDriveDataHelper($scope) {
           parishData.driveEmpty = driveEmpty;
           if (driveEmpty) {
             console.log("applying empty drive changes for " + parishId);
-            if (parishData[$scope.FOR_YEAR-3] == null) {
+            if (typeof parishData[$scope.FOR_YEAR-3] === "undefined") {
               parishData[$scope.FOR_YEAR-3] = {};
             }
-            if (parishData[$scope.FOR_YEAR-2] == null) {
+            if (typeof parishData[$scope.FOR_YEAR-2] == "undefined") {
               parishData[$scope.FOR_YEAR-2] = {};
             }
-            parishData[$scope.FOR_YEAR-3].have_pl = 'false';
-            parishData[$scope.FOR_YEAR-2].have_pl = 'false';
-            parishData[$scope.FOR_YEAR-3].have_bal = 'false';
-            parishData[$scope.FOR_YEAR-2].have_bal = 'false';
+            parishData[$scope.FOR_YEAR-3].have_pl = false;
+            parishData[$scope.FOR_YEAR-2].have_pl = false;
+            parishData[$scope.FOR_YEAR-3].have_bal = false;
+            parishData[$scope.FOR_YEAR-2].have_bal = false;
           }
-          $scope.parishIds.$save();
         });
       }
     });

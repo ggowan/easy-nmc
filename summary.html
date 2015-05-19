@@ -34,7 +34,6 @@
 <th rowspan=2>Drive Empty?</th>
 <th colspan=2>P&L Submitted?</th>
 <th colspan=2>Balance Sheet Submitted?</th>
-<th rowspan=2>Submission Status</th>
 </tr>
 <tr>
 <th>{{ FOR_YEAR - 3 }}</th>
@@ -61,45 +60,22 @@
 <td ng-if="parish_data.driveEmpty == false" class="good">No</td>
 <td ng-if="parish_data.driveEmpty != true && parish_data.driveEmpty != false" class="attention">?</td>
 
-<td ng-class="parish_data[FOR_YEAR - 3].have_pl == 'true' ? 'good' : (parish_data[FOR_YEAR - 3].have_pl == 'false' ? 'bad' : 'attention')">
-<select ng-change="parishIds.$save()" ng-model="parish_data[FOR_YEAR - 3].have_pl">
-  <option value="">?</option>
-  <option value="true">Yes</option>
-  <option value="false">No</option>
-</select>
+<td ng-class="parish_data[FOR_YEAR - 3].have_pl ? 'good' : 'bad'">
+<input type="checkbox" ng-change="parishIds.$save()" ng-model="parish_data[FOR_YEAR - 3].have_pl">
 </td>
 
-<td ng-class="parish_data[FOR_YEAR - 2].have_pl == 'true' ? 'good' : (parish_data[FOR_YEAR - 2].have_pl == 'false' ? 'bad' : 'attention')">
-<select ng-change="parishIds.$save()" ng-model="parish_data[FOR_YEAR - 2].have_pl">
-  <option value="">?</option>
-  <option value="true">Yes</option>
-  <option value="false">No</option>
-</select>
+<td ng-class="parish_data[FOR_YEAR - 2].have_pl ? 'good' : 'bad'">
+<input type="checkbox" ng-change="parishIds.$save()" ng-model="parish_data[FOR_YEAR - 2].have_pl">
 </td>
 
-<td ng-class="parish_data[FOR_YEAR - 3].have_bal == 'true' ? 'good' : (parish_data[FOR_YEAR - 3].have_bal == 'false' ? 'bad' : 'attention')">
-<select ng-change="parishIds.$save()" ng-model="parish_data[FOR_YEAR - 3].have_bal">
-  <option value="">?</option>
-  <option value="true">Yes</option>
-  <option value="false">No</option>
-</select>
+<td ng-class="parish_data[FOR_YEAR - 3].have_bal ? 'good' : 'bad'">
+<input type="checkbox" ng-change="parishIds.$save()" ng-model="parish_data[FOR_YEAR - 3].have_bal">
 </td>
 
-<td ng-class="parish_data[FOR_YEAR - 2].have_bal == 'true' ? 'good' : (parish_data[FOR_YEAR - 2].have_bal == 'false' ? 'bad' : 'attention')">
-<select ng-change="parishIds.$save()" ng-model="parish_data[FOR_YEAR - 2].have_bal">
-  <option value="">?</option>
-  <option value="true">Yes</option>
-  <option value="false">No</option>
-</select>
+<td ng-class="parish_data[FOR_YEAR - 2].have_bal ? 'good' : 'bad'">
+<input type="checkbox" ng-change="parishIds.$save()" ng-model="parish_data[FOR_YEAR - 2].have_bal">
 </td>
 
-<td ng-class="parish_data.submission_status == 'complete' ? 'good' : (parish_data.submission_status == 'nothing' ? 'bad' : 'attention')">
-<select ng-change="parishIds.$save()" ng-model="parish_data.submission_status">
-  <option value="">?</option>
-  <option value="complete">Complete</option>
-  <option value="partial">Partial</option>
-  <option value="nothing">Nothing</option>
-</select>
 </td>
 </tr>
 </tbody>
