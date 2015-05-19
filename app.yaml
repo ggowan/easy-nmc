@@ -1,5 +1,5 @@
-application: friendly-aurora-855
-version: alpha-001
+application: easy-nmc
+version: prod-004
 runtime: python27
 api_version: 1
 threadsafe: yes
