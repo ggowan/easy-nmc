@@ -27,13 +27,17 @@
 <th rowspan=2>Parish Name</th>
 <th rowspan=2>City</th>
 <th rowspan=2>State</th>
+<!--
 <th rowspan=2>Data Form</th>
 <th rowspan=2>Upload Folder</th>
+-->
 <th rowspan=2>Data Entered?</th>
 <th rowspan=2>Approved By Parish?</th>
 <th rowspan=2>Drive Empty?</th>
 <th colspan=2>P&L Submitted?</th>
 <th colspan=2>Balance Sheet Submitted?</th>
+<th rowspan=2>Notes</th>
+<th rowspan=2>Review Form</th>
 </tr>
 <tr>
 <th>{{ FOR_YEAR - 3 }}</th>
@@ -47,8 +51,11 @@
 <td>{{parish_data.name}}</td>
 <td>{{parish_data.city}}</td>
 <td>{{parish_data.state}}</td>
+
+<!--
 <td><a target="data-form" ng-href="parish/{{parish_id}}/data-form/2016?key={{parish_data.access_key}}">form</a></td>
 <td><a target="upload_folder" ng-href="https://drive.google.com/drive/#folders/{{parish_data.upload_folder}}" ng-show="parish_data.upload_folder">Drive</a></td>
+-->
 
 <td ng-if="dataEntered(parish_id)" class="good">Yes</td>
 <td ng-if="!dataEntered(parish_id)" class="bad">No</td>
@@ -76,7 +83,10 @@
 <input type="checkbox" ng-change="parishIds.$save()" ng-model="parish_data[FOR_YEAR - 2].have_bal">
 </td>
 
-</td>
+<td>{{ reviewData.parish[parish_id].notes }}</td>
+
+<td><a target="review" ng-href="parish/{{parish_id}}/review/2016">review</a></td>
+
 </tr>
 </tbody>
 </table>
