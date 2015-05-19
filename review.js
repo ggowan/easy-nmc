@@ -1,4 +1,4 @@
-var app = angular.module("easyNmc", ["firebase"]);
+var app = angular.module("easyNmcReview", ["firebase"]);
 
 function sumNumbers(a, b) {
   if (angular.isNumber(a)) {
@@ -42,13 +42,20 @@ function bindFirebase($scope, $firebaseObject, ref) {
     $scope.error = error;
   });
   var dataFormRef = metroRef.child("/data-form/" + $scope.year + "/parish/" + $scope.parish_id);
-
-  // Setup synchronization between AngularJS and Firebase using AngularFire.
-  $scope.firebaseData = $firebaseObject(dataFormRef);
-  $scope.firebaseData.$loaded().then(function(data) {
-    $scope.dataFinishedLoading = true;
+  $scope.formData = $firebaseObject(dataFormRef);
+  $scope.formData.$loaded().then(function(data) {
+    $scope.formDataFinishedLoading = true;
   }).catch(function(error) {
-    console.log("loading firebaseData failed: ", error);
+    console.log("loading form data failed: ", error);
+    $scope.error = error;
+  });
+
+  var reviewDataRef = metroRef.child("/review-data/" + $scope.year + "/parish/" + $scope.parish_id);
+  $scope.reviewData = $firebaseObject(reviewDataRef);
+  $scope.reviewData.$loaded().then(function(data) {
+    $scope.reviewDataFinishedLoading = true;
+  }).catch(function(error) {
+    console.log("loading review data failed: ", error);
     $scope.error = error;
   });
 
@@ -79,16 +86,22 @@ function bindFirebase($scope, $firebaseObject, ref) {
     return total;
   };
   $scope.editing = function() {
-    return $scope.firebaseData.editing_user && $scope.firebaseData.editing_user === $scope.auth.uid
+    return $scope.reviewData.editing_user && $scope.reviewData.editing_user === $scope.auth.uid
         && $scope.infoFinishedLoading && $scope.firebaseInfo.connected;
   };
   $scope.toggleEditing = function() {
+    console.log("toggleEditing");
     if ($scope.editing()) {
-      $scope.firebaseData.editing_user = '';
+      console.log("clearing editing_user");
+      $scope.reviewData.editing_user = '';
     } else {
-      $scope.firebaseData.editing_user = $scope.auth.uid;
+      console.log("setting editing_user");
+      $scope.reviewData.editing_user = $scope.auth.uid;
     }
-    $scope.firebaseData.$save();
+    $scope.reviewData.$save().then(function(ref) {
+    }, function(error) {
+      console.log("Error saving editing toggle:", error);
+    });
   };
   $scope.firebaseInfo = $firebaseObject(ref.child(".info"));
   $scope.firebaseInfo.$loaded().then(function(data) {
@@ -115,39 +128,42 @@ function setupSession($scope, $firebaseObject, ref, auth) {
   $scope.year = patharray[5];
   $scope.auth = auth;
   console.log("metropolis_id: ", $scope.metropolis_id, " parish_id: ", $scope.parish_id, " year: ", $scope.year);
-  if ("key" in queryParams) {
-    var userProfile = ref.child("easy-nmc/user").child(auth.uid);
-    var keys = userProfile.child("access-key");
-    keys.child(queryParams.key).set(true, function(error) {
-      if (error) {
-        console.log('Failed to store key in profile: ', error);
-      } else {
-        console.log('Stored key in profile: ', queryParams.key);
-      }
-      bindFirebase($scope, $firebaseObject, ref);
-    });
-  } else {
-    bindFirebase($scope, $firebaseObject, ref);
+  bindFirebase($scope, $firebaseObject, ref);
+}
+
+function handleAuthChange($scope, $firebaseObject, ref, auth) {
+  console.log("handleAuthChange ", auth);
+  if (auth && auth.provider !== "google") {
+    console.log("Need to logout");
+    ref.unauth();
+    return;
   }
+  if (!auth) {
+    ref.authWithOAuthPopup("google", function(error, auth) {
+      if (error) {
+        if (error.code === "TRANSPORT_UNAVAILABLE") {
+          // fall-back to browser redirects, and pick up the session
+          // automatically when we come back to the origin page
+          ref.authWithOAuthRedirect("google", function(error) {
+            console.log("auth redirect failed: ", error);
+            $scope.error = error;
+          });
+        }
+      } else {
+        console.log("authentication succeeded ", auth);
+      }
+    });
+    return;
+  }
+  console.log("Already authenticated: ", auth);
+  setupSession($scope, $firebaseObject, ref, auth);
 }
 
 app.controller("Ctrl", function($scope, $firebaseObject) {
   var ref = new Firebase(shared.firebaseBackend);
-
-  var auth = ref.getAuth();
-  if (!auth) {
-    ref.authAnonymously(function(error, authData) {
-      if (error) {
-        console.log("Login Failed!", error);
-      } else {
-        console.log("Authenticated successfully with payload:", authData);
-        setupSession($scope, $firebaseObject, ref, authData);
-      }
-    });
-  } else {
-    console.log("Already authenticated: ", auth);
-    setupSession($scope, $firebaseObject, ref, auth);
-  }
+  ref.onAuth(function (auth) {
+    handleAuthChange($scope, $firebaseObject, ref, auth);
+  });
 });
 
 // Checks whether the specified string appears to be a number, optionally
