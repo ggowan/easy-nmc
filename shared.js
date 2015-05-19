@@ -2,7 +2,7 @@ var shared = {};
 
 // Left unspecified in master branch so that it must be specified in the
 // deployment branch.
-shared.firebaseBackend = "https://intense-heat-7228.firebaseio.com/";
+shared.firebaseBackend = "https://easy-nmc-dev.firebaseio.com/";
 
 // Data form fields signifying approval.
 shared.APPROVAL_FIELDS = [
