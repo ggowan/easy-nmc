@@ -11,7 +11,7 @@
   <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
 
   <!-- AngularFire -->
-  <script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
+  <script src="https://cdn.firebase.com/libs/angularfire/1.1.1/angularfire.min.js"></script>
 
   <!-- Google APIs -->
   <script type="text/javascript" src="https://apis.google.com/js/client.js"></script>
@@ -24,7 +24,7 @@
 <button ng-click="createFolders(metaData.upload_folder)">Create Folders</button>
 <table class="bordered-table">
 <thead>
-<tr><th>Parish ID</th><th>Parish Name</th><th>City</th><th>State</th><th>Data Forms</th><th>Upload Folder</th></tr>
+<tr><th>Parish ID</th><th>Parish Name</th><th>City</th><th>State</th><th>Required to Report</th><th>Data Forms</th><th>Upload Folder</th></tr>
 </thead>
 <tbody>
 <tr ng-repeat="(parish_id, parish_data) in parishIds">
@@ -32,6 +32,12 @@
 <td><input type="text" ng-model=parish_data.name size=25></td>
 <td><input type="text" ng-model=parish_data.city size=15></td>
 <td><input type="text" ng-model=parish_data.state size=2></td>
+<td>
+  <select ng-model=parish_data.excused>
+    <option value="">Yes</option>
+    <option value="true">No</option>
+  </select>
+</td>
 <td><a target="data-form" ng-href="parish/{{parish_id}}/data-form/2016?key={{parish_data.access_key}}">form</a></td>
 <td><a target="upload_folder" ng-href="https://drive.google.com/drive/#folders/{{parish_data.upload_folder}}" ng-show="parish_data.upload_folder">Drive</a></td>
 </tr>

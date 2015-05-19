@@ -61,21 +61,7 @@ function createFoldersAuthorized($scope) {
 
 function createParishFolders($scope) {
   console.log("createParishFolders called with $scope.metaData.upload_folder: ", $scope.metaData.upload_folder);
-  var CLIENT_ID = '540806466980-i5mifkaf6utq2g8k3p3opbj6gd4jv9oj.apps.googleusercontent.com';
-  var SCOPES = 'https://www.googleapis.com/auth/drive';
-  gapi.auth.authorize(
-      {'client_id': CLIENT_ID, 'scope': SCOPES, 'immediate': true},
-      function handleAuthResult(authResult) {
-        if (authResult && !authResult.error) {
-          // We're authorized, now load the Drive API.
-          gapi.client.load('drive', 'v2', function() {
-            createFoldersAuthorized($scope);
-          });
-        } else {
-          console.log("Google API authorization failed: ", authResult.error);
-          $scope.error = authResult.error;
-        }
-      });
+  shared.initDriveApi(function() {createFoldersAuthorized($scope);});
 }
 
 // Binds the firebase data to a field in the AngularJS scope.
@@ -84,7 +70,7 @@ function setupSession($scope, $firebaseObject, ref, auth) {
   url_parser.href = document.URL;
   var pathname = url_parser.pathname;
   var patharray = pathname.split('/');
-  var queryParams = getQueryParams(url_parser.search);
+  var queryParams = shared.getQueryParams(url_parser.search);
   $scope.metropolis_id = patharray[2];
   $scope.metroRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id);
   $scope.addParish = function(parishId) {
