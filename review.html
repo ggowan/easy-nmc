@@ -43,7 +43,7 @@ You are offline<br>
 </select>
 <p><strong>Reviewer(s):</strong> <input size=40 ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.reviewer_name placeholder="Reviewer Name">
 <p>Notes:
-<br><textarea ng-readonly="!editing()" ng-change="formData.$save()" ng-model=reviewData.notes placeholder="Notes" cols=70 rows=10></textarea>
+<br><textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.notes placeholder="Notes" cols=70 rows=10></textarea>
 
 </section>
 <section>
