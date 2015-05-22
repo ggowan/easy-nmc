@@ -110,6 +110,37 @@ function bindFirebase($scope, $firebaseObject, ref) {
     console.log("loading firebaseInfo failed: ", error);
     $scope.error = error;
   });
+  $scope.FOR_YEAR = shared.FOR_YEAR;
+  // We use objects instead of arrays for the tallies to work around a bug.
+  // https://github.com/firebase/angularfire/issues/623
+  $scope.addTally = function() {
+    if (!$scope.reviewData.nextTally) $scope.reviewData.nextTally = 100;
+    if (!$scope.reviewData.tallies) $scope.reviewData.tallies = {};
+    $scope.reviewData.tallies['tally' + $scope.reviewData.nextTally] = {
+      name: $scope.newTallyName,
+      rows: {
+        'row100': {description: ''},
+        'row101': {description: ''}
+      },
+      nextRow: 102
+    };
+    $scope.reviewData.nextTally += 1;
+    $scope.reviewData.$save();
+  };
+  $scope.addRow = function(tally) {
+    if (!tally.rows) tally.rows = {};
+    if (!tally.nextRow) tally.nextRow = 100;
+    tally.rows['row' + tally.nextRow] = {description: ''};
+    tally.nextRow += 1;
+    $scope.reviewData.$save();
+  };
+  $scope.tallyTotal = function(tally) {
+    result = 0;
+    angular.forEach(tally.rows, function(row, rowKey) {
+      result += row.amount;
+    });
+    return result;
+  }
 }
 
 function setupSession($scope, $firebaseObject, ref, auth) {
