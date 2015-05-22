@@ -261,6 +261,7 @@ Review any adjustments that were made to the parish's report in the prior year a
 <h3>Reviewer Tallies</h3>
 <div ng-repeat="(tallyKey, tally) in reviewData.tallies">
 <h4>Tally #{{$index + 1}}</h4>
+<p><input type="text" ng-change="reviewData.$save()" ng-model="tally.name" ng-readonly="!editing()" size=40 placeholder="Tally name">
 <table class="bordered-table">
 <thead>
 <tr><th>Description</th><th>Amount</th></tr>
@@ -276,7 +277,6 @@ Review any adjustments that were made to the parish's report in the prior year a
 </tfoot>
 </table>
 <button ng-click="addRow(tally)" ng-disabled="!editing()">Add Row</button>
-<input type="text" ng-change="reviewData.$save()" ng-model="tally.comment" ng-readonly="!editing()" size=40 placeholder="Tally comment">
 </div>
 <p><button ng-click="addTally()" ng-disabled="!editing()">Add Tally</button>
 </section>

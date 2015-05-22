@@ -1,18 +1,5 @@
 var app = angular.module("easyNmc", ["firebase"]);
 
-function sumNumbers(a, b) {
-  if (angular.isNumber(a)) {
-    if (angular.isNumber(b)) {
-      return a + b;
-    } else {
-      return a;
-    }
-  } else if (angular.isNumber(b)) {
-    return b;
-  }
-  return 0;
-}
-
 // Binds the firebase data to a field in the AngularJS scope.
 function bindFirebase($scope, $firebaseObject, ref) {
   var metroRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id);
@@ -57,7 +44,7 @@ function bindFirebase($scope, $firebaseObject, ref) {
     var total = [
       yearObj.arch_don, yearObj.hchc, yearObj.stbasil, yearObj.stmichael,
       yearObj.stphotios, yearObj.ionian, yearObj.standrew, yearObj.other_arch
-    ].reduce(sumNumbers);
+    ].reduce(shared.sumNumbers);
     return total;
   };
   $scope.authMinTotal = function(yearObj) {
@@ -65,7 +52,7 @@ function bindFirebase($scope, $firebaseObject, ref) {
     var total = [
       yearObj.iocc, yearObj.ocmc, yearObj.ocf, yearObj.prison_min,
       yearObj.eocs, yearObj.ocn, yearObj.ocec, yearObj.ocampr, yearObj.ed_comm
-    ].reduce(sumNumbers);
+    ].reduce(shared.sumNumbers);
     return total;
   };
   $scope.totalDeductions = function(yearObj) {
@@ -75,7 +62,7 @@ function bindFirebase($scope, $firebaseObject, ref) {
       yearObj.patriarch, yearObj.cap, yearObj.const_loan, yearObj.mort,
       yearObj.fundraising, yearObj.school, yearObj.religious_ed, yearObj.unusual,
       yearObj.moving, yearObj.outreach, yearObj.clergy_laity, yearObj.other_hier
-    ].reduce(sumNumbers);
+    ].reduce(shared.sumNumbers);
     return total;
   };
   $scope.editing = function() {

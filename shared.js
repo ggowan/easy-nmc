@@ -47,3 +47,18 @@ shared.initDriveApi = function (callback) {
         }
       });
 };
+
+// Sums the inputs, ignoring any inputs that aren't numbers.
+// Returns zero if neither is a number.
+shared.sumNumbers = function sumNumbers(a, b) {
+  if (angular.isNumber(a)) {
+    if (angular.isNumber(b)) {
+      return a + b;
+    } else {
+      return a;
+    }
+  } else if (angular.isNumber(b)) {
+    return b;
+  }
+  return 0;
+};
