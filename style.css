@@ -64,13 +64,16 @@ th[scope="row"] {
 td {
   text-align: center;
 }
-td.good {
+.small {
+  font-size: 80%;
+}
+.good {
   background-color: #B2FEB3;
 }
-td.bad {
+.bad {
   background-color: #FEB2B2;
 }
-td.attention {
+.attention {
   background-color: #F8FF6A;
 }
 table.bordered-table {

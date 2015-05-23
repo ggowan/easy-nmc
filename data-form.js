@@ -28,6 +28,10 @@ function bindFirebase($scope, $firebaseObject, ref) {
     console.log("loading upload_folder failed: ", error);
     $scope.error = error;
   });
+  var reviewDataRef = metroRef.child("/review-data/" + $scope.year + "/parish/" + $scope.parish_id);
+  reviewDataRef.child("form_edit_mode").on("value", function(snap) {
+    $scope.form_edit_mode = snap.val();
+  });
   var dataFormRef = metroRef.child("/data-form/" + $scope.year + "/parish/" + $scope.parish_id);
 
   // Setup synchronization between AngularJS and Firebase using AngularFire.
@@ -66,8 +70,9 @@ function bindFirebase($scope, $firebaseObject, ref) {
     return total;
   };
   $scope.editing = function() {
-    return $scope.firebaseData.editing_user && $scope.firebaseData.editing_user === $scope.auth.uid
-        && $scope.infoFinishedLoading && $scope.firebaseInfo.connected;
+    return $scope.form_edit_mode !== 'locked' && $scope.firebaseData.editing_user && 
+        $scope.firebaseData.editing_user === $scope.auth.uid && $scope.infoFinishedLoading &&
+        $scope.firebaseInfo.connected;
   };
   $scope.toggleEditing = function() {
     if ($scope.editing()) {
