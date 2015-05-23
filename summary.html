@@ -82,7 +82,7 @@
 <input type="checkbox" ng-change="parishIds.$save()" ng-model="parish_data[FOR_YEAR - 2].have_bal">
 </td>
 
-<td>{{ reviewData.parish[parish_id].notes }}</td>
+<td class="small">{{ reviewData.parish[parish_id].notes | limitTo : 80 }}<span ng-if="reviewData.parish[parish_id].notes.length > 80">&hellip;</span></td>
 
 <td><a target="review" ng-href="parish/{{parish_id}}/review/2016">review</a></td>
 <td><a target="upload_folder" ng-href="https://drive.google.com/drive/#folders/{{parish_data.upload_folder}}" ng-show="parish_data.upload_folder">Drive</a></td>

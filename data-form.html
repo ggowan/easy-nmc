@@ -19,9 +19,12 @@
 <body ng-controller="Ctrl" ng-cloak>
   <div class="fixed-panel">
   <div style="text-align: right">
-  <button class="image-button" ng-show="dataFinishedLoading" ng-style="editing() ? {'background-color': '#93FA86', 'border-color': '#93FA86'} : {}" ng-click="toggleEditing()">
+  <button class="image-button" ng-show="dataFinishedLoading"
+          ng-style="editing() ? {'background-color': '#93FA86', 'border-color': '#93FA86'} : {}"
+          ng-click="toggleEditing()" ng-disabled="form_edit_mode === 'locked'">
   <img alt="pencil icon" src="/pencil-icon.png" width=36 height=36></button>
   </div>
+  <div ng-if="form_edit_mode === 'locked'">Form locked.</div>
   <div ng-show="error" class="error-message">
   Error: {{ error.code }}<br>
   <small>Do you have the correct URL?</small>
@@ -521,7 +524,7 @@ All expenses incurred and paid by a supporting foundation, private foundation, p
     </ul>
   <li>Print a copy of this form for your records.
 </ol>
-<p>There is no step 3! All your data is already stored online. Once all approvals have been entered, we consider your form complete.
+<p>There is no step 3! Your form data is automatically saved to an online database. Once all approvals have been entered, your form is complete.
 </section>
 
 <section style="color:#FFFFFF;font-size:80%;display:none">

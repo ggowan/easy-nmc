@@ -29,14 +29,14 @@ function bindFirebase($scope, $firebaseObject, ref) {
     $scope.error = error;
   });
   var dataFormRef = metroRef.child("/data-form/" + $scope.year + "/parish/" + $scope.parish_id);
-  $scope.formData = $firebaseObject(dataFormRef);
-  $scope.formData.$loaded().then(function(data) {
+  dataFormRef.on("value", function(snap) {
+    $scope.formData = snap.val();
     $scope.formDataFinishedLoading = true;
-  }).catch(function(error) {
+  }, function(error) {
     console.log("loading form data failed: ", error);
     $scope.error = error;
   });
-
+  
   var reviewDataRef = metroRef.child("/review-data/" + $scope.year + "/parish/" + $scope.parish_id);
   $scope.reviewData = $firebaseObject(reviewDataRef);
   $scope.reviewData.$loaded().then(function(data) {
@@ -187,11 +187,31 @@ app.controller("Ctrl", function($scope, $firebaseObject) {
 
 // Checks whether the specified string appears to be a number, optionally
 // formatted like currency.
-function looksLikeNumber(val) {
+function looksLikePositiveNumber(val) {
   if (!angular.isString(val)) return false;
   // Make sure there are no extraneous characters and it looks like a number,
   // optionally currency formatted.
   return /^\s*\$?\s*[,0-9]+\.?\d*\s*$/.test(val);
+}
+
+// Checks whether the specified string appears to be a number, optionally
+// formatted like currency.
+function looksLikeNegativeNumber(val) {
+  if (!angular.isString(val)) return false;
+  // Make sure there are no extraneous characters and it looks like a number,
+  // optionally currency formatted.
+  if (/^\s*\(\$?\s*[,0-9]+\.?\d*\)\s*$/.test(val)) {
+    // Negative number surrounded in parens.
+    return true;
+  } else if (/^\s*\$?-\$?[,0-9]+\.?\d*\s*$/.test(val)) {
+    // Negative number with minus sign.
+    return true;
+  }
+  return false;
+}
+
+function looksLikeNumber(val) {
+  return looksLikePositiveNumber(val) || looksLikeNegativeNumber(val);
 }
 
 app.directive('dollars', ['currencyFilter', function(currencyFilter) {
@@ -199,8 +219,10 @@ app.directive('dollars', ['currencyFilter', function(currencyFilter) {
     require: 'ngModel',
     link: function(scope, element, attrs, ngModel) {
       ngModel.$parsers.push(function(value) {
-        if (looksLikeNumber(value)) {
+        if (looksLikePositiveNumber(value)) {
           return Math.round(Number(value.replace(/[^0-9\.]+/g,"")));
+        } else if (looksLikeNegativeNumber(value)) {
+          return -Math.round(Number(value.replace(/[^0-9\.]+/g,"")));
         } else if (angular.isString(value)) {
           // If it's not quite a number, we just save whatever they typed in
           // as a string for later analysis.
@@ -230,7 +252,7 @@ app.directive('dollars', ['currencyFilter', function(currencyFilter) {
           return true;
         }
         if (angular.isNumber(modelValue)) {
-          return modelValue >= 0.0 && modelValue <= 100000000;
+          return modelValue >= -100000000 && modelValue <= 100000000;
         } else {
           return true;
         }

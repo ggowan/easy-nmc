@@ -42,29 +42,54 @@ You are offline<br>
   <option value="finished">Finished</option>
 </select>
 <p><strong>Reviewer(s):</strong> <input size=40 ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.reviewer_name placeholder="Reviewer Name">
+<p><strong>Data form is:</strong> 
+<select ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.form_edit_mode">
+  <option value="">Editable</option>
+  <option value="locked">Locked</option>
+</select>
+<span class="attention" ng-if="reviewData.form_edit_mode !== 'locked'">
+<strong>Lock the data form to prevent changes before you review the form.</strong></span>
 <p>Things to look for in your review:
-<br><input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.all_expenses>
+<div ng-class="reviewData.all_expenses ? 'good' : 'attention'">
+<input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.all_expenses>
 Do the gross expenses appear to include all non-deductible expenses listed in the financial reports?
-<br><input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.all_expenses>
+</div>
+<div ng-class="reviewData.excluded_expenses ? 'good' : 'attention'">
+<input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.excluded_expenses>
 Do the gross expenses exclude depreciation, transfers, account balances and the like that should not be included?
-<br><input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.deductible_in_gross>
+</div>
+<div ng-class="reviewData.deductible_in_gross ? 'good' : 'attention'">
+<input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.deductible_in_gross>
 Are each of the deductible expenses reported on lines of the P&L that are included in the gross expenses?
-<br><input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.appropriate_deductions>
+</div>
+<div ng-class="reviewData.appropriate_deductions ? 'good' : 'attention'">
+<input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.appropriate_deductions>
 Do the deductions appear to be for things that match the description and guidelines for the line in which they are reported?
 Take into consideration the description of the lines of the P&L that the deductions are reported in and any notes from the parish explaining
 the nature of the expenses.
-<br><input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.balance_matches>
+</div>
+<div ng-class="reviewData.balance_matches ? 'good' : 'attention'">
+<input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.balance_matches>
 Does the change in the balance sheets match the net income shown on the P&L?
-<br><input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.prior_year_report>
+</div>
+<div ng-class="reviewData.yoy_change ? 'good' : 'attention'">
+<input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.yoy_change>
 If there was a significant change in net expenses between {{ FOR_YEAR - 2 }} and {{ FOR_YEAR - 3}}, can you explain the source of the change?
-<br><input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.prior_year_report>
+</div>
+<div ng-class="reviewData.prior_year_report ? 'good' : 'attention'">
+<input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.prior_year_report>
 Do the values for {{ FOR_YEAR -3 }} match what was reported on last year's form? If not, do the changes make sense?
-<br><input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.prior_year_adjustments>
+</div>
+<div ng-class="reviewData.prior_year_adjustments ? 'good' : 'attention'">
+<input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.prior_year_adjustments>
 Review any adjustments that were made to the parish's report in the prior year and see if they should be applied to this year's report as well.
+</div>
 <p><strong>Notes:</strong>
 <br><textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.notes placeholder="Notes" cols=70 rows=10></textarea>
 
-<p><a target="drive-folder" ng-href="https://drive.google.com/drive/#folders/{{upload_folder}}">Google Drive folder</a>
+<p>Supporting documentation is located in the <a target="drive-folder" ng-href="https://drive.google.com/drive/#folders/{{upload_folder}}">parish's Google Drive folder for {{ FOR_YEAR }}</a>.
+<p>You should also compare to the numbers reported last year. See 
+<a target="last-year-drive" href="https://drive.google.com/drive/folders/0B9GVPB85ZKRkYUMtN24zX1F3emM/0B9GVPB85ZKRkZjF0d09aNkxZdUk">last year's Google Drive folder</a>.
 
 </section>
 <section>
@@ -89,6 +114,14 @@ Review any adjustments that were made to the parish's report in the prior year a
   <td class=money><strong>{{ (formData.Y2014.expenses || 0) | currency : $ : 0 }}</strong></td>
   <td class=money><strong>{{ (formData.Y2014.expenses - formData.Y2013.expenses || 0) | currency : $ : 0 }}</strong></td>
   <td><div class="explanation">{{ formData.expense_explanation }}</div></td>
+</tr>
+<tr>
+  <td><strong>A-B</strong></td>
+  <th scope=row><strong>Net Income</strong></th>
+  <td class=money><strong>{{ (formData.Y2013.income - formData.Y2013.expenses || 0) | currency : $ : 0 }}</strong></td>
+  <td class=money><strong>{{ (formData.Y2014.income - formData.Y2014.expenses || 0) | currency : $ : 0 }}</strong></td>
+  <td class=money><strong>{{ (formData.Y2014.income - formData.Y2014.expenses - (formData.Y2013.income - formData.Y2013.expenses) || 0) | currency : $ : 0 }}</strong></td>
+  <td>-</td>
 </tr>
 <tr>
   <td>C1</td>
@@ -251,13 +284,6 @@ Review any adjustments that were made to the parish's report in the prior year a
 </table>
 </section>
 <section>
-<h3>General Information</h3>
-<p><strong>Priest:</strong> {{ formData.priest_name }}, {{ formData.priest_phone }}, {{ formData.priest_email }}
-<br><strong>President:</strong> {{ formData.pres_name }}, {{ formData.pres_phone }}, {{ formData.pres_email }}
-<br><strong>Treasurer:</strong> {{ formData.treas_name }}, {{ formData.treas_phone }}, {{ formData.treas_email }}
-<br><strong>Preparer:</strong> {{ formData.preparer_name }}, {{ formData.preparer_phone }}, {{ formData.preparer_email }}
-</section>
-<section>
 <h3>Reviewer Tallies</h3>
 <div ng-repeat="(tallyKey, tally) in reviewData.tallies">
 <h4>Tally #{{$index + 1}}</h4>
@@ -281,6 +307,13 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p><button ng-click="addTally()" ng-disabled="!editing()">Add Tally</button>
 </section>
 <section>
+<section>
+<h3>Contact Information</h3>
+<p><strong>Priest:</strong> {{ formData.priest_name }}, {{ formData.priest_phone }}, {{ formData.priest_email }}
+<br><strong>President:</strong> {{ formData.pres_name }}, {{ formData.pres_phone }}, {{ formData.pres_email }}
+<br><strong>Treasurer:</strong> {{ formData.treas_name }}, {{ formData.treas_phone }}, {{ formData.treas_email }}
+<div ng-show="formData.preparer_name || formData.preparer_phone || formData.preparer_email"><strong>Preparer:</strong> {{ formData.preparer_name }}, {{ formData.preparer_phone }}, {{ formData.preparer_email }}</div>
+</section>
 <h3>Details</h3>
 <h4>A. Gross Income</h4>
 <p>Please report gross income for your parish below. Include all parish income from all sources and for all purposes, including income imputed to the parish from indirect support.
@@ -290,13 +323,13 @@ Review any adjustments that were made to the parish's report in the prior year a
   </thead>
   <tbody>
     <tr>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.income" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.income" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.income" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.income" type="text" size=10>
     </tr>
   </tbody>
 </table>
 <p>If the above numbers do not appear exactly as in your P&amp;L, please explain the calculation here:<br>
-<textarea ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.income_explanation placeholder="Explanation of gross income calculation" cols=70 rows=3></textarea>
+<textarea ng-readonly="true" ng-change="formData.$save()" ng-model=formData.income_explanation placeholder="Explanation of gross income calculation" cols=70 rows=3></textarea>
 
 <h4>B. Gross Expenses</h4>
 <p>Please report gross expenses for your parish below. Include expenses for all purposes from all funds, including expenses imputed to the parish from indirect support. Do not include depreciation.
@@ -305,11 +338,11 @@ Review any adjustments that were made to the parish's report in the prior year a
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.expenses" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.expenses" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.expenses" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.expenses" type="text" size=10></tr>
   </tbody>
 </table>
 <p>If the above numbers do not appear exactly as in your P&amp;L, please explain the calculation here:<br>
-<textarea ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.expense_explanation placeholder="Explanation of gross expense calculation" cols=70 rows=3></textarea>
+<textarea ng-readonly="true" ng-change="formData.$save()" ng-model=formData.expense_explanation placeholder="Explanation of gross expense calculation" cols=70 rows=3></textarea>
 
 <h4>C. Deductions</h4>
 <p>Please report deductible expenses in the sections below. For all sections, please bear in mind the following:
@@ -324,11 +357,11 @@ Review any adjustments that were made to the parish's report in the prior year a
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" name="nmc-2013" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.nmc" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.nmc" type="text" size=10></tr>
+    <tr><td><input class="money" name="nmc-2013" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.nmc" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.nmc" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.nmc_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="true" ng-change="formData.$save()" ng-model=formData.nmc_lines cols=70 rows=3></textarea>
 
 <h4>C2. Donations to the Archdiocese or National Ministries</h4>
 <p>If your parish made additional donations to the Archdiocese or to its ministries, please report those here.
@@ -337,14 +370,14 @@ Review any adjustments that were made to the parish's report in the prior year a
     <tr><th style="border: none"><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><th scope="row">Archdiocese (do not include allocation)<td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.arch_don" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.arch_don" type="text" size=10></tr>
-    <tr><th scope="row">Hellenic College/Holy Cross<td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.hchc" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.hchc" type="text" size=10></tr>
-    <tr><th scope="row">St. Basil Academy<td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.stbasil" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.stbasil" type="text" size=10></tr>
-    <tr><th scope="row">St. Michael Home<td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.stmichael" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.stmichael" type="text" size=10></tr>
-    <tr><th scope="row">St. Photios Shrine<td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.stphotios" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.stphotios" type="text" size=10></tr>
-    <tr><th scope="row">Ionian Village<td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.ionian" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.ionian" type="text" size=10></tr>
-    <tr><th scope="row">Order of St. Andrew<td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.standrew" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.standrew" type="text" size=10></tr>
-    <tr><th scope="row">Other<td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.other_arch" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.other_arch" type="text" size=10></tr>
+    <tr><th scope="row">Archdiocese (do not include allocation)<td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.arch_don" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.arch_don" type="text" size=10></tr>
+    <tr><th scope="row">Hellenic College/Holy Cross<td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.hchc" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.hchc" type="text" size=10></tr>
+    <tr><th scope="row">St. Basil Academy<td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.stbasil" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.stbasil" type="text" size=10></tr>
+    <tr><th scope="row">St. Michael Home<td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.stmichael" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.stmichael" type="text" size=10></tr>
+    <tr><th scope="row">St. Photios Shrine<td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.stphotios" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.stphotios" type="text" size=10></tr>
+    <tr><th scope="row">Ionian Village<td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.ionian" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.ionian" type="text" size=10></tr>
+    <tr><th scope="row">Order of St. Andrew<td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.standrew" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.standrew" type="text" size=10></tr>
+    <tr><th scope="row">Other<td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.other_arch" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.other_arch" type="text" size=10></tr>
   </tbody>
   <tfoot>
     <tr><th scope="row">Total<td class=money>{{ archMinTotal(formData.Y2013) | currency : $ : 0 }}
@@ -352,9 +385,9 @@ Review any adjustments that were made to the parish's report in the prior year a
   </tfoot>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.arch_don_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="true" ng-change="formData.$save()" ng-model=formData.arch_don_lines cols=70 rows=3></textarea>
 <p>If you included an amount for "Other", please provide a breakdown by ministry and year here:<br>
-<textarea ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.other_arch_don_breakdown placeholder="Breakdown of donations to other Archdiocesen ministries" cols=70 rows=3></textarea>
+<textarea ng-readonly="true" ng-change="formData.$save()" ng-model=formData.other_arch_don_breakdown placeholder="Breakdown of donations to other Archdiocesen ministries" cols=70 rows=3></textarea>
 
 <h4>C3. Donations to Assembly of Bishops Authorized Ministries</h4>
 <p>If your parish made donations to any of the following organizations, please report those here.
@@ -363,15 +396,15 @@ Review any adjustments that were made to the parish's report in the prior year a
     <tr><th style="border: none"><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><th scope="row">IOCC (International Orthodox Christian Charities)<td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.iocc" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.iocc" type="text" size=10></tr>
-    <tr><th scope="row">OCMC (Orthodox Christian Mission Center)<td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.ocmc" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.ocmc" type="text" size=10></tr>
-    <tr><th scope="row">OCF (Orthodox Christian Fellowship)<td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.ocf" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.ocf" type="text" size=10></tr>
-    <tr><th scope="row">Orthodox Christian Prison Ministries<td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.prison_min" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.prison_min" type="text" size=10></tr>
-    <tr><th scope="row">EOCS (Eastern Orthodox Committee on Scouting)<td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.eocs" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.eocs" type="text" size=10></tr>
-    <tr><th scope="row">OCN (Orthodox Christian Network)<td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.ocn" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.ocn" type="text" size=10></tr>
-    <tr><th scope="row">OCEC (Orthodox Christian Education Commission)<td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.ocec" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.ocec" type="text" size=10></tr>
-    <tr><th scope="row">OCAMPR (Orthodox Christian Association of Medicine, Psychology and Religion)<td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.ocampr" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.ocampr" type="text" size=10></tr>
-    <tr><th scope="row">Orthodox Christian Education Commission<td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.ed_comm" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.ed_comm" type="text" size=10></tr>
+    <tr><th scope="row">IOCC (International Orthodox Christian Charities)<td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.iocc" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.iocc" type="text" size=10></tr>
+    <tr><th scope="row">OCMC (Orthodox Christian Mission Center)<td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.ocmc" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.ocmc" type="text" size=10></tr>
+    <tr><th scope="row">OCF (Orthodox Christian Fellowship)<td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.ocf" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.ocf" type="text" size=10></tr>
+    <tr><th scope="row">Orthodox Christian Prison Ministries<td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.prison_min" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.prison_min" type="text" size=10></tr>
+    <tr><th scope="row">EOCS (Eastern Orthodox Committee on Scouting)<td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.eocs" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.eocs" type="text" size=10></tr>
+    <tr><th scope="row">OCN (Orthodox Christian Network)<td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.ocn" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.ocn" type="text" size=10></tr>
+    <tr><th scope="row">OCEC (Orthodox Christian Education Commission)<td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.ocec" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.ocec" type="text" size=10></tr>
+    <tr><th scope="row">OCAMPR (Orthodox Christian Association of Medicine, Psychology and Religion)<td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.ocampr" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.ocampr" type="text" size=10></tr>
+    <tr><th scope="row">Orthodox Christian Education Commission<td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.ed_comm" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.ed_comm" type="text" size=10></tr>
   </tbody>
   <tfoot>
     <tr><th scope="row">Total<td class=money>{{ authMinTotal(formData.Y2013) | currency : $ : 0 }}
@@ -379,7 +412,7 @@ Review any adjustments that were made to the parish's report in the prior year a
   </tfoot>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.auth_min_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="true" ng-change="formData.$save()" ng-model=formData.auth_min_lines cols=70 rows=3></textarea>
 
 <h4>C4. Donations to the Metropolis</h4>
 <p>If your parish made payments or donations to support the Metropolis or any of its ministries, please report the total below.
@@ -388,11 +421,11 @@ Review any adjustments that were made to the parish's report in the prior year a
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.metro" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.metro" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.metro" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.metro" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.metro_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="true" ng-change="formData.$save()" ng-model=formData.metro_lines cols=70 rows=3></textarea>
 
 <h4>C5. Donations to the Ecumenical Patriarchate</h4>
 <p>If your parish made donations to support the Ecumenical Patriarchate or any of its Patriarchal Institutions, please report the total below.
@@ -401,11 +434,11 @@ Review any adjustments that were made to the parish's report in the prior year a
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.patriarch" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.patriarch" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.patriarch" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.patriarch" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.patriarch_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="true" ng-change="formData.$save()" ng-model=formData.patriarch_lines cols=70 rows=3></textarea>
 
 <h4>C6. Capital Improvement Projects</h4>
 <p>Please report deductible capital improvement expenses below in accordance with the following guidelines:
@@ -420,13 +453,13 @@ Review any adjustments that were made to the parish's report in the prior year a
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.cap" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.cap" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.cap" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.cap" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.cap_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="true" ng-change="formData.$save()" ng-model=formData.cap_lines cols=70 rows=3></textarea>
 <p>Please list the projects included in the above figures. For each project, indicate the start date, anticipated completion date, and estimated total cost.<br>
-<textarea ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.cap_projects placeholder="List of capital projects" cols=70 rows=6></textarea>
+<textarea ng-readonly="true" ng-change="formData.$save()" ng-model=formData.cap_projects placeholder="List of capital projects" cols=70 rows=6></textarea>
 
 <h4>C7. Construction Loan Interest</h4>
 <p>Please report interest paid on construction loans below.
@@ -436,11 +469,11 @@ Review any adjustments that were made to the parish's report in the prior year a
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.const_loan" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.const_loan" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.const_loan" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.const_loan" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.const_loan_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="true" ng-change="formData.$save()" ng-model=formData.const_loan_lines cols=70 rows=3></textarea>
 
 <h4>C8. Mortgage Payments</h4>
 <p>Please report the deductible portion of your parish's mortgage payments below. Payments on a mortgage are deductible to the extent they are included in the gross expenses reported in section B, above. For example,
@@ -453,11 +486,11 @@ Review any adjustments that were made to the parish's report in the prior year a
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.mort" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.mort" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.mort" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.mort" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.mort_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="true" ng-change="formData.$save()" ng-model=formData.mort_lines cols=70 rows=3></textarea>
 
 <h4>C9. Fundraising Expenses</h4>
 <p>Please report deductible fundraising expenses below, in accordance with the following guidelines:
@@ -475,11 +508,11 @@ Review any adjustments that were made to the parish's report in the prior year a
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.fundraising" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.fundraising" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.fundraising" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.fundraising" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Please list the lines on the P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.fundraising_lines placeholder="Line(s) or account number(s) on P&amp;L containing fundraising expenses" cols=70 rows=4></textarea>
+<textarea ng-readonly="true" ng-change="formData.$save()" ng-model=formData.fundraising_lines placeholder="Line(s) or account number(s) on P&amp;L containing fundraising expenses" cols=70 rows=4></textarea>
 
 <h4>C10. Greek School and Day School Expenses</h4>
 <p>Please report deductible Greek School and Day School expenses below, in accordance with the following guidelines:
@@ -494,11 +527,11 @@ Review any adjustments that were made to the parish's report in the prior year a
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.school" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.school" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.school" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.school" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.school_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="true" ng-change="formData.$save()" ng-model=formData.school_lines cols=70 rows=3></textarea>
 
 <h4>C11. Religious Education Expenses</h4>
 <p>Please report deductible expenses for religious education below, in accordance with the following guidelines:
@@ -513,11 +546,11 @@ Review any adjustments that were made to the parish's report in the prior year a
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.religious_ed" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.religious_ed" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.religious_ed" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.religious_ed" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.religious_ed_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="true" ng-change="formData.$save()" ng-model=formData.religious_ed_lines cols=70 rows=3></textarea>
 
 <h4>C12. Funds paid for catastrophic risk insurance</h4>
 <p>Please report expenses for catastrophic risk insurance such as earthquake or flood insurance below. Please note that typical fire and liability insurance should not be included.
@@ -526,12 +559,12 @@ Review any adjustments that were made to the parish's report in the prior year a
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.unusual" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.unusual" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.unusual" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.unusual" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Please explain the above expenses.
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.catastrophic_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="true" ng-change="formData.$save()" ng-model=formData.catastrophic_lines cols=70 rows=3></textarea>
 
 <h4>C13. Funds paid for moving expenses of Clergy</h4>
 <p>Please report expenses for relocating clergymen to your parish.
@@ -540,11 +573,11 @@ Review any adjustments that were made to the parish's report in the prior year a
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.moving" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.moving" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.moving" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.moving" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.moving_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="true" ng-change="formData.$save()" ng-model=formData.moving_lines cols=70 rows=3></textarea>
 
 <h4>C14. Outreach and Evangelism</h4>
 <p>Please report deductible outreach and evangelism expenses below, in accordance with the following guidelines:
@@ -559,11 +592,11 @@ Review any adjustments that were made to the parish's report in the prior year a
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.outreach" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.outreach" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.outreach" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.outreach" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.outreach_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="true" ng-change="formData.$save()" ng-model=formData.outreach_lines cols=70 rows=3></textarea>
 
 <h4>C15. National Clergy Laity Congress</h4>
 <p>Please report expenses for sending delegates to the Archdiocese Clergy Laity Congress below. Do not include expenses associated with metropolis assembly meetings or other organizations. Note that the Clergy Laity Congress happens only once every two years, so you should only have expenses for it on even years.
@@ -572,11 +605,11 @@ Review any adjustments that were made to the parish's report in the prior year a
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.clergy_laity" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.clergy_laity" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.clergy_laity" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.clergy_laity" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.clergy_laity_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="true" ng-change="formData.$save()" ng-model=formData.clergy_laity_lines cols=70 rows=3></textarea>
 
 <h4>C16. Other Deductions Approved by Hierarch</h4>
 <p>Please report any special deductions that have been approved by your hierarch below.
@@ -585,13 +618,13 @@ Review any adjustments that were made to the parish's report in the prior year a
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.other_hier" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.other_hier" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.other_hier" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.other_hier" type="text" size=10></tr>
   </tbody>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.other_hier_lines cols=70 rows=3></textarea>
+<textarea ng-readonly="true" ng-change="formData.$save()" ng-model=formData.other_hier_lines cols=70 rows=3></textarea>
 <p>Please explain the special deductions.<br>
-<textarea ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.other_hier_explanation placeholder="Explanation of special deductions" cols=70 rows=3></textarea>
+<textarea ng-readonly="true" ng-change="formData.$save()" ng-model=formData.other_hier_explanation placeholder="Explanation of special deductions" cols=70 rows=3></textarea>
 
 <h4>Property and Liability Insurance</h4>
 <p>Please report the total amount paid for property and liability insurance for your parish. This is collected for informational purposes but is not a deductible expense.
@@ -600,110 +633,18 @@ Review any adjustments that were made to the parish's report in the prior year a
     <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.prop_liab" type="text" size=10><td><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.prop_liab" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2013.prop_liab" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-change="formData.$save()" ng-model="formData.Y2014.prop_liab" type="text" size=10></tr>
   </tbody>
 </table>
 
-<h4>Stewardship</h4>
-<p>Please provide the following information about stewardship at your parish. This information is used to understand trends across the Metropolis and Archdiocese as well as at individual parishes.
-<table class="bordered-table">
-  <thead>
-    <tr><th style="border: none"><th>2012<th>2013<th>2014</tr>
-  </thead>
-  <tbody>
-    <tr>
-    <th scope="row">Stewardship or dues?
-    <td><select ng-disabled="!editing()" ng-change="formData.$save()" ng-model="formData.Y2012.stew_or_dues"><option value="stew">Stewardship</option><option value="dues">Dues</option></select>
-    <td><select ng-disabled="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.stew_or_dues"><option value="stew">Stewardship</option><option value="dues">Dues</option></select>
-    <td><select ng-disabled="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.stew_or_dues"><option value="stew">Stewardship</option><option value="dues">Dues</option></select>
-    </tr>
-    <tr>
-    <th scope="row">Total # of paid members
-    <td class="number"><input class="number" ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2012.num_members" type="text" size=10>
-    <td class="number"><input class="number" ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.num_members" type="text" size=10>
-    <td class="number"><input class="number" ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.num_members" type="text" size=10>
-    </tr>
-    <tr>
-    <th scope="row">How are members counted?
-    <td><select ng-disabled="!editing()" ng-change="formData.$save()" ng-model="formData.Y2012.how_counted"><option value="family">Per Family</option><option value="individual">Individual</option></select>
-    <td><select ng-disabled="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.how_counted"><option value="family">Per Family</option><option value="individual">Individual</option></select>
-    <td><select ng-disabled="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.how_counted"><option value="family">Per Family</option><option value="individual">Individual</option></select>
-    </tr>
-    <tr>
-    <th scope="row">Total stewardship or dues income
-    <td class="money"><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2012.stew_income" type="text" size=10>
-    <td class="money"><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2013.stew_income" type="text" size=10>
-    <td class="money"><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2014.stew_income" type="text" size=10>
-    </tr>
-    <tr>
-    <th scope="row">Total parish income (all sources)
-    <td class="money"><input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.Y2012.income" type="text" size=10>
-    <td class="money">{{ (formData.Y2013.income || 0) | currency : $ : 0 }}
-    <td class="money">{{ (formData.Y2014.income || 0) | currency : $ : 0 }}
-    </tr>
-    <tr>
-    <th scope="row">Avg. stewardship or dues per member
-    <td class="money">{{ (formData.Y2012.stew_income / formData.Y2012.num_members) | currency : $ : 0 }}
-    <td class="money">{{ (formData.Y2013.stew_income / formData.Y2013.num_members) | currency : $ : 0 }}
-    <td class="money">{{ (formData.Y2014.stew_income / formData.Y2014.num_members) | currency : $ : 0 }}
-    </tr>
-    <tr>
-    <th scope="row">Stewardship/dues as % of total income
-    <td class="number">{{ (100 * formData.Y2012.stew_income / formData.Y2012.income) | number : 0 }}%
-    <td class="number">{{ (100 * formData.Y2013.stew_income / formData.Y2013.income) | number : 0 }}%
-    <td class="number">{{ (100 * formData.Y2014.stew_income / formData.Y2014.income) | number : 0 }}%
-    </tr>
-  </tbody>
-</table>
-<p><label>Number of new families who became members in 2014: <input class="number" ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.num_new_families" type="text" size=7></label>
-<p ng-show="formData.Y2014.stew_or_dues === 'stew'">Number of members giving for year 2014:
-<label>$2,000 &amp; over: <input class="number" ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.num_stew_over_2000" type="text" size=7></label>
-<label>Between $1,000 - $1,999: <input class="number" ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.num_stew_1000_1999" type="text" size=7></label>
-<label>Between $800 - $999: <input class="number" ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.num_stew_800_999" type="text" size=7></label>
-<label>Between $500 - $799: <input class="number" ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.num_stew_500_799" type="text" size=7></label>
-<label>Between $300 - $499: <input class="number" ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.num_stew_300_499" type="text" size=7></label>
-<label>Less than $300: <input class="number" ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.num_stew_under_300" type="text" size=7></label>
-<p ng-show="formData.Y2014.stew_or_dues === 'dues'">
-<label>$ Amount for Families: <input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.dues_family" type="text" size=7></label>
-<label>$ Amount for Singles: <input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.dues_single" type="text" size=7></label>
-<label>$ Amount for Seniors: <input class="money" dollars ng-readonly="!editing()" ng-change="formData.$save()" ng-model="formData.dues_senior" type="text" size=7></label>
-<p>Stewardship and/or membership chairperson(s):<br>
-<input size=20 ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.stew_name1 placeholder="Name">
-<input size=12 ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.stew_phone1 type=tel placeholder="Phone">
-<input size=25 ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.stew_email1 type=email placeholder="Email Address"><br>
-<input size=20 ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.stew_name2 placeholder="Name">
-<input size=12 ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.stew_phone2 type=tel placeholder="Phone">
-<input size=25 ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.stew_email2 type=email placeholder="Email Address"><br>
-<input size=20 ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.stew_name3 placeholder="Name">
-<input size=12 ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.stew_phone3 type=tel placeholder="Phone">
-<input size=25 ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.stew_email3 type=email placeholder="Email Address"><br>
-<input size=20 ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.stew_name4 placeholder="Name">
-<input size=12 ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.stew_phone4 type=tel placeholder="Phone">
-<input size=25 ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.stew_email4 type=email placeholder="Email Address"><br>
-</section>
 <section>
 <h3>Approvals</h3>
 <p>Please enter your name below if you approve this report.
-<p><strong>Priest:</strong> <input size=25 ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.priest_approval_name placeholder="Name">
-<p><strong>President:</strong> <input size=25 ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.pres_approval_name placeholder="Name">
-<p><strong>Treasurer:</strong> <input size=25 ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.treas_approval_name placeholder="Name">
-<p><strong>Internal Audit Committee Chair</strong>: <input size=25 ng-readonly="!editing()" ng-change="formData.$save()" ng-model=formData.audit_approval_name placeholder="Name">
-<h3>Final Steps</h3>
-<ol>
-  <li>Submit profit &amp; loss statements and balance sheets for 2013 and 2014. You may do so using one of the following means:
-    <ul>
-      <li><strong>Preferred:</strong> Upload electronic copies of your documents to <a target="drive-folder" ng-href="https://drive.google.com/drive/#folders/{{upload_folder}}">this Google Drive folder</a>. Note that using this method requires you to have a Google Account.
-      <li>Email your documents directly to <a href="mailto:geoffrey.gowan@gmail.com">geoffrey.gowan@gmail.com</a>, including the name and city of your parish.
-    </ul>
-  <li>Print a copy of this form for your records.
-</ol>
-</section>
+<p><strong>Priest:</strong> <input size=25 ng-readonly="true" ng-change="formData.$save()" ng-model=formData.priest_approval_name placeholder="Name">
+<p><strong>President:</strong> <input size=25 ng-readonly="true" ng-change="formData.$save()" ng-model=formData.pres_approval_name placeholder="Name">
+<p><strong>Treasurer:</strong> <input size=25 ng-readonly="true" ng-change="formData.$save()" ng-model=formData.treas_approval_name placeholder="Name">
+<p><strong>Internal Audit Committee Chair</strong>: <input size=25 ng-readonly="true" ng-change="formData.$save()" ng-model=formData.audit_approval_name placeholder="Name">
 
-<section style="color:#FFFFFF;font-size:80%;display:none">
-<div>Debug Info</div>
-<div>formData: {{formData}}</div>
-<div>firebaseInfo: {{firebaseInfo}}</div>
-</section>
 </form>
 </body>
 </html>
