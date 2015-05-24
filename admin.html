@@ -44,8 +44,9 @@
 </tbody>
 </table>
 <p><label>New Parish ID: <input type="text" ng-model=new_parish_id size=20></label><button ng-click="addParish(new_parish_id)">Add Parish</button>
-<p>Committee Invitations:
-<div ng-repeat="(token, name) in committeeInvites">{{ name }}: {{token}}</div>
+<p>
+<div>Committee Invitations:</div>
+<div ng-repeat="(token, name) in committeeInvites" class="small">{{ name }}: https://easy-nmc.appspot.com/metropolis/SF/summary?invite={{token}}</div>
 <p><input type="text" ng-model="recipientName" size=20 placeholder="Name of Recipient">
 <button ng-click="createInvitation(recipientName)">Create Invitation</button>
 <!--
