@@ -76,6 +76,12 @@ td {
 .attention {
   background-color: #F8FF6A;
 }
+.requested-info {
+  background-color: #FFE398;
+}
+.in-progress {
+  background-color: #6AFFF7;
+}
 table.bordered-table {
   border-collapse: collapse;
 }
