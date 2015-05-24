@@ -44,6 +44,11 @@
 </tbody>
 </table>
 <p><label>New Parish ID: <input type="text" ng-model=new_parish_id size=20></label><button ng-click="addParish(new_parish_id)">Add Parish</button>
+<p>Committee Invitations:
+<div ng-repeat="(token, name) in committeeInvites">{{ name }}: {{token}}</div>
+<p><input type="text" ng-model="recipientName" size=20 placeholder="Name of Recipient">
+<button ng-click="createInvitation(recipientName)">Create Invitation</button>
+<!--
 <table class="bordered-table">
 <thead>
 <tr><th>Parish Name</th><th>City</th><th>State</th><th>Form Address</th></tr>
@@ -57,6 +62,6 @@
 </tr>
 </tbody>
 </table>
-
+-->
 </body>
 </html>

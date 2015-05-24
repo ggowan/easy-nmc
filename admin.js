@@ -64,14 +64,8 @@ function createParishFolders($scope) {
   shared.initDriveApi(function() {createFoldersAuthorized($scope);});
 }
 
-// Binds the firebase data to a field in the AngularJS scope.
-function setupSession($scope, $firebaseObject, ref, auth) {
-  var url_parser = document.createElement('a');
-  url_parser.href = document.URL;
-  var pathname = url_parser.pathname;
-  var patharray = pathname.split('/');
-  var queryParams = shared.getQueryParams(url_parser.search);
-  $scope.metropolis_id = patharray[2];
+function setupScope($scope, $firebaseObject) {
+  var ref = new Firebase(shared.firebaseBackend);
   $scope.metroRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id);
   $scope.addParish = function(parishId) {
     console.log("addParish", parishId);
@@ -112,30 +106,15 @@ function setupSession($scope, $firebaseObject, ref, auth) {
   }, function(error) {
     $scope.error = error;
   });
+  $scope.committeeInvites = $firebaseObject($scope.metroRef.child("committee-invite"));
+  $scope.createInvitation = function(recipientName) {
+    $scope.committeeInvites[generateKey()] = recipientName;
+    $scope.committeeInvites.$save();
+  };
 }
 
 app.controller("Ctrl", function($scope, $firebaseObject) {
-  var ref = new Firebase(shared.firebaseBackend);
-  var auth = ref.getAuth();
-  console.log("auth: ", auth);
-  if (auth && auth.provider !== "google") {
-    console.log("Need to logout");
-    ref.unauth();
-    auth = null;
-  }
-  if (!auth) {
-    console.log("authenticating with Google");
-    ref.authWithOAuthPopup("google", function(error, authData) {
-      if (error) {
-        console.log("Login Failed!", error);
-        $scope.error = error;
-      } else {
-        console.log("authData", authData);
-        setupSession($scope, $firebaseObject, ref, authData);
-      }
-    });
-  } else {
-    console.log("Already authenticated: ", auth);
-    setupSession($scope, $firebaseObject, ref, auth);
-  }
+  shared.handleMetroLogin($scope, function() {
+    setupScope($scope, $firebaseObject);
+  });
 });

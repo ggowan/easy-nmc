@@ -1,7 +1,9 @@
 var app = angular.module("easyNmcReview", ["firebase"]);
 
-// Binds the firebase data to a field in the AngularJS scope.
-function bindFirebase($scope, $firebaseObject, ref) {
+function setupScope($scope, $firebaseObject) {
+  $scope.parish_id = $scope.patharray[3];
+  $scope.year = $scope.patharray[5];
+  var ref = new Firebase(shared.firebaseBackend);
   var metroRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id);
   var parishIdRef = metroRef.child("/parish-id/" + $scope.parish_id);
   parishIdRef.child("name").on("value", function(snap) {
@@ -131,57 +133,9 @@ function bindFirebase($scope, $firebaseObject, ref) {
   }
 }
 
-function setupSession($scope, $firebaseObject, ref, auth) {
-  var url_parser = document.createElement('a');
-  url_parser.href = document.URL;
-  var pathname = url_parser.pathname;
-  // On some browsers the pathname starts with a slash; on others it doesn't.
-  if (pathname.charAt(0) === '/') {
-    // Drop first slash.
-    pathname = pathname.substr(1);
-  }
-  var patharray = pathname.split('/');
-  var queryParams = shared.getQueryParams(url_parser.search);
-  $scope.metropolis_id = patharray[1];
-  $scope.parish_id = patharray[3];
-  $scope.year = patharray[5];
-  $scope.auth = auth;
-  console.log("metropolis_id: ", $scope.metropolis_id, " parish_id: ", $scope.parish_id, " year: ", $scope.year);
-  bindFirebase($scope, $firebaseObject, ref);
-}
-
-function handleAuthChange($scope, $firebaseObject, ref, auth) {
-  console.log("handleAuthChange ", auth);
-  if (auth && auth.provider !== "google") {
-    console.log("Need to logout");
-    ref.unauth();
-    return;
-  }
-  if (!auth) {
-    ref.authWithOAuthPopup("google", function(error, auth) {
-      if (error) {
-        if (error.code === "TRANSPORT_UNAVAILABLE") {
-          // fall-back to browser redirects, and pick up the session
-          // automatically when we come back to the origin page
-          ref.authWithOAuthRedirect("google", function(error) {
-            console.log("auth redirect failed: ", error);
-            $scope.error = error;
-          });
-        }
-      } else {
-        console.log("authentication succeeded ", auth);
-      }
-    });
-    return;
-  }
-  console.log("Already authenticated: ", auth);
-  setupSession($scope, $firebaseObject, ref, auth);
-}
-
 app.controller("Ctrl", function($scope, $firebaseObject) {
-  var ref = new Firebase(shared.firebaseBackend);
-  ref.onAuth(function (auth) {
-    handleAuthChange($scope, $firebaseObject, ref, auth);
+  shared.handleMetroLogin($scope, function() {
+    setupScope($scope, $firebaseObject);
   });
 });
 

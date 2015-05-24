@@ -62,3 +62,99 @@ shared.sumNumbers = function sumNumbers(a, b) {
   }
   return 0;
 };
+
+function setupSession($scope, ref, auth, callback) {
+  var url_parser = document.createElement('a');
+  url_parser.href = document.URL;
+  var pathname = url_parser.pathname;
+  // On some browsers the pathname starts with a slash; on others it doesn't.
+  if (pathname.charAt(0) === '/') {
+    // Drop first slash.
+    pathname = pathname.substr(1);
+  }
+  $scope.patharray = pathname.split('/');
+  $scope.metropolis_id = $scope.patharray[1];
+  $scope.auth = auth;  
+  var queryParams = shared.getQueryParams(url_parser.search);
+  if ("invite" in queryParams) {
+    var metroRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id);
+    metroRef.child("committee/" + auth.uid).set(queryParams.invite, function(error) {
+      if (error) {
+        console.log('Failed to store invitation in committee slot: ', error);
+      } else {
+        console.log('Stored invitation in committee slot: ', queryParams.invite);
+        // Also delete the committee-invite to represent that it has been used.
+        metroRef.child("committee-invite/" + queryParams.invite).remove();
+      }
+      callback();
+    });
+  } else {
+    callback();
+  }
+}
+
+function handleAuthChange($scope, ref, auth, callback) {
+  console.log("handleAuthChange ", auth);
+  if (auth && auth.provider !== "google") {
+    console.log("Need to logout");
+    ref.unauth();
+    return;
+  }
+  if (!auth) {
+    console.log("requesting auth redirect");
+    ref.authWithOAuthRedirect("google", function(error) {
+      if (error) {
+        console.log("auth redirect failed: ", error);
+        console.log("requesting auth popup");
+        ref.authWithOAuthPopup("google", function(error, auth) {
+          if (error) {
+            console.log("popup failed", error);
+            $scope.error = error;
+          } else {
+            console.log("authentication via popup succeeded ", auth);
+          }
+        });
+      }
+    });
+    console.log("returning after requesting auth redirect");
+    return;
+  }
+  console.log("Already authenticated: ", auth);
+  setupSession($scope, ref, auth, callback);
+}
+
+// Ensures the user is logged in with a Google account, and registers
+// the user as a committee member if the query parameters contain an
+// invitation. Invitations are represented like 
+// "?invite=u23zD4Yv4BnMxaFyNtGEwS8B". Invitations can only be used
+// once because this function deletes the invitation after it is
+// successfully associated with the authenticated Google account.
+//
+// Requires that the URL path starts with "/metropolis/$metropolis_id".
+// This is needed in order to register the user with the correct committee.
+//
+// Invokes the callback when complete, and every time the
+// auth state changes thereafter. 
+//
+// Stores some data in $scope prior to invoking the callback:
+//   - $scope.auth receives the auth data (or null if an error occurs).
+//   - $scope.error receives the error, if any.
+//   - $scope.patharray receives an array containing the elements of
+//     the URL path split on slashes. For example, if the path is
+//     "/metropolis/SF/review/2016/parish/ascension", the contents of
+//     patharray will be:
+//         patharray[0] = 'metropolis'
+//         patharray[1] = 'SF'
+//         patharray[2] = 'review'
+//         patharray[3] = '2016'
+//         patharray[4] = 'parish'
+//         patharray[5] = 'ascension'
+//   - $scope.metropolis_id receives patharray[1]
+shared.handleMetroLogin = function($scope, callback) {
+  var ref = new Firebase(shared.firebaseBackend);
+  ref.onAuth(function (auth) {
+    handleAuthChange($scope, ref, auth, callback);
+  });  
+};
+
+
