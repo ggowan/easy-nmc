@@ -33,17 +33,11 @@ function refreshDriveDataHelper($scope) {
   });
 }
 
-// Binds the firebase data to a field in the AngularJS scope.
-function setupSession($scope, $firebaseObject, ref, auth) {
-  var url_parser = document.createElement('a');
-  url_parser.href = document.URL;
-  var pathname = url_parser.pathname;
-  var patharray = pathname.split('/');
-  var queryParams = shared.getQueryParams(url_parser.search);
+function setupScope($scope, $firebaseObject) {
+  var ref = new Firebase(shared.firebaseBackend);
   $scope.FOR_YEAR = shared.FOR_YEAR;
-  $scope.metropolis_id = patharray[2];
   $scope.metroRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id);
-  
+ 
   $scope.parishIds = $firebaseObject($scope.metroRef.child("parish-id"));
   $scope.parishIds.$loaded().then(function(data) {
     console.log("parish-id finished loading");
@@ -129,29 +123,9 @@ function setupSession($scope, $firebaseObject, ref, auth) {
 }
 
 app.controller("Ctrl", function($scope, $firebaseObject) {
-  var ref = new Firebase(shared.firebaseBackend);
-  var auth = ref.getAuth();
-  console.log("auth: ", auth);
-  if (auth && auth.provider !== "google") {
-    console.log("Need to logout");
-    ref.unauth();
-    auth = null;
-  }
-  if (!auth) {
-    console.log("authenticating with Google");
-    ref.authWithOAuthPopup("google", function(error, authData) {
-      if (error) {
-        console.log("Login Failed!", error);
-        $scope.error = error;
-      } else {
-        console.log("authData", authData);
-        setupSession($scope, $firebaseObject, ref, authData);
-      }
-    });
-  } else {
-    console.log("Already authenticated: ", auth);
-    setupSession($scope, $firebaseObject, ref, auth);
-  }
+  shared.handleMetroLogin($scope, function() {
+    setupScope($scope, $firebaseObject);
+  });
 });
 
 // Filters for properties that do not have the specified sub-property value.
