@@ -120,6 +120,16 @@ function setupScope($scope, $firebaseObject) {
     console.log("saving extension ", $scope.parishIds);
     $scope.parishIds.$save();
   };
+  $scope.statusClass = function(status) {
+    if (!status) return 'bad';
+    var result = {
+      'started': 'in-progress',
+      'waiting': 'requested-info',
+      'finished': 'good',
+    }[status];
+    if (!result) return 'bad';
+    return result;
+  };
 }
 
 app.controller("Ctrl", function($scope, $firebaseObject) {
@@ -140,4 +150,17 @@ app.filter('objectByKeyValFilter', function () {
     });
     return filteredInput;
   }
+});
+
+app.filter('shortReviewStatus', function() {
+  return function(status) {
+    if (!status) return '-';
+    var result = {
+      'started': 'Started',
+      'waiting': 'Awaiting Response',
+      'finished': 'Finished',
+    }[status];
+    if (!result) return status;
+    return result;
+  };
 });
