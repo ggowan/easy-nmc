@@ -101,25 +101,22 @@ function handleAuthChange($scope, ref, auth, callback) {
     return;
   }
   if (!auth) {
-    console.log("requesting auth with popup");
-    ref.authWithOAuthPopup("google", function(error, auth) {
+    console.log("requesting auth redirect");
+    ref.authWithOAuthRedirect("google", function(error) {
       if (error) {
-        console.log("popup failed", error);
-        if (error.code === "TRANSPORT_UNAVAILABLE") {
-          console.log("initiating redirect");
-          // fall-back to browser redirects, and pick up the session
-          // automatically when we come back to the origin page
-          ref.authWithOAuthRedirect("google", function(error) {
-            console.log("auth redirect failed: ", error);
+        console.log("auth redirect failed: ", error);
+        console.log("requesting auth popup");
+        ref.authWithOAuthPopup("google", function(error, auth) {
+          if (error) {
+            console.log("popup failed", error);
             $scope.error = error;
-            setupSession($scope, ref, auth, callback);
-          });
-        }
-      } else {
-        console.log("authentication via popup succeeded ", auth);
+          } else {
+            console.log("authentication via popup succeeded ", auth);
+          }
+        });
       }
     });
-    console.log("returning after requesting auth with popup");
+    console.log("returning after requesting auth redirect");
     return;
   }
   console.log("Already authenticated: ", auth);
