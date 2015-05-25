@@ -62,6 +62,10 @@ Do the gross expenses exclude depreciation, transfers, account balances and the 
 <input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.deductible_in_gross>
 Are each of the deductible expenses reported on lines of the P&L that are included in the gross expenses?
 </div>
+<div ng-class="reviewData.each_deduction_once_only ? 'good' : 'attention'">
+<input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.each_deduction_once_only>
+Is each deductible expense deducted on one and only one line?
+</div>
 <div ng-class="reviewData.appropriate_deductions ? 'good' : 'attention'">
 <input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.appropriate_deductions>
 Do the deductions appear to be for things that match the description and guidelines for the line in which they are reported?
