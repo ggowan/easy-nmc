@@ -95,6 +95,13 @@ Review any adjustments that were made to the parish's report in the prior year a
  
 </section>
 <section>
+<h3>Contact Information</h3>
+<p><strong>Priest:</strong> {{ formData.priest_name }}, {{ formData.priest_phone }}, {{ formData.priest_email }}
+<br><strong>President:</strong> {{ formData.pres_name }}, {{ formData.pres_phone }}, {{ formData.pres_email }}
+<br><strong>Treasurer:</strong> {{ formData.treas_name }}, {{ formData.treas_phone }}, {{ formData.treas_email }}
+<div ng-show="formData.preparer_name || formData.preparer_phone || formData.preparer_email"><strong>Preparer:</strong> {{ formData.preparer_name }}, {{ formData.preparer_phone }}, {{ formData.preparer_email }}</div>
+</section>
+<section>
 <h3>Summary</h3>
 <table class="bordered-table">
 <thead>
@@ -289,7 +296,7 @@ Review any adjustments that were made to the parish's report in the prior year a
 <h3>Reviewer Tallies</h3>
 <div ng-repeat="(tallyKey, tally) in reviewData.tallies">
 <h4>Tally #{{$index + 1}}</h4>
-<p><input type="text" ng-change="reviewData.$save()" ng-model="tally.name" ng-readonly="!editing()" size=40 placeholder="Tally name">
+<p><input type="text" ng-change="reviewData.$save()" ng-model="tally.name" ng-readonly="!editing()" size=90 placeholder="Tally name">
 <table class="bordered-table">
 <thead>
 <tr><th>Description</th><th>Amount</th></tr>
@@ -309,13 +316,6 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p><button ng-click="addTally()" ng-disabled="!editing()">Add Tally</button>
 </section>
 <section>
-<section>
-<h3>Contact Information</h3>
-<p><strong>Priest:</strong> {{ formData.priest_name }}, {{ formData.priest_phone }}, {{ formData.priest_email }}
-<br><strong>President:</strong> {{ formData.pres_name }}, {{ formData.pres_phone }}, {{ formData.pres_email }}
-<br><strong>Treasurer:</strong> {{ formData.treas_name }}, {{ formData.treas_phone }}, {{ formData.treas_email }}
-<div ng-show="formData.preparer_name || formData.preparer_phone || formData.preparer_email"><strong>Preparer:</strong> {{ formData.preparer_name }}, {{ formData.preparer_phone }}, {{ formData.preparer_email }}</div>
-</section>
 <h3>Details</h3>
 <h4>A. Gross Income</h4>
 <p>Please report gross income for your parish below. Include all parish income from all sources and for all purposes, including income imputed to the parish from indirect support.
@@ -333,6 +333,9 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>If the above numbers do not appear exactly as in your P&amp;L, please explain the calculation here:<br>
 <textarea ng-readonly="true" ng-model=formData.income_explanation placeholder="Explanation of gross income calculation" cols=70 rows=3></textarea>
 
+<p>Reviewer comments:<br>
+<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.income_comment placeholder="Comments on gross income" cols=70 rows=3></textarea>
+
 <h4>B. Gross Expenses</h4>
 <p>Please report gross expenses for your parish below. Include expenses for all purposes from all funds, including expenses imputed to the parish from indirect support. Do not include depreciation.
 <table>
@@ -345,6 +348,9 @@ Review any adjustments that were made to the parish's report in the prior year a
 </table>
 <p>If the above numbers do not appear exactly as in your P&amp;L, please explain the calculation here:<br>
 <textarea ng-readonly="true" ng-model=formData.expense_explanation placeholder="Explanation of gross expense calculation" cols=70 rows=3></textarea>
+
+<p>Reviewer comments:<br>
+<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.expense_comment placeholder="Comments on gross expenses" cols=70 rows=3></textarea>
 
 <h4>C. Deductions</h4>
 <p>Please report deductible expenses in the sections below. For all sections, please bear in mind the following:
@@ -364,6 +370,9 @@ Review any adjustments that were made to the parish's report in the prior year a
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
 <textarea ng-readonly="true" ng-model=formData.nmc_lines cols=70 rows=3></textarea>
+
+<p>Reviewer comments:<br>
+<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.nmc_comment placeholder="Comments on National Ministries Commitment deduction" cols=70 rows=3></textarea>
 
 <h4>C2. Donations to the Archdiocese or National Ministries</h4>
 <p>If your parish made additional donations to the Archdiocese or to its ministries, please report those here.
@@ -391,6 +400,9 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>If you included an amount for "Other", please provide a breakdown by ministry and year here:<br>
 <textarea ng-readonly="true" ng-model=formData.other_arch_don_breakdown placeholder="Breakdown of donations to other Archdiocesen ministries" cols=70 rows=3></textarea>
 
+<p>Reviewer comments:<br>
+<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.arch_don_comment placeholder="Comments on Archdiocese donations" cols=70 rows=3></textarea>
+
 <h4>C3. Donations to Assembly of Bishops Authorized Ministries</h4>
 <p>If your parish made donations to any of the following organizations, please report those here.
 <table class="bordered-table">
@@ -416,6 +428,9 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
 <textarea ng-readonly="true" ng-model=formData.auth_min_lines cols=70 rows=3></textarea>
 
+<p>Reviewer comments:<br>
+<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.auth_min_comment placeholder="Comments on Assembly of Bishops Authorized Ministries deductions" cols=70 rows=3></textarea>
+
 <h4>C4. Donations to the Metropolis</h4>
 <p>If your parish made payments or donations to support the Metropolis or any of its ministries, please report the total below.
 <table>
@@ -429,6 +444,9 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
 <textarea ng-readonly="true" ng-model=formData.metro_lines cols=70 rows=3></textarea>
 
+<p>Reviewer comments:<br>
+<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.metro_comment placeholder="Comments on Metropolis donations deduction" cols=70 rows=3></textarea>
+
 <h4>C5. Donations to the Ecumenical Patriarchate</h4>
 <p>If your parish made donations to support the Ecumenical Patriarchate or any of its Patriarchal Institutions, please report the total below.
 <table>
@@ -441,6 +459,9 @@ Review any adjustments that were made to the parish's report in the prior year a
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
 <textarea ng-readonly="true" ng-model=formData.patriarch_lines cols=70 rows=3></textarea>
+
+<p>Reviewer comments:<br>
+<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.patriarch_comment placeholder="Comments on Patriarchate deductions" cols=70 rows=3></textarea>
 
 <h4>C6. Capital Improvement Projects</h4>
 <p>Please report deductible capital improvement expenses below in accordance with the following guidelines:
@@ -463,6 +484,9 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>Please list the projects included in the above figures. For each project, indicate the start date, anticipated completion date, and estimated total cost.<br>
 <textarea ng-readonly="true" ng-model=formData.cap_projects placeholder="List of capital projects" cols=70 rows=6></textarea>
 
+<p>Reviewer comments:<br>
+<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.cap_comment placeholder="Comments on capital improvement deductions" cols=70 rows=3></textarea>
+
 <h4>C7. Construction Loan Interest</h4>
 <p>Please report interest paid on construction loans below.
 <p>Construction loans are short-term, interest-only loans in which the balance increases as payments are made on an ongoing construction project. If your parish's loan requires fixed monthly payments over a period of years and the balance is going down, not up, it is a mortgage and should be reported in section C8 below.
@@ -476,6 +500,9 @@ Review any adjustments that were made to the parish's report in the prior year a
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
 <textarea ng-readonly="true" ng-model=formData.const_loan_lines cols=70 rows=3></textarea>
+
+<p>Reviewer comments:<br>
+<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.const_loan_comment placeholder="Comments on construction loan deduction" cols=70 rows=3></textarea>
 
 <h4>C8. Mortgage Payments</h4>
 <p>Please report the deductible portion of your parish's mortgage payments below. Payments on a mortgage are deductible to the extent they are included in the gross expenses reported in section B, above. For example,
@@ -493,6 +520,9 @@ Review any adjustments that were made to the parish's report in the prior year a
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
 <textarea ng-readonly="true" ng-model=formData.mort_lines cols=70 rows=3></textarea>
+
+<p>Reviewer comments:<br>
+<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.mort_comment placeholder="Comments on mortgage deduction" cols=70 rows=3></textarea>
 
 <h4>C9. Fundraising Expenses</h4>
 <p>Please report deductible fundraising expenses below, in accordance with the following guidelines:
@@ -516,6 +546,9 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>Please list the lines on the P&amp;L containing these amounts:<br>
 <textarea ng-readonly="true" ng-model=formData.fundraising_lines placeholder="Line(s) or account number(s) on P&amp;L containing fundraising expenses" cols=70 rows=4></textarea>
 
+<p>Reviewer comments:<br>
+<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.fundraising_comment placeholder="Comments on fundraising deductions" cols=70 rows=3></textarea>
+
 <h4>C10. Greek School and Day School Expenses</h4>
 <p>Please report deductible Greek School and Day School expenses below, in accordance with the following guidelines:
 <ul>
@@ -534,6 +567,9 @@ Review any adjustments that were made to the parish's report in the prior year a
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
 <textarea ng-readonly="true" ng-model=formData.school_lines cols=70 rows=3></textarea>
+
+<p>Reviewer comments:<br>
+<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.schoool_comment placeholder="Comments on greek/day school deductions" cols=70 rows=3></textarea>
 
 <h4>C11. Religious Education Expenses</h4>
 <p>Please report deductible expenses for religious education below, in accordance with the following guidelines:
@@ -554,6 +590,9 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
 <textarea ng-readonly="true" ng-model=formData.religious_ed_lines cols=70 rows=3></textarea>
 
+<p>Reviewer comments:<br>
+<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.religious_ed_comment placeholder="Comments on religious education deductions" cols=70 rows=3></textarea>
+
 <h4>C12. Funds paid for catastrophic risk insurance</h4>
 <p>Please report expenses for catastrophic risk insurance such as earthquake or flood insurance below. Please note that typical fire and liability insurance should not be included.
 <table>
@@ -568,6 +607,9 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
 <textarea ng-readonly="true" ng-model=formData.catastrophic_lines cols=70 rows=3></textarea>
 
+<p>Reviewer comments:<br>
+<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.catastrophic_comment placeholder="Comments on catastrophic risk insurance deduction" cols=70 rows=3></textarea>
+
 <h4>C13. Funds paid for moving expenses of Clergy</h4>
 <p>Please report expenses for relocating clergymen to your parish.
 <table>
@@ -580,6 +622,9 @@ Review any adjustments that were made to the parish's report in the prior year a
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
 <textarea ng-readonly="true" ng-model=formData.moving_lines cols=70 rows=3></textarea>
+
+<p>Reviewer comments:<br>
+<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.moving_comment placeholder="Comments on moving expenses deduction" cols=70 rows=3></textarea>
 
 <h4>C14. Outreach and Evangelism</h4>
 <p>Please report deductible outreach and evangelism expenses below, in accordance with the following guidelines:
@@ -600,6 +645,9 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
 <textarea ng-readonly="true" ng-model=formData.outreach_lines cols=70 rows=3></textarea>
 
+<p>Reviewer comments:<br>
+<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.outreach_comment placeholder="Comments on outreach and evangelism deduction" cols=70 rows=3></textarea>
+
 <h4>C15. National Clergy Laity Congress</h4>
 <p>Please report expenses for sending delegates to the Archdiocese Clergy Laity Congress below. Do not include expenses associated with metropolis assembly meetings or other organizations. Note that the Clergy Laity Congress happens only once every two years, so you should only have expenses for it on even years.
 <table>
@@ -612,6 +660,9 @@ Review any adjustments that were made to the parish's report in the prior year a
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
 <textarea ng-readonly="true" ng-model=formData.clergy_laity_lines cols=70 rows=3></textarea>
+
+<p>Reviewer comments:<br>
+<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.clergy_laity_comment placeholder="Comments on Clergy Laity Congress deductions" cols=70 rows=3></textarea>
 
 <h4>C16. Other Deductions Approved by Hierarch</h4>
 <p>Please report any special deductions that have been approved by your hierarch below.
@@ -627,6 +678,9 @@ Review any adjustments that were made to the parish's report in the prior year a
 <textarea ng-readonly="true" ng-model=formData.other_hier_lines cols=70 rows=3></textarea>
 <p>Please explain the special deductions.<br>
 <textarea ng-readonly="true" ng-model=formData.other_hier_explanation placeholder="Explanation of special deductions" cols=70 rows=3></textarea>
+
+<p>Reviewer comments:<br>
+<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.other_hier_comment placeholder="Comments on deductions approved by hierarch" cols=70 rows=3></textarea>
 
 <h4>Property and Liability Insurance</h4>
 <p>Please report the total amount paid for property and liability insurance for your parish. This is collected for informational purposes but is not a deductible expense.
