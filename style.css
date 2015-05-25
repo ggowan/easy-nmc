@@ -51,7 +51,7 @@ div.offline-warning, div.error-message {
   box-shadow: 0.3em 0.3em 0.15em #AFAFAF;
   text-align: center;
 }
-div.explanation {
+.explanation {
   text-align: left;
 }
 th {

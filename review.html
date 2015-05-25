@@ -74,7 +74,7 @@ the nature of the expenses.
 </div>
 <div ng-class="reviewData.balance_matches ? 'good' : 'attention'">
 <input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.balance_matches>
-Does the change in the balance sheets match the net income shown on the P&L?
+Does the change in the net assets (aka equity or fund balances) on the balance sheets match the net income shown on the P&L?
 </div>
 <div ng-class="reviewData.yoy_change ? 'good' : 'attention'">
 <input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.yoy_change>
@@ -109,7 +109,14 @@ Review any adjustments that were made to the parish's report in the prior year a
 <h3>Summary</h3>
 <table class="bordered-table">
 <thead>
-<tr><th>Line</th><th>Description</th><th>2013</th><th>2014</th><th>Change</th><th>Parish Notes</th></tr>
+<tr>
+  <th>Line</th>
+  <th>Description</th>
+  <th>2013</th>
+  <th>2014</th>
+  <th>Change</th>
+  <th class=small>Parish Notes</th>
+  <th class=small>Metropolis Comments</th></tr>
 </thead>
 <tbody>
 <tr>
@@ -118,7 +125,8 @@ Review any adjustments that were made to the parish's report in the prior year a
   <td class=money><strong>{{ (formData.Y2013.income || 0) | currency : $ : 0 }}</strong></td>
   <td class=money><strong>{{ (formData.Y2014.income || 0) | currency : $ : 0 }}</strong></td>
   <td class=money><strong>{{ (formData.Y2014.income - formData.Y2013.income || 0) | currency : $ : 0 }}</strong></td>
-  <td><div class="explanation">{{ formData.income_explanation }}</div></td>
+  <td class="small explanation">{{ formData.income_explanation }}</td>
+  <td class="small explanation">{{ reviewData.income_comment }}</td>
 </tr>
 <tr>
   <td><strong>B</strong></td>
@@ -126,7 +134,8 @@ Review any adjustments that were made to the parish's report in the prior year a
   <td class=money><strong>{{ (formData.Y2013.expenses || 0) | currency : $ : 0 }}</strong></td>
   <td class=money><strong>{{ (formData.Y2014.expenses || 0) | currency : $ : 0 }}</strong></td>
   <td class=money><strong>{{ (formData.Y2014.expenses - formData.Y2013.expenses || 0) | currency : $ : 0 }}</strong></td>
-  <td><div class="explanation">{{ formData.expense_explanation }}</div></td>
+  <td class="small explanation">{{ formData.expense_explanation }}</td>
+  <td class="small explanation">{{ reviewData.expense_comment }}</td>
 </tr>
 <tr>
   <td><strong>A-B</strong></td>
@@ -135,134 +144,151 @@ Review any adjustments that were made to the parish's report in the prior year a
   <td class=money><strong>{{ (formData.Y2014.income - formData.Y2014.expenses || 0) | currency : $ : 0 }}</strong></td>
   <td class=money><strong>{{ (formData.Y2014.income - formData.Y2014.expenses - (formData.Y2013.income - formData.Y2013.expenses) || 0) | currency : $ : 0 }}</strong></td>
   <td>-</td>
+  <td>-</td>
 </tr>
 <tr>
   <td>C1</td>
-  <th scope=row class="indent">National Ministries Commitment</th>
+  <th scope=row class="small indent">National Ministries Commitment</th>
   <td class=money>{{ (formData.Y2013.nmc || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.nmc || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.nmc - formData.Y2013.nmc || 0) | currency : $ : 0 }}</td>
-  <td><div class="explanation">{{ formData.nmc_lines }}</div></td>
+  <td class="small explanation">{{ formData.nmc_lines }}</td>
+  <td class="small explanation">{{ reviewData.nmc_comment }}</td>
 </tr>
 <tr>
   <td>C2</td>
-  <th scope=row class="indent">Donations to Archdiocese</th>
+  <th scope=row class="small indent">Donations to Archdiocese</th>
   <td class=money>{{ archMinTotal(formData.Y2013) | currency : $ : 0 }}</td>
   <td class=money>{{ archMinTotal(formData.Y2014) | currency : $ : 0 }}</td>
   <td class=money>{{ archMinTotal(formData.Y2014) - archMinTotal(formData.Y2013) | currency : $ : 0 }}</td>
-  <td><div class="explanation">{{ formData.arch_don_lines }} {{ formData.other_arch_don_breakdown }}</div></td>
+  <td class="small explanation">{{ formData.arch_don_lines }} {{ formData.other_arch_don_breakdown }}</td>
+  <td class="small explanation">{{ reviewData.arch_don_comment }}</td>
 </tr>
 <tr>
   <td>C3</td>
-  <th scope=row class="indent">Assembly of Bishops Ministries</th>
+  <th scope=row class="small indent">Assembly of Bishops Ministries</th>
   <td class=money>{{ authMinTotal(formData.Y2013) | currency : $ : 0 }}</td>
   <td class=money>{{ authMinTotal(formData.Y2014) | currency : $ : 0 }}</td>
   <td class=money>{{ authMinTotal(formData.Y2014) - authMinTotal(formData.Y2013) | currency : $ : 0 }}</td>
-  <td><div class="explanation">{{ formData.auth_min_lines }}</div></td>
+  <td class="small explanation">{{ formData.auth_min_lines }}</td>
+  <td class="small explanation">{{ reviewData.auth_min_comment }}</td>
 </tr>
 <tr>
   <td>C4</td>
-  <th scope=row class="indent">Donations to Metropolis </th>
+  <th scope=row class="small indent">Donations to Metropolis </th>
   <td class=money>{{ (formData.Y2013.metro || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.metro || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.metro - formData.Y2013.metro|| 0) | currency : $ : 0 }}</td>
-  <td><div class="explanation">{{ formData.metro_lines }}</div></td>
+  <td class="small explanation">{{ formData.metro_lines }}</td>
+  <td class="small explanation">{{ reviewData.metro_comment }}</td>
 </tr>
 <tr>
   <td>C5</td>
-  <th scope=row class="indent">Donations to Patriarchate </th>
+  <th scope=row class="small indent">Donations to Patriarchate </th>
   <td class=money>{{ (formData.Y2013.patriarch || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.patriarch || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.patriarch - formData.Y2013.patriarch || 0) | currency : $ : 0 }}</td>
-  <td><div class="explanation">{{ formData.patriarch_lines }}</div></td>
+  <td class="small explanation">{{ formData.patriarch_lines }}</td>
+  <td class="small explanation">{{ reviewData.patriarch_comment }}</td>
 </tr>
 <tr>
   <td>C6</td>
-  <th scope=row class="indent">Capital Improvement</th>
+  <th scope=row class="small indent">Capital Improvement</th>
   <td class=money>{{ (formData.Y2013.cap || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.cap || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.cap - formData.Y2013.cap || 0) | currency : $ : 0 }}</td>
-  <td><div class="explanation">{{ formData.cap_lines }} {{ formData.cap_projects }} </div></td>
+  <td class="small explanation">{{ formData.cap_lines }} {{ formData.cap_projects }} </td>
+  <td class="small explanation">{{ reviewData.cap_comment }}</td>
 </tr>
 <tr>
   <td>C7</td>
-  <th scope=row class="indent">Construction Loan</th>
+  <th scope=row class="small indent">Construction Loan</th>
   <td class=money>{{ (formData.Y2013.const_loan || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.const_loan || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.const_loan - formData.Y2013.const_loan || 0) | currency : $ : 0 }}</td>
-  <td><div class="explanation">{{ formData.const_loan_lines }}</div></td>
+  <td class="small explanation">{{ formData.const_loan_lines }}</td>
+  <td class="small explanation">{{ reviewData.const_loan_comment }}</td>
 </tr>
 <tr>
   <td>C8</td>
-  <th scope=row class="indent">Mortgage</th>
+  <th scope=row class="small indent">Mortgage</th>
   <td class=money>{{ (formData.Y2013.mort || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.mort || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.mort - formData.Y2013.mort || 0) | currency : $ : 0 }}</td>
-  <td><div class="explanation">{{ formData.mort_lines }}</div></td>
+  <td class="small explanation">{{ formData.mort_lines }}</td>
+  <td class="small explanation">{{ reviewData.mort_comment }}</td>
 </tr>
 <tr>
   <td>C9</td>
-  <th scope=row class="indent">Fundraising Expenses</th>
+  <th scope=row class="small indent">Fundraising Expenses</th>
   <td class=money>{{ (formData.Y2013.fundraising || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.fundraising || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.fundraising - formData.Y2013.fundraising || 0) | currency : $ : 0 }}</td>
-  <td><div class="explanation">{{ formData.fundraising_lines }}</div></td>
+  <td class="small explanation">{{ formData.fundraising_lines }}</td>
+  <td class="small explanation">{{ reviewData.fundraising_comment }}</td>
 </tr>
 <tr>
   <td>C10</td>
-  <th scope=row class="indent">Greek/Day School Expenses</th>
+  <th scope=row class="small indent">Greek/Day School Expenses</th>
   <td class=money>{{ (formData.Y2013.school || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.school || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.school - formData.Y2013.school || 0) | currency : $ : 0 }}</td>
-  <td><div class="explanation">{{ formData.school_lines }}</div></td>
+  <td class="small explanation">{{ formData.school_lines }}</td>
+  <td class="small explanation">{{ reviewData.school_comment }}</td>
 </tr>
 <tr>
   <td>C11</td>
-  <th scope=row class="indent">Religious Ed.</th>
+  <th scope=row class="small indent">Religious Ed.</th>
   <td class=money>{{ (formData.Y2013.religious_ed || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.religious_ed || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.religious_ed - formData.Y2013.religious_ed || 0) | currency : $ : 0 }}</td>
-  <td><div class="explanation">{{ formData.religious_ed_lines }}</div></td>
+  <td class="small explanation">{{ formData.religious_ed_lines }}</td>
+  <td class="small explanation">{{ reviewData.religious_ed_comment }}</td>
 </tr>
 <tr>
   <td>C12</td>
-  <th scope=row class="indent">Catastrophic Risk Insurance</th>
+  <th scope=row class="small indent">Catastrophic Risk Insurance</th>
   <td class=money>{{ (formData.Y2013.unusual || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.unusual || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.unusual - formData.Y2013.unusual || 0) | currency : $ : 0 }}</td>
-  <td><div class="explanation">{{ formData.catastrophic_lines }}</div></td>
+  <td class="small explanation">{{ formData.catastrophic_lines }}</td>
+  <td class="small explanation">{{ reviewData.catastrophic_comment }}</td>
 </tr>
 <tr>
   <td>C13</td>
-  <th scope=row class="indent">Clergy Moving Expenses</th>
+  <th scope=row class="small indent">Clergy Moving Expenses</th>
   <td class=money>{{ (formData.Y2013.moving || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.moving || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.moving - formData.Y2013.moving || 0) | currency : $ : 0 }}</td>
-  <td><div class="explanation">{{ formData.moving_lines }}</div></td>
+  <td class="small explanation">{{ formData.moving_lines }}</td>
+  <td class="small explanation">{{ reviewData.moving_comment }}</td>
 </tr>
 <tr>
   <td>C14</td>
-  <th scope=row class="indent">Outreach and Evangelism</th>
+  <th scope=row class="small indent">Outreach and Evangelism</th>
   <td class=money>{{ (formData.Y2013.outreach || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.outreach || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.outreach - formData.Y2013.outreach || 0) | currency : $ : 0 }}</td>
-  <td><div class="explanation">{{ formData.outreach_lines }}</div></td>
+  <td class="small explanation">{{ formData.outreach_lines }}</td>
+  <td class="small explanation">{{ reviewData.outreach_comment }}</td>
 </tr>
 <tr>
   <td>C15</td>
-  <th scope=row class="indent">Clergy Laity Congress</th>
+  <th scope=row class="small indent">Clergy Laity Congress</th>
   <td class=money>{{ (formData.Y2013.clergy_laity || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.clergy_laity || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.clergy_laity - formData.Y2013.clergy_laity || 0) | currency : $ : 0 }}</td>
-  <td><div class="explanation">{{ formData.clergy_laity_lines }}</div></td>
+  <td class="small explanation">{{ formData.clergy_laity_lines }}</td>
+  <td class="small explanation">{{ reviewData.clergy_laity_comment }}</td>
 </tr>
 <tr>
   <td>C16</td>
-  <th scope=row class="indent">Other Deductions</th>
+  <th scope=row class="small indent">Other Deductions</th>
   <td class=money>{{ (formData.Y2013.other_hier || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.other_hier || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2014.other_hier - formData.Y2013.other_hier || 0) | currency : $ : 0 }}</td>
-  <td><div class="explanation">{{ formData.other_hier_lines }} {{ formData.other_hier_explanation }}</div></td>
+  <td class="small explanation">{{ formData.other_hier_lines }} {{ formData.other_hier_explanation }}</td>
+  <td class="small explanation">{{ reviewData.other_hier_comment }}</td>
 </tr>
 <tr>
   <td><strong>C</strong></td>
@@ -587,7 +613,7 @@ Review any adjustments that were made to the parish's report in the prior year a
 <textarea ng-readonly="true" ng-model=formData.school_lines cols=70 rows=3></textarea>
 
 <p>Reviewer comments:<br>
-<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.schoool_comment placeholder="Comments on greek/day school deductions" cols=70 rows=3></textarea>
+<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.school_comment placeholder="Comments on greek/day school deductions" cols=70 rows=3></textarea>
 
 <h4>C11. Religious Education Expenses</h4>
 <p>Please report deductible expenses for religious education below, in accordance with the following guidelines:
