@@ -128,6 +128,10 @@ function setupScope($scope, $firebaseObject) {
     tally.nextRow += 1;
     $scope.reviewData.$save();
   };
+  $scope.deleteRow = function(tally, rowKey) {
+    delete tally.rows[rowKey];
+    $scope.reviewData.$save();
+  }
   $scope.tallyTotal = function(tally) {
     result = 0;
     angular.forEach(tally.rows, function(row, rowKey) {
