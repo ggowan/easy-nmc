@@ -295,16 +295,30 @@ Review any adjustments that were made to the parish's report in the prior year a
 <section>
 <h3>Reviewer Tallies</h3>
 <div ng-repeat="(tallyKey, tally) in reviewData.tallies">
-<h4>Tally #{{$index + 1}}</h4>
-<p><input type="text" ng-change="reviewData.$save()" ng-model="tally.name" ng-readonly="!editing()" size=90 placeholder="Tally name">
+<h4>Tally #{{$index + 1}}: 
+<input ng-if="editing()" type="text" ng-change="reviewData.$save()" ng-model="tally.name" ng-readonly="!editing()" size=90 placeholder="Tally name">
+<span ng-if="!editing()">{{tally.name}}</span>
+</h4>
 <table class="bordered-table">
 <thead>
-<tr><th>Description</th><th>Amount</th></tr>
+<tr>
+<th>Description</th>
+<th>Amount</th>
+</tr>
 </thead>
 <tbody>
 <tr ng-repeat="(rowKey, tallyRow) in tally.rows">
-<td><input type="text" ng-change="reviewData.$save()" ng-model="tallyRow.description" ng-readonly="!editing()" size=40></td>
-<td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="tallyRow.amount" type="text" size=10></td>
+<th scope="row">
+<input ng-if="editing()" type="text" ng-change="reviewData.$save()" ng-model="tallyRow.description" size=40>
+<span ng-if="!editing()">{{ tallyRow.description }}</span>
+</th>
+<td class=money>
+<input ng-if="editing()" class="money" dollars ng-change="reviewData.$save()" ng-model="tallyRow.amount" type="text" size=10>
+<span ng-if="!editing()">{{tallyRow.amount | currency : $ : 0}}</span>
+</td>
+<td ng-if="editing()">
+<button ng-click="deleteRow(tally, rowKey)">Delete Row</button>
+</td>
 </tr>
 </tbody>
 <tfoot>
