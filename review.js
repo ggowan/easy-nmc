@@ -30,6 +30,12 @@ function setupScope($scope, $firebaseObject) {
     console.log("loading upload_folder failed: ", error);
     $scope.error = error;
   });
+  parishIdRef.child("access_key").on("value", function(snap) {
+    $scope.access_key = snap.val();
+  }, function(error) {
+    console.log("loading access key failed: ", error);
+    $scope.error = error;
+  });
   var dataFormRef = metroRef.child("/data-form/" + $scope.year + "/parish/" + $scope.parish_id);
   dataFormRef.on("value", function(snap) {
     $scope.formData = snap.val();
