@@ -94,6 +94,61 @@
 </tr>
 </tbody>
 </table>
+<br>
+<table class="bordered-table" ng-if="reviewDataFinishedLoading">
+<caption>
+<strong>Count of Parishes By Review Status and Reviewer</strong>
+</caption>
+<thead>
+<tr>
+  <th>Reviewer</th><th>Not Started</th><th>Started</th><th>Waiting for Response</th><th>Finished</th><th>Total</th>
+</tr>
+</thead>
+<tbody>
+<tr ng-repeat="(reviewer, count) in reviewerStatusCount">
+  <th scope="row">
+    {{ reviewer }}
+  </th>
+  <td>
+    {{ count[''] }}
+  </td>
+  <td>
+    {{ count['started'] }}
+  </td>
+  <td>
+    {{ count['waiting'] }}
+  </td>
+  <td>
+    {{ count['finished'] }}
+  </td>
+  <td>
+    <strong>{{ reviewerCount[reviewer] }}</strong>
+  </td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+  <th scope="row">
+    <strong>Total</strong>
+  </th>
+  <td>
+    <strong>{{ statusCount[''] }}</strong>
+  </td>
+  <td>
+    <strong>{{ statusCount['started'] }}</strong>
+  </td>
+  <td>
+    <strong>{{ statusCount['waiting'] }}</strong>
+  </td>
+  <td>
+    <strong>{{ statusCount['finished'] }}</strong>
+  </td>
+  <td>
+    <strong>{{ numParishes }}</strong>
+  </td>
+</tr>
+</tfoot>
+</table>
 
 </body>
 </html>
