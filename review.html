@@ -69,8 +69,6 @@ Is each deductible expense deducted on one and only one line?
 <div ng-class="reviewData.appropriate_deductions ? 'good' : 'attention'">
 <input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.appropriate_deductions>
 Do the deductions appear to be for things that match the description and guidelines for the line in which they are reported?
-Take into consideration the description of the lines of the P&L that the deductions are reported in and any notes from the parish explaining
-the nature of the expenses.
 </div>
 <div ng-class="reviewData.balance_matches ? 'good' : 'attention'">
 <input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.balance_matches>
@@ -352,7 +350,7 @@ Review any adjustments that were made to the parish's report in the prior year a
 </tr>
 </tbody>
 <tfoot>
-<tr><th scope="row">Total</th><td class=money>{{ tallyTotal(tally) | currency : $ : 0 }}</td></tr>
+<tr><th scope="row"><strong>Total</strong></th><td class=money><strong>{{ tallyTotal(tally) | currency : $ : 0 }}</strong></td></tr>
 </tfoot>
 </table>
 <button ng-click="addRow(tally)" ng-disabled="!editing()">Add Row</button>

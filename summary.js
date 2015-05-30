@@ -37,7 +37,7 @@ function setupScope($scope, $firebaseObject) {
   var ref = new Firebase(shared.firebaseBackend);
   $scope.FOR_YEAR = shared.FOR_YEAR;
   $scope.metroRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id);
- 
+
   $scope.parishIds = $firebaseObject($scope.metroRef.child("parish-id"));
   $scope.parishIds.$loaded().then(function(data) {
     console.log("parish-id finished loading");
@@ -46,7 +46,7 @@ function setupScope($scope, $firebaseObject) {
     console.log("loading parish-id failed: ", error);
     $scope.error = error;
   });
-  
+
   $scope.metaData = $firebaseObject($scope.metroRef.child("meta-data"));
   $scope.metaData.$loaded().then(function(data) {
     console.log("metadata finished loading: ", $scope.metaData);
@@ -54,7 +54,7 @@ function setupScope($scope, $firebaseObject) {
   }).catch(function(error) {
     $scope.error = error;
   });
-  
+
   $scope.firebaseInfo = $firebaseObject(ref.child(".info"));
   $scope.firebaseInfo.$loaded().then(function() {
     console.log(".info finished loading");
@@ -62,7 +62,7 @@ function setupScope($scope, $firebaseObject) {
   }).catch(function(error) {
     $scope.error = error;
   });
-  
+
   $scope.formData = $firebaseObject($scope.metroRef.child("data-form/" + shared.FOR_YEAR));
   $scope.formData.$loaded().then(function(data) {
     console.log("form data finished loading");
@@ -71,7 +71,7 @@ function setupScope($scope, $firebaseObject) {
     console.log("loading form data failed: ", error);
     $scope.error = error;
   });
-  
+
   $scope.reviewData = $firebaseObject($scope.metroRef.child("review-data/" + shared.FOR_YEAR));
   $scope.reviewData.$loaded().then(function(data) {
     console.log("review data finished loading");
@@ -80,7 +80,7 @@ function setupScope($scope, $firebaseObject) {
     console.log("loading review data failed: ", error);
     $scope.error = error;
   });
-  
+
   $scope.parishApproval = function(parishId) {
     if (!$scope.formData || !$scope.formData.parish) return '';
     var numApprovals = 0;
@@ -130,6 +130,41 @@ function setupScope($scope, $firebaseObject) {
     if (!result) return 'bad';
     return result;
   };
+  $scope.countParishesByReviewerStatus = function() {
+    console.log('entering countParishesByReviewerStatus');
+    var result = {};
+    angular.forEach($scope.parishIds, function(parishData, parishId) {
+      if (parishData.excused || !$scope.reviewData.parish) return;
+      var parishReviewData = $scope.reviewData.parish[parishId];
+      if (!parishReviewData) {
+        if (!result['']) result[''] = {};
+        if (!result['']['']) result[''][''] = 0;
+        result[''][''] += 1;
+        return;
+      }
+      var reviewer = parishReviewData.reviewer_name ? parishReviewData.reviewer_name : '';
+      var status = parishReviewData.review_status ? parishReviewData.review_status : '';
+      if (!result[reviewer]) result[reviewer] = {};
+      if (!result[reviewer][status]) result[reviewer][status] = 0;
+      result[reviewer][status] += 1;
+    });
+    return result;
+  };
+  $scope.$watch('countParishesByReviewerStatus()', function(newCounts, oldCounts) {
+    $scope.reviewerStatusCount = newCounts;
+    $scope.reviewerCount = {};
+    $scope.statusCount = {};
+    $scope.numParishes = 0;
+    angular.forEach(newCounts, function(counts, reviewer) {
+      angular.forEach(counts, function(count, status) {
+        if (!$scope.reviewerCount[reviewer]) $scope.reviewerCount[reviewer] = 0;
+        $scope.reviewerCount[reviewer] += count;
+        if (!$scope.statusCount[status]) $scope.statusCount[status] = 0;
+        $scope.statusCount[status] += count;
+        $scope.numParishes += count;
+      });
+    });
+  }, true);
 }
 
 app.controller("Ctrl", function($scope, $firebaseObject) {
