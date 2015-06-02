@@ -141,6 +141,13 @@ function setupScope($scope, $firebaseObject) {
     });
     return result;
   }
+  $scope.statusChanged = function() {
+    if ($scope.reviewData.review_status === 'started' ||
+        $scope.reviewData.review_status === 'finished') {
+      $scope.reviewData.form_edit_mode = 'locked';
+    }
+    $scope.reviewData.$save();
+  };
 }
 
 app.controller("Ctrl", function($scope, $firebaseObject) {

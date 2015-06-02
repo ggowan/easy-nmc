@@ -35,10 +35,11 @@ You are offline<br>
 <section>
 <h1>Review of {{ parish_name }} in {{ parish_city }}, {{ parish_state }}</h1>
 <p><strong>Review status:</strong> 
-<select ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.review_status">
+<select ng-disabled="!editing()" ng-change="statusChanged()" ng-model="reviewData.review_status">
   <option value="">Not Started</option>
   <option value="started">Started</option>
   <option value="waiting">Waiting for Response</option>
+  <option value="re-review">Needs Re-Review</option>
   <option value="finished">Finished</option>
 </select>
 <p><strong>Reviewer(s):</strong> <input size=40 ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.reviewer_name placeholder="Reviewer Name">
