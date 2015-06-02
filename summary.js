@@ -125,6 +125,7 @@ function setupScope($scope, $firebaseObject) {
     var result = {
       'started': 'in-progress',
       'waiting': 'requested-info',
+      're-review': 'attention',
       'finished': 'good',
     }[status];
     if (!result) return 'bad';
@@ -193,6 +194,7 @@ app.filter('shortReviewStatus', function() {
     var result = {
       'started': 'Started',
       'waiting': 'Awaiting Response',
+      're-review': 'Needs Re-Review',
       'finished': 'Finished',
     }[status];
     if (!result) return status;
