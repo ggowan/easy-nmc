@@ -1,10 +1,9 @@
 var app = angular.module("easyNmcReview", ["firebase"]);
 
 function sumFields(fields, yearObj, fallback) {
-  if (yearObj === undefined) return 0;
   var total = 0;
   angular.forEach(fields, function(fieldName) {
-    if (angular.isNumber(yearObj[fieldName])) {
+    if (yearObj && angular.isNumber(yearObj[fieldName])) {
       total += yearObj[fieldName];
     } else if (fallback && angular.isNumber(fallback[fieldName])) {
       total += fallback[fieldName];
