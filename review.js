@@ -62,8 +62,10 @@ function setupScope($scope, $firebaseObject) {
   });
   var dataFormRef = metroRef.child("/data-form/" + $scope.year + "/parish/" + $scope.parish_id);
   dataFormRef.on("value", function(snap) {
-    $scope.formData = snap.val();
-    $scope.formDataFinishedLoading = true;
+    $scope.$apply(function() {
+      $scope.formData = snap.val();
+      $scope.formDataFinishedLoading = true;
+    });
   }, function(error) {
     console.log("loading form data failed: ", error);
     $scope.error = error;
