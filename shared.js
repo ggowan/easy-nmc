@@ -12,6 +12,49 @@ shared.APPROVAL_FIELDS = [
   'audit_approval_name'
 ];
 
+// Fields for donations to Archdiocese Ministries.
+shared.ARCH_MIN_FIELDS = [
+  'arch_don',
+  'hchc',
+  'stbasil',
+  'stmichael',
+  'stphotios',
+  'ionian',
+  'standrew',
+  'other_arch'
+];
+
+// Fields for donations to Assembly of Bishops Authorized Ministries.
+shared.AUTH_MIN_FIELDS = [
+  'iocc',
+  'ocmc',
+  'ocf',
+  'prison_min',
+  'eocs',
+  'ocn',
+  'ocec',
+  'ocampr',
+  'ed_comm'
+];
+
+// All deduction fields.
+shared.DEDUCTION_FIELDS = shared.ARCH_MIN_FIELDS.concat(shared.AUTH_MIN_FIELDS).concat([
+  'nmc',
+  'metro',
+  'patriarch',
+  'cap',
+  'const_loan',
+  'mort',
+  'fundraising',
+  'school',
+  'religious_ed',
+  'unusual',
+  'moving',
+  'outreach',
+  'clergy_laity',
+  'other_hier'
+]);
+
 // The year we are currently working on allocations for.
 shared.FOR_YEAR = 2016;
 
