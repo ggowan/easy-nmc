@@ -16,6 +16,11 @@ handlers:
   upload: review.html
   secure: always
 
+- url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/report/20[0-9][0-9]
+  static_files: report.html
+  upload: report.html
+  secure: always
+
 - url: /metropolis/[A-Z]+/admin
   static_files: admin.html
   upload: admin.html
