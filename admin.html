@@ -19,16 +19,17 @@
   <script src="/shared.js"></script>
   <script src="/admin.js"></script>
 </head>
-<body ng-controller="Ctrl" ng-cloak ng-show="parishIdsFinishedLoading && infoFinishedLoading">
+<body class="wide" ng-controller="Ctrl" ng-cloak ng-show="parishIdsFinishedLoading && infoFinishedLoading">
 <p><label>Metropolis Upload Folder ID: <input type="text" ng-model="metaData.upload_folder" size=40 ng-show="metaDataFinishedLoading"></label>
 <button ng-click="createFolders(metaData.upload_folder)">Create Folders</button>
 <table class="bordered-table">
 <thead>
-<tr><th>Parish ID</th><th>Parish Name</th><th>City</th><th>State</th><th>Required to Report</th><th>Data Forms</th><th>Upload Folder</th></tr>
+<tr><th>Parish ID</th><th>Parish Code</th><th>Parish Name</th><th>City</th><th>State</th><th>Required to Report</th><th>Data Forms</th><th>Upload Folder</th></tr>
 </thead>
 <tbody>
 <tr ng-repeat="(parish_id, parish_data) in parishIds">
 <td>{{ parish_id }}</td>
+<td><input type="text" class=number ng-model=parish_data.parish_code size=6></td>
 <td><input type="text" ng-model=parish_data.name size=25></td>
 <td><input type="text" ng-model=parish_data.city size=15></td>
 <td><input type="text" ng-model=parish_data.state size=2></td>
