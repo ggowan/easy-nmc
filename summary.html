@@ -38,8 +38,7 @@
 <th rowspan=2 class="small">Reviewer</th>
 <th rowspan=2 class="small">Review Status</th>
 <th rowspan=2 class="small">Notes</th>
-<th rowspan=2 class="small">Review Form</th>
-<th rowspan=2 class="small">Upload Folder</th>
+<th rowspan=2 class="small">Links</th>
 </tr>
 <tr>
 <th class="small">{{ FOR_YEAR - 3 }}</th>
@@ -88,9 +87,11 @@
 <td ng-class="'small ' + statusClass(reviewData.parish[parish_id].review_status)">{{ reviewData.parish[parish_id].review_status | shortReviewStatus }}</td>
 <td class="small">{{ reviewData.parish[parish_id].notes | limitTo : 80 }}<span ng-if="reviewData.parish[parish_id].notes.length > 80">&hellip;</span></td>
 
-<td class="small"><a target="review" ng-href="parish/{{parish_id}}/review/2016">review</a></td>
-<td class="small"><a target="upload_folder" ng-href="https://drive.google.com/drive/#folders/{{parish_data.upload_folder}}" ng-show="parish_data.upload_folder">Drive</a></td>
-
+<td class="small">
+  <a target="review" ng-href="parish/{{parish_id}}/review/2016">review</a>
+  <a target="upload_folder" ng-href="https://drive.google.com/drive/#folders/{{parish_data.upload_folder}}" ng-show="parish_data.upload_folder">Drive</a>
+  <a target="report" ng-href="parish/{{parish_id}}/report/2016">report</a>
+</td>
 </tr>
 </tbody>
 </table>
