@@ -1,5 +1,5 @@
 application: easy-nmc
-version: prod-009
+version: prod-010
 runtime: python27
 api_version: 1
 threadsafe: yes
