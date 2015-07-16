@@ -120,8 +120,9 @@ function setupScope($scope, $firebaseObject) {
     console.log("saving extension ", $scope.parishIds);
     $scope.parishIds.$save();
   };
-  $scope.statusClass = function(status) {
+  $scope.statusClass = function(status, formEditMode) {
     if (!status) return 'bad';
+    if (status === 'finished' && formEditMode != 'locked') return 'bad';
     var result = {
       'started': 'in-progress',
       'waiting': 'requested-info',
@@ -199,5 +200,13 @@ app.filter('shortReviewStatus', function() {
     }[status];
     if (!result) return status;
     return result;
+  };
+});
+
+app.filter('formEditMode', function() {
+  return function(formEditMode) {
+    if (!formEditMode) return 'Not Locked';
+    if (formEditMode === 'locked') return 'Locked';
+    return 'UNKNOWN FORM EDIT MODE';
   };
 });
