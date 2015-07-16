@@ -84,7 +84,10 @@
 </td>
 
 <td class="small">{{ reviewData.parish[parish_id].reviewer_name }}</td>
-<td ng-class="'small ' + statusClass(reviewData.parish[parish_id].review_status)">{{ reviewData.parish[parish_id].review_status | shortReviewStatus }}</td>
+<td ng-class="'small ' + statusClass(reviewData.parish[parish_id].review_status, reviewData.parish[parish_id].form_edit_mode)">
+  {{ reviewData.parish[parish_id].review_status | shortReviewStatus }}, 
+  {{ reviewData.parish[parish_id].form_edit_mode | formEditMode }}
+</td>
 <td class="small">{{ reviewData.parish[parish_id].notes | limitTo : 80 }}<span ng-if="reviewData.parish[parish_id].notes.length > 80">&hellip;</span></td>
 
 <td class="small">
