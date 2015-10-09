@@ -31,6 +31,11 @@ handlers:
   upload: summary.html
   secure: always
 
+- url: /metropolis/[A-Z]+/stewardship
+  static_files: stewardship.html
+  upload: stewardship.html
+  secure: always
+
 - url: /(.*\.(gif|png|jpg|html|css|js))$
   static_files: \1
   upload: .*\.(gif|png|jpg|html|css|js)$
