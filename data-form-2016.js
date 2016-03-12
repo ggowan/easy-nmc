@@ -43,12 +43,28 @@ function bindFirebase($scope, $firebaseObject, ref) {
     $scope.error = error;
   });
 
+  $scope.archMinTotal = function(yearObj) {
+    if (yearObj === undefined) return 0;
+    var total = [
+      yearObj.arch_don, yearObj.hchc, yearObj.stbasil, yearObj.stmichael,
+      yearObj.stphotios, yearObj.ionian, yearObj.standrew, yearObj.other_arch
+    ].reduce(shared.sumNumbers);
+    return total;
+  };
+  $scope.authMinTotal = function(yearObj) {
+    if (yearObj === undefined) return 0;
+    var total = [
+      yearObj.iocc, yearObj.ocmc, yearObj.ocf, yearObj.prison_min,
+      yearObj.eocs, yearObj.ocn, yearObj.ocec, yearObj.ocampr, yearObj.ed_comm
+    ].reduce(shared.sumNumbers);
+    return total;
+  };
   $scope.totalDeductions = function(yearObj) {
     if (yearObj === undefined) return 0;
     var total = [
-      yearObj.nmc, yearObj.arch, yearObj.auth_min, yearObj.metro,
+      yearObj.nmc, $scope.archMinTotal(yearObj), $scope.authMinTotal(yearObj), yearObj.metro,
       yearObj.patriarch, yearObj.cap, yearObj.const_loan, yearObj.mort,
-      yearObj.fundraising, yearObj.school, yearObj.religious_ed, yearObj.catastrophic,
+      yearObj.fundraising, yearObj.school, yearObj.religious_ed, yearObj.unusual,
       yearObj.moving, yearObj.outreach, yearObj.clergy_laity, yearObj.other_hier
     ].reduce(shared.sumNumbers);
     return total;
