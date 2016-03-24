@@ -39,7 +39,7 @@ function bindFirebase($scope, $firebaseObject, ref) {
   $scope.firebaseData.$loaded().then(function(data) {
     $scope.dataFinishedLoading = true;
   }).catch(function(error) {
-    console.log("loading firebaseData failed: ", error);
+    console.log("loading firebaseData failed: ", dataFormRef.toString(), error);
     $scope.error = error;
   });
 
