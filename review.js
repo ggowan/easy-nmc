@@ -1,17 +1,5 @@
 var app = angular.module("easyNmcReview", ["firebase"]);
 
-function sumFields(fields, yearObj, fallback) {
-  var total = 0;
-  angular.forEach(fields, function(fieldName) {
-    if (yearObj && angular.isNumber(yearObj[fieldName])) {
-      total += yearObj[fieldName];
-    } else if (fallback && angular.isNumber(fallback[fieldName])) {
-      total += fallback[fieldName];
-    }
-  });
-  return total;
-}
-
 function anyFieldIsNumber(fields, yearObj) {
   if (yearObj === undefined) return false;
   var result = false;
@@ -97,14 +85,14 @@ function setupScope($scope, $firebaseObject) {
         angular.isNumber($scope.reviewData[yearField][field]);
   };
   $scope.archMinTotal = function(yearObj, fallback) {
-    return sumFields(shared.ARCH_MIN_FIELDS, yearObj, fallback);
+    return shared.sumFields(shared.ARCH_MIN_FIELDS, yearObj, fallback);
   };
   $scope.isArchMinAdjusted = function(year) {
     var yearField = 'Y' + year;
     return anyFieldIsNumber(shared.ARCH_MIN_FIELDS, $scope.reviewData[yearField]);
   };
   $scope.authMinTotal = function(yearObj, fallback) {
-    return sumFields(shared.AUTH_MIN_FIELDS, yearObj, fallback);
+    return shared.sumFields(shared.AUTH_MIN_FIELDS, yearObj, fallback);
   };
   $scope.isAuthMinAdjusted = function(year) {
     var yearField = 'Y' + year;
@@ -113,7 +101,7 @@ function setupScope($scope, $firebaseObject) {
   $scope.totalDeductions = function(year) {
     if (!$scope.formData) return null;
     var yearField = 'Y' + year;
-    return sumFields(
+    return shared.sumFields(
         shared.DEDUCTION_FIELDS, $scope.reviewData[yearField], $scope.formData[yearField]);
   };
   $scope.editing = function() {
