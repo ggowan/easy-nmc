@@ -217,7 +217,9 @@ function setupScope($scope, $firebaseObject) {
                 'other_hier',
                 'prop_liab'
               ]);
-              currentFormVal.Y1.catastrophic = previousFormVal.Y2014.unusual;
+              if (previousFormVal.Y2014.unusual) {
+                currentFormVal.Y1.catastrophic = previousFormVal.Y2014.unusual;
+              }
               var arch = shared.sumFields(shared.ARCH_MIN_FIELDS, previousFormVal.Y2014);
               if (arch) {
                 currentFormVal.Y1.arch = arch;
@@ -231,8 +233,8 @@ function setupScope($scope, $firebaseObject) {
               if (!currentFormVal.Y2) {
                 currentFormVal.Y2 = {};
               }
-              currentFormVal.Y2.stew_or_dues = currentFormVal.Y1.stew_or_dues;
-              currentFormVal.Y2.how_counted = currentFormVal.Y1.how_counted;
+              copyPropertiesIfPresent(currentFormVal.Y1, currentFormVal.Y2, 
+                ['stew_or_dues', 'how_counted']);
             }
             if (previousFormVal.Y2013) {
               if (!currentFormVal.Y0) {
