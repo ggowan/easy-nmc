@@ -72,9 +72,18 @@ function copyPropertyIfPresent(formSource, reviewSource, dest, sourceName, destN
   if (!destName) {
     destName = sourceName;
   }
+  if (reviewSource) {
+    if (angular.isNumber(formSource[sourceName])) {
+      dest.adjusted[destName] = dest.original[destName] = formSource[sourceName];
+    }
+    if (angular.isNumber(reviewSource[sourceName])) {
+      dest.adjusted[destName] = reviewSource[sourceName];
+    }
+  }
   if (reviewSource && sourceName in reviewSource && angular.isNumber(reviewSource[sourceName])) {
     // review can override form only when review contains a number.
     dest[destName] = reviewSource[sourceName];
+    dest.wasAdjusted = true;
   } else if (sourceName in formSource) {
     dest[destName] = formSource[sourceName];
   }
@@ -154,9 +163,33 @@ function copyDataIfReady(parishId, parishInfo, previousFormVal, previousReviewVa
       'stew_phone4',
       'stew_email4',
     ]);
+    currentFormVal.priorReview = {};
+    copyPropertiesIfPresent(previousReviewVal, null, currentFormVal.priorReview, [
+      'income_comment',
+      'expense_comment',
+      'nmc_comment',
+      'arch_don_comment',
+      'auth_min_comment',
+      'metro_comment',
+      'patriarch_comment',
+      'cap_comment',
+      'const_loan_comment',
+      'mort_comment',
+      'fundraising_comment',
+      'school_comment',
+      'religious_ed_comment',
+      'catastrophic_comment',
+      'moving_comment',
+      'outreach_comment',
+      'clergy_laity_comment',
+      'other_hier_comment',
+    ]);
     if (previousFormVal.Y2014) {
       if (!currentFormVal.Y1) {
-        currentFormVal.Y1 = {};
+        currentFormVal.Y1 = {
+          original: {},
+          adjusted: {}
+        };
       }
       copyPropertiesIfPresent(previousFormVal.Y2014, previousReviewVal.Y2014, currentFormVal.Y1, [
         'income',
@@ -178,17 +211,23 @@ function copyDataIfReady(parishId, parishInfo, previousFormVal, previousReviewVa
       ]);
       copyPropertyIfPresent(previousFormVal.Y2014, previousReviewVal.Y2014,
           currentFormVal.Y1, 'unusual', 'catastrophic');
-      var arch = shared.sumFields(shared.ARCH_MIN_FIELDS, previousReviewVal.Y2014,
+      var archOriginal = shared.sumFields(shared.ARCH_MIN_FIELDS, previousFormVal.Y2014);
+      var archAdjusted = shared.sumFields(shared.ARCH_MIN_FIELDS, previousReviewVal.Y2014,
           previousFormVal.Y2014);
-      if (arch) {
-        currentFormVal.Y1.arch = arch;
+      if (archOriginal || archAdjusted) {
+        currentFormVal.Y1.arch = archAdjusted;
+        currentFormVal.Y1.original.arch = archOriginal;
+        currentFormVal.Y1.adjusted.arch = archAdjusted;
       }
-      var authMin = shared.sumFields(shared.AUTH_MIN_FIELDS, previousReviewVal.Y2014,
+      var authMinOriginal = shared.sumFields(shared.AUTH_MIN_FIELDS, previousFormVal.Y2014);
+      var authMinAdjusted = shared.sumFields(shared.AUTH_MIN_FIELDS, previousReviewVal.Y2014,
           previousFormVal.Y2014);
-      if (authMin) {
-        currentFormVal.Y1.auth_min = authMin;
+      if (authMinOriginal || authMinAdjusted) {
+        currentFormVal.Y1.auth_min = authMinAdjusted;
+        currentFormVal.Y1.original.auth_min = authMinOriginal;
+        currentFormVal.Y1.adjusted.auth_min = authMinAdjusted;
       }
-      copyPropertiesIfPresent(previousFormVal.Y2014, previousReviewVal.Y2014,
+      copyPropertiesIfPresent(previousFormVal.Y2014, null,
           currentFormVal.Y1, shared.STEWARDSHIP_FIELDS_PER_YEAR);
       if (!currentFormVal.Y2) {
         currentFormVal.Y2 = {};
