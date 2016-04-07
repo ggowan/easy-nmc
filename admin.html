@@ -23,6 +23,7 @@
 <p><label>Metropolis Upload Folder ID: <input type="text" ng-model="metaData.upload_folder" size=40 ng-show="metaDataFinishedLoading"></label>
 <button ng-click="createFolders(metaData.upload_folder)">Create Folders</button>
 <button ng-click="autoFillForms()">Copy Last Year's Data</button>
+<button ng-click="generateKeys()">Generate Keys</button>
 <table class="bordered-table">
 <thead>
 <tr><th>Parish ID</th><th>Parish Code</th><th>Parish Name</th><th>City</th><th>State</th><th>Required to Report</th><th>Data Forms</th><th>Upload Folder</th></tr>
@@ -54,7 +55,7 @@
 <!-- -->
 <table class="bordered-table">
 <thead>
-<tr><th>Parish Name</th><th>City</th><th>State</th><th>Form Address</th></tr>
+<tr><th>Parish Name</th><th>City</th><th>State</th><th>Form Address</th><th>Excused</th></tr>
 </thead>
 <tbody>
 <tr ng-repeat="(parish_id, parish_data) in parishInfos">
@@ -62,6 +63,7 @@
 <td>{{parish_data.city}}</td>
 <td>{{parish_data.state}}</td>
 <td>https://easy-nmc.appspot.com/metropolis/{{metropolis_id}}/parish/{{parish_id}}/data-form/{{forYear}}?key={{parish_data.access_key}}</td>
+<td>{{parish_data.excused}}</td>
 </tr>
 </tbody>
 </table>

@@ -17,67 +17,103 @@
   <script src="/data-form.js"></script>
 </head>
 <body ng-controller="Ctrl" ng-cloak>
-  <div class="fixed-panel">
-  <div style="text-align: right">
-  <button class="image-button" ng-show="dataFinishedLoading"
-          ng-style="editing() ? {'background-color': '#93FA86', 'border-color': '#93FA86'} : {}"
-          ng-click="toggleEditing()" ng-disabled="form_edit_mode === 'locked'">
-  <img alt="pencil icon" src="/pencil-icon.png" width=36 height=36></button>
-  </div>
-  <div ng-if="form_edit_mode === 'locked'">Form locked.</div>
-  <div ng-show="error" class="error-message">
-  Error: {{ error.code }}<br>
-  <small>Do you have the correct URL?</small>
-  </div>
-  <div ng-show="dataFinishedLoading && infoFinishedLoading && !firebaseInfo.connected" class="offline-warning">
-  You are offline<br>
-  <small>Reconnect for changes to be saved</small>
-  </div> <!-- offline-warning -->
-  </div> <!-- error-container -->
-  <form novalidate name="form" ng-model-options="{ allowInvalid: true }" ng-show="dataFinishedLoading && parish_name && parish_city && parish_state">
-  <section class=form>
-  <h1>National Ministries Allocation Data Form</h1>
-  <h3>Instructions</h3>
-  <p>Please use this form to report your parish's financial information for the National Ministries Allocation Process. The due date for completing this form is <strong>May 15, {{ year - 1 }}</strong>. Please bear in mind that the form must be reviewed and approved by the parish priest, president, treasurer, and internal audit committee chairperson by that date.
-  <p>Financial data should be reported on a calendar-year basis for {{ year - 3 }} and {{ year - 2 }}, and must include any indirect support received by the parish from organizations or individuals. The Archdiocese Finance Committee and Archdiocese Legal Committee have approved the following text to clarify how and when to report indirect support, as required under the Archdiocese Regulations:
-  <blockquote>
-  All expenses incurred and paid by a supporting foundation, private foundation, public charity, an individual, or any other entity: (i) on behalf of a parish, (ii) are required to operate a parish, or (iii) or maintain parish related assets, are required to be included on Line B of the Archdiocese Allocation Form. The Archdiocese Finance Committee shall have the discretion to work with a parish to impute expenses to a parish and such discretion shall be binding.
-  </blockquote>
-  <p>You may share this form by sending the complete URL to another person. Please note that the URL contains a randomized key that allows the recipient to view the form and modify its contents.
-  <p>In order to edit the form, please click the pencil button in the top-right corner. It should turn green to indicate you are editing the form. Only one person will be able to edit the form at a time. Your changes will be automatically saved as you type, as long as there is a working internet connection. A red error message will appear if the connection is lost or the data is not being saved.
-  <p>In order to save you time, we have pre-populated the form with information that was submitted last year. Please correct any information that has changed and delete any information that applied only to {{ year - 4 }}.
-  <h3>Before You Begin</h3>
-  <p>Please follow these steps to verify that this form is working correctly on your web browser:
-  <ol>
-    <li>Click the pencil button to enter editing mode (it should turn green).
-    <li>Make a small change to one of the fields in the form.
-    <li>Refresh the page in your browser.
-    <li>Verify your changes are still visible. If so, that means the form is working correctly and your changes are being saved.
-  </ol>
-  <p>If the form does not seem to be working, try using a newer web browser, such as 
-  <a href="https://www.mozilla.org/en-US/firefox/" target="firefox">Firefox</a> or
-  <a href="http://www.google.com/chrome/" target="chrome">Chrome</a>.
-  You may also contact Geoffrey Gowan for assistance at <a href="mailto:geoffrey.gowan@gmail.com">geoffrey.gowan@gmail.com</a> or (510) 230-7650.
+<div class="fixed-panel">
+<div style="text-align: right">
+<button class="image-button" ng-show="dataFinishedLoading"
+        ng-style="editing() ? {'background-color': '#93FA86', 'border-color': '#93FA86'} : {}"
+        ng-click="toggleEditing()" ng-disabled="form_edit_mode === 'locked'">
+<img alt="pencil icon" src="/pencil-icon.png" width=36 height=36></button>
+</div>
+<div ng-if="form_edit_mode === 'locked'">Form locked.</div>
+<div ng-show="error" class="error-message">
+Error: {{ error.code }}<br>
+<small>Do you have the correct URL?</small>
+</div>
+<div ng-show="dataFinishedLoading && infoFinishedLoading && !firebaseInfo.connected" class="offline-warning">
+You are offline<br>
+<small>Reconnect for changes to be saved</small>
+</div> <!-- offline-warning -->
+</div> <!-- error-container -->
+<form novalidate name="form" ng-model-options="{ allowInvalid: true }" ng-show="dataFinishedLoading && parish_name && parish_city && parish_state">
+<section class=form>
+<h1>National Ministries Allocation Data Form</h1>
+<h3>Instructions</h3>
+<p>Please use this form to report your parish's financial information for the National Ministries Allocation Process. The due date for completing this form is <strong>May 15, {{ year - 1 }}</strong>. Please bear in mind that the form must be reviewed and approved by the parish priest, president, treasurer, and internal audit committee chairperson by that date.
+<p>Financial data should be reported on a calendar-year basis for {{ year - 3 }} and {{ year - 2 }}, and must include any indirect support received by the parish from organizations or individuals. The Archdiocese Finance Committee and Archdiocese Legal Committee have approved the following text to clarify how and when to report indirect support, as required under the Archdiocese Regulations:
+<blockquote>
+All expenses incurred and paid by a supporting foundation, private foundation, public charity, an individual, or any other entity: (i) on behalf of a parish, (ii) are required to operate a parish, or (iii) or maintain parish related assets, are required to be included on Line B of the Archdiocese Allocation Form. The Archdiocese Finance Committee shall have the discretion to work with a parish to impute expenses to a parish and such discretion shall be binding.
+</blockquote>
+<p>You may share this form by sending the complete URL to another person. Please note that the URL contains a randomized key that allows the recipient to view the form and modify its contents.
+<p>In order to edit the form, please click the pencil button in the top-right corner. It should turn green to indicate you are editing the form. Only one person will be able to edit the form at a time. Your changes will be automatically saved as you type, as long as there is a working internet connection. A red error message will appear if the connection is lost or the data is not being saved.
+<p>In order to save you time, we have pre-populated the form with information that was submitted last year. Please correct any information that has changed and delete any information that applied only to {{ year - 4 }}.
+<h3>Verify Data Connection</h3>
+<p>Please follow these steps to verify that this form is working correctly on your web browser:
+<ol>
+  <li>Click the pencil button to enter editing mode (it should turn green).
+  <li>Make a small change to one of the fields in the form.
+  <li>Refresh the page in your browser.
+  <li>Verify your changes are still visible. If so, that means the form is working correctly and your changes are being saved.
+</ol>
+<p>If the form does not seem to be working, try using a newer web browser, such as 
+<a href="https://www.mozilla.org/en-US/firefox/" target="firefox">Firefox</a> or
+<a href="http://www.google.com/chrome/" target="chrome">Chrome</a>.
+You may also contact Geoffrey Gowan for assistance at <a href="mailto:geoffrey.gowan@gmail.com">geoffrey.gowan@gmail.com</a> or (510) 230-7650.
+<p>If the form is working correctly on your browser but your internet connection is temporarily lost, a red error message will appear and the data entry fields will become locked until the connection can be restored. 
 
-  <h3>General Information</h3>
-  <p><strong>Parish:</strong> {{ parish_name }} in {{ parish_city }}, {{ parish_state }}<br>
-  <p><strong>Priest:</strong> <input size=20 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.priest_name placeholder="Priest's Name">
-  <input size=12 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.priest_phone type=tel placeholder="Phone">
-  <input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.priest_email type=email placeholder="Email Address"><br>
-  <p><strong>President:</strong> <input size=20 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.pres_name placeholder="President's Name">
-  <input size=12 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.pres_phone type=tel placeholder="Phone">
-  <input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.pres_email type=email placeholder="Email Address"><br>
-  <p><strong>Treasurer:</strong> <input size=20 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.treas_name placeholder="Treasurer's Name">
-  <input size=12 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.treas_phone type=tel placeholder="Phone">
-  <input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.treas_email type=email placeholder="Email Address"><br>
+<h3>General Information</h3>
+<p><strong>Parish:</strong> {{ parish_name }} in {{ parish_city }}, {{ parish_state }}<br>
+<p><strong>Priest:</strong> <input size=20 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.priest_name placeholder="Priest's Name">
+<input size=12 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.priest_phone type=tel placeholder="Phone">
+<input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.priest_email type=email placeholder="Email Address"><br>
+<p><strong>President:</strong> <input size=20 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.pres_name placeholder="President's Name">
+<input size=12 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.pres_phone type=tel placeholder="Phone">
+<input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.pres_email type=email placeholder="Email Address"><br>
+<p><strong>Treasurer:</strong> <input size=20 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.treas_name placeholder="Treasurer's Name">
+<input size=12 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.treas_phone type=tel placeholder="Phone">
+<input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.treas_email type=email placeholder="Email Address"><br>
 
-  <p>If the person preparing this form is not the treasurer, please provide the following:<br>
-  <strong>Preparer:</strong> <input size=20 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.preparer_name placeholder="Preparer's Name">
-  <input size=12 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.preparer_phone type=tel placeholder="Phone">
-  <input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.preparer_email type=email placeholder="Email Address">
+<p>If the person preparing this form is not the treasurer, please provide the following:<br>
+<strong>Preparer:</strong> <input size=20 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.preparer_name placeholder="Preparer's Name">
+<input size=12 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.preparer_phone type=tel placeholder="Phone">
+<input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.preparer_email type=email placeholder="Email Address">
+</section>
 
-  </section>
-  <section>
+<section ng-show="firebaseData.Y1.wasAdjusted">
+<h3>Review Last Year's Adjustment</h3>
+<p>Your parish's report was adjusted last year by the Metropolis or Archdiocese review committee. This may indicate there was something wrong with the report. Unclear or inaccurate reports lead to a lot of back-and-forth communication between the parish and the review committee, and can lead to errors and unfair allocations. Please try to understand why your report was adjusted and see if you can address those issues in this year's report to avoid another adjustment.
+<table class="bordered-table">
+<thead>
+<tr><th rowspan=2>Line</th><th rowspan=2>Description</th><th colspan=2>{{ year - 3 }}</th><th rowspan=2>Reviewer's Comment</th></tr>
+<tr><th>Original</th><th>Adjusted</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>A</strong></td><th scope=row><strong>Total Income</strong></th><td class=money><strong>{{ firebaseData.Y1.original.income | currency : $ : 0 }}</strong></td><td class=money ng-class="wasAdjusted('income') ? 'attention' : ''"><strong>{{ firebaseData.Y1.adjusted.income | currency : $ : 0 }}</strong></td><td class="explanation">{{ firebaseData.priorReview.income_comment }}</td></tr>
+<tr><td><strong>B</strong></td><th scope=row><strong>Total Expenses</strong></th><td class=money><strong>{{ firebaseData.Y1.original.expenses | currency : $ : 0 }}</strong></td><td class=money ng-class="wasAdjusted('expenses') ? 'attention' : ''"><strong>{{ firebaseData.Y1.adjusted.expenses | currency : $ : 0 }}</strong></td><td class="explanation">{{ firebaseData.priorReview.expense_comment }}</td></tr>
+<tr><td>C1</td><th scope=row class="indent">National Ministries Commitment</th><td class=money>{{ firebaseData.Y1.original.nmc | currency : $ : 0 }}</td><td class=money ng-class="wasAdjusted('nmc') ? 'attention' : ''">{{ firebaseData.Y1.adjusted.nmc | currency : $ : 0 }}</td><td class="explanation">{{ firebaseData.priorReview.nmc_comment }}</td></tr>
+<tr><td>C2</td><th scope=row class="indent">Donations to Archdiocese</th><td class=money>{{ (firebaseData.Y1.original.arch || 0) | currency : $ : 0 }}</td><td class=money ng-class="wasAdjusted('arch') ? 'attention' : ''">{{ (firebaseData.Y1.adjusted.arch || 0) | currency : $ : 0 }}</td><td class="explanation">{{ firebaseData.priorReview.arch_don_comment }}</td></tr>
+<tr><td>C3</td><th scope=row class="indent">Assembly of Bishops Ministries</th><td class=money>{{ (firebaseData.Y1.original.auth_min || 0) | currency : $ : 0 }}</td><td class=money ng-class="wasAdjusted('auth_min') ? 'attention' : ''">{{ (firebaseData.Y1.adjusted.auth_min || 0) | currency : $ : 0 }}</td><td class="explanation">{{ firebaseData.priorReview.auth_min_comment }}</td></tr>
+<tr><td>C4</td><th scope=row class="indent">Donations to Metropolis </th><td class=money>{{ (firebaseData.Y1.original.metro || 0) | currency : $ : 0 }}</td><td class=money ng-class="wasAdjusted('metro') ? 'attention' : ''">{{ (firebaseData.Y1.adjusted.metro || 0) | currency : $ : 0 }}</td><td class="explanation">{{ firebaseData.priorReview.metro_comment }}</td></tr>
+<tr><td>C5</td><th scope=row class="indent">Donations to Patriarchate </th><td class=money>{{ (firebaseData.Y1.original.patriarch || 0) | currency : $ : 0 }}</td><td class=money ng-class="wasAdjusted('patriarch') ? 'attention' : ''">{{ (firebaseData.Y1.adjusted.patriarch || 0) | currency : $ : 0 }}</td><td class="explanation">{{ firebaseData.priorReview.patriarch_comment }}</td></tr>
+<tr><td>C6</td><th scope=row class="indent">Capital Improvement</th><td class=money>{{ (firebaseData.Y1.original.cap || 0) | currency : $ : 0 }}</td><td class=money ng-class="wasAdjusted('cap') ? 'attention' : ''">{{ (firebaseData.Y1.adjusted.cap || 0) | currency : $ : 0 }}</td><td class="explanation">{{ firebaseData.priorReview.cap_comment }}</td></tr>
+<tr><td>C7</td><th scope=row class="indent">Construction Loan</th><td class=money>{{ (firebaseData.Y1.original.const_loan || 0) | currency : $ : 0 }}</td><td class=money ng-class="wasAdjusted('const_loan') ? 'attention' : ''">{{ (firebaseData.Y1.adjusted.const_loan || 0) | currency : $ : 0 }}</td><td class="explanation">{{ firebaseData.priorReview.const_loan_comment }}</td></tr>
+<tr><td>C8</td><th scope=row class="indent">Mortgage</th><td class=money>{{ (firebaseData.Y1.original.mort || 0) | currency : $ : 0 }}</td><td class=money ng-class="wasAdjusted('mort') ? 'attention' : ''">{{ (firebaseData.Y1.adjusted.mort || 0) | currency : $ : 0 }}</td><td class="explanation">{{ firebaseData.priorReview.mort_comment }}</td></tr>
+<tr><td>C9</td><th scope=row class="indent">Fundraising Expenses</th><td class=money>{{ (firebaseData.Y1.original.fundraising || 0) | currency : $ : 0 }}</td><td class=money ng-class="wasAdjusted('fundraising') ? 'attention' : ''">{{ (firebaseData.Y1.adjusted.fundraising || 0) | currency : $ : 0 }}</td><td class="explanation">{{ firebaseData.priorReview.fundraising_comment }}</td></tr>
+<tr><td>C10</td><th scope=row class="indent">Greek/Day School Expenses</th><td class=money>{{ (firebaseData.Y1.original.school || 0) | currency : $ : 0 }}</td><td class=money ng-class="wasAdjusted('school') ? 'attention' : ''">{{ (firebaseData.Y1.adjusted.school || 0) | currency : $ : 0 }}</td><td class="explanation">{{ firebaseData.priorReview.school_comment }}</td></tr>
+<tr><td>C11</td><th scope=row class="indent">Religious Ed.</th><td class=money>{{ (firebaseData.Y1.original.religious_ed || 0) | currency : $ : 0 }}</td><td class=money ng-class="wasAdjusted('religious_ed') ? 'attention' : ''">{{ (firebaseData.Y1.adjusted.religious_ed || 0) | currency : $ : 0 }}</td><td class="explanation">{{ firebaseData.priorReview.religious_ed_comment }}</td></tr>
+<tr><td>C12</td><th scope=row class="indent">Catastrophic Risk Insurance</th><td class=money>{{ (firebaseData.Y1.original.catastrophic || 0) | currency : $ : 0 }}</td><td class=money ng-class="wasAdjusted('catastrophic') ? 'attention' : ''">{{ (firebaseData.Y1.adjusted.catastrophic || 0) | currency : $ : 0 }}</td><td class="explanation">{{ firebaseData.priorReview.catastrophic_comment }}</td></tr>
+<tr><td>C13</td><th scope=row class="indent">Clergy Moving Expenses</th><td class=money>{{ (firebaseData.Y1.original.moving || 0) | currency : $ : 0 }}</td><td class=money ng-class="wasAdjusted('moving') ? 'attention' : ''">{{ (firebaseData.Y1.adjusted.moving || 0) | currency : $ : 0 }}</td><td class="explanation">{{ firebaseData.priorReview.moving_comment }}</td></tr>
+<tr><td>C14</td><th scope=row class="indent">Outreach and Evangelism</th><td class=money>{{ (firebaseData.Y1.original.outreach || 0) | currency : $ : 0 }}</td><td class=money ng-class="wasAdjusted('outreach') ? 'attention' : ''">{{ (firebaseData.Y1.adjusted.outreach || 0) | currency : $ : 0 }}</td><td class="explanation">{{ firebaseData.priorReview.outreach_comment }}</td></tr>
+<tr><td>C15</td><th scope=row class="indent">Clergy Laity Congress</th><td class=money>{{ (firebaseData.Y1.original.clergy_laity || 0) | currency : $ : 0 }}</td><td class=money ng-class="wasAdjusted('clergy_laity') ? 'attention' : ''">{{ (firebaseData.Y1.adjusted.clergy_laity || 0) | currency : $ : 0 }}</td><td class="explanation">{{ firebaseData.priorReview.clergy_laity_comment }}</td></tr>
+<tr><td>C16</td><th scope=row class="indent">Other Deductions</th><td class=money>{{ (firebaseData.Y1.original.other_hier || 0) | currency : $ : 0 }}</td><td class=money ng-class="wasAdjusted('other_hier') ? 'attention' : ''">{{ (firebaseData.Y1.adjusted.other_hier || 0) | currency : $ : 0 }}</td><td class="explanation">{{ firebaseData.priorReview.other_hier_comment }}</td></tr>
+<tr><td><strong>C</strong></td><th scope=row><strong>Total Deductions</strong></th><td class=money><strong>{{ totalDeductions(firebaseData.Y1.original) | currency : $ : 0 }}</strong></td><td class=money><strong>{{ totalDeductions(firebaseData.Y1.adjusted) | currency : $ : 0 }}</strong></td></tr>
+<tr><td><strong>B-C</strong></td><th scope=row><strong>Net Expenses</strong></th>
+<td class=money><strong>{{ firebaseData.Y1.original.expenses - totalDeductions(firebaseData.Y1.original) | currency : $ : 0 }}</strong></td>
+<td class=money><strong>{{ firebaseData.Y1.adjusted.expenses - totalDeductions(firebaseData.Y1.adjusted) | currency : $ : 0 }}</strong></td></tr>
+</tbody>
+</table>
+</section>
+
+<section>
 <h3>Financial Data</h3>
 <h4>A. Gross Income</h4>
 <p>Please report gross income for your parish below. Include all income from all sources and for all purposes, including income imputed to the parish from indirect support.

@@ -1,5 +1,17 @@
 var app = angular.module("easyNmc", ["firebase"]);
 
+function isDifferent(val1, val2) {
+  if (angular.isNumber(val1)) {
+    if (angular.isNumber(val2)) {
+      return Math.abs(val1 - val2) > 0.5;
+    } else {
+      return true;
+    }
+  } else {
+    return angular.isNumber(val2);
+  }
+}
+
 // Binds the firebase data to a field in the AngularJS scope.
 function bindFirebase($scope, $firebaseObject, ref) {
   var metroRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id);
@@ -65,6 +77,12 @@ function bindFirebase($scope, $firebaseObject, ref) {
       $scope.firebaseData.editing_user = $scope.auth.uid;
     }
     $scope.firebaseData.$save();
+  };
+  $scope.wasAdjusted = function(fieldName) {
+    if ($scope.dataFinishedLoading && $scope.firebaseData.Y1 && $scope.firebaseData.Y1.original && $scope.firebaseData.Y1.adjusted) {
+      return isDifferent($scope.firebaseData.Y1.original[fieldName], $scope.firebaseData.Y1.adjusted[fieldName]);
+    }
+    return false;
   };
   $scope.firebaseInfo = $firebaseObject(ref.child(".info"));
   $scope.firebaseInfo.$loaded().then(function(data) {
@@ -139,8 +157,10 @@ app.directive('dollars', ['currencyFilter', function(currencyFilter) {
   return {
     require: 'ngModel',
     link: function(scope, element, attrs, ngModel) {
+      // Parse input.
       ngModel.$parsers.push(function(value) {
         if (looksLikeNumber(value)) {
+          // Remove anything that is not a digit or decimal point.
           return Math.round(Number(value.replace(/[^0-9\.]+/g,"")));
         } else if (angular.isString(value)) {
           // If it's not quite a number, we just save whatever they typed in
@@ -151,6 +171,8 @@ app.directive('dollars', ['currencyFilter', function(currencyFilter) {
           return '';
         }
       });
+
+      // Format output.
       ngModel.$formatters.push(function(value) {
         if (angular.isNumber(value)) {
           return currencyFilter(value, '$', 0);
