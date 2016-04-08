@@ -184,57 +184,59 @@ function copyDataIfReady(parishId, parishInfo, previousFormVal, previousReviewVa
       'clergy_laity_comment',
       'other_hier_comment',
     ]);
-    if (previousFormVal.Y2014) {
-      if (!currentFormVal.Y1) {
-        currentFormVal.Y1 = {
-          original: {},
-          adjusted: {}
-        };
-      }
-      copyPropertiesIfPresent(previousFormVal.Y2014, previousReviewVal.Y2014, currentFormVal.Y1, [
-        'income',
-        'expenses',
-        'nmc',
-        'metro',
-        'patriarch',
-        'cap',
-        'const_loan',
-        'mort',
-        'fundraising',
-        'school',
-        'religious_ed',
-        'moving',
-        'outreach',
-        'clergy_laity',
-        'other_hier',
-        'prop_liab'
-      ]);
-      copyPropertyIfPresent(previousFormVal.Y2014, previousReviewVal.Y2014,
-          currentFormVal.Y1, 'unusual', 'catastrophic');
-      var archOriginal = shared.sumFields(shared.ARCH_MIN_FIELDS, previousFormVal.Y2014);
-      var archAdjusted = shared.sumFields(shared.ARCH_MIN_FIELDS, previousReviewVal.Y2014,
-          previousFormVal.Y2014);
-      if (archOriginal || archAdjusted) {
-        currentFormVal.Y1.arch = archAdjusted;
-        currentFormVal.Y1.original.arch = archOriginal;
-        currentFormVal.Y1.adjusted.arch = archAdjusted;
-      }
-      var authMinOriginal = shared.sumFields(shared.AUTH_MIN_FIELDS, previousFormVal.Y2014);
-      var authMinAdjusted = shared.sumFields(shared.AUTH_MIN_FIELDS, previousReviewVal.Y2014,
-          previousFormVal.Y2014);
-      if (authMinOriginal || authMinAdjusted) {
-        currentFormVal.Y1.auth_min = authMinAdjusted;
-        currentFormVal.Y1.original.auth_min = authMinOriginal;
-        currentFormVal.Y1.adjusted.auth_min = authMinAdjusted;
-      }
-      copyPropertiesIfPresent(previousFormVal.Y2014, null,
-          currentFormVal.Y1, shared.STEWARDSHIP_FIELDS_PER_YEAR);
-      if (!currentFormVal.Y2) {
-        currentFormVal.Y2 = {};
-      }
-      copyPropertiesIfPresent(currentFormVal.Y1, null, currentFormVal.Y2, 
-          ['stew_or_dues', 'how_counted']);
+    if (!previousFormVal.Y2014) {
+      // Need this so we can copy from the adjustment if the parish never submitted a report.
+      previousFormVal.Y2014 = {};
     }
+    if (!currentFormVal.Y1) {
+      currentFormVal.Y1 = {
+        original: {},
+        adjusted: {}
+      };
+    }
+    copyPropertiesIfPresent(previousFormVal.Y2014, previousReviewVal.Y2014, currentFormVal.Y1, [
+      'income',
+      'expenses',
+      'nmc',
+      'metro',
+      'patriarch',
+      'cap',
+      'const_loan',
+      'mort',
+      'fundraising',
+      'school',
+      'religious_ed',
+      'moving',
+      'outreach',
+      'clergy_laity',
+      'other_hier',
+      'prop_liab'
+    ]);
+    copyPropertyIfPresent(previousFormVal.Y2014, previousReviewVal.Y2014,
+        currentFormVal.Y1, 'unusual', 'catastrophic');
+    var archOriginal = shared.sumFields(shared.ARCH_MIN_FIELDS, previousFormVal.Y2014);
+    var archAdjusted = shared.sumFields(shared.ARCH_MIN_FIELDS, previousReviewVal.Y2014,
+        previousFormVal.Y2014);
+    if (archOriginal || archAdjusted) {
+      currentFormVal.Y1.arch = archAdjusted;
+      currentFormVal.Y1.original.arch = archOriginal;
+      currentFormVal.Y1.adjusted.arch = archAdjusted;
+    }
+    var authMinOriginal = shared.sumFields(shared.AUTH_MIN_FIELDS, previousFormVal.Y2014);
+    var authMinAdjusted = shared.sumFields(shared.AUTH_MIN_FIELDS, previousReviewVal.Y2014,
+        previousFormVal.Y2014);
+    if (authMinOriginal || authMinAdjusted) {
+      currentFormVal.Y1.auth_min = authMinAdjusted;
+      currentFormVal.Y1.original.auth_min = authMinOriginal;
+      currentFormVal.Y1.adjusted.auth_min = authMinAdjusted;
+    }
+    copyPropertiesIfPresent(previousFormVal.Y2014, null,
+        currentFormVal.Y1, shared.STEWARDSHIP_FIELDS_PER_YEAR);
+    if (!currentFormVal.Y2) {
+      currentFormVal.Y2 = {};
+    }
+    copyPropertiesIfPresent(currentFormVal.Y1, null, currentFormVal.Y2, 
+        ['stew_or_dues', 'how_counted']);
     if (previousFormVal.Y2013) {
       if (!currentFormVal.Y0) {
         currentFormVal.Y0 = {};
