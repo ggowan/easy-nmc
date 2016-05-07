@@ -1,5 +1,17 @@
 var app = angular.module("easyNmcReview", ["firebase"]);
 
+function sumFields(fields, yearObj, fallback) {
+  var total = 0;
+  angular.forEach(fields, function(fieldName) {
+    if (yearObj && angular.isNumber(yearObj[fieldName])) {
+      total += yearObj[fieldName];
+    } else if (fallback && angular.isNumber(fallback[fieldName])) {
+      total += fallback[fieldName];
+    }
+  });
+  return total;
+}
+
 function anyFieldIsNumber(fields, yearObj) {
   if (yearObj === undefined) return false;
   var result = false;
@@ -68,7 +80,7 @@ function setupScope($scope, $firebaseObject) {
   });
 
   $scope.get = function(year, field) {
-    var yearField = yearToYearField(year);
+    var yearField = 'Y' + year;
     if ($scope.reviewData && $scope.reviewData[yearField] && 
         angular.isNumber($scope.reviewData[yearField][field])) {
       return $scope.reviewData[yearField][field];
@@ -80,14 +92,28 @@ function setupScope($scope, $firebaseObject) {
     return 0;
   };
   $scope.isAdjusted = function(year, field) {
-    var yearField = yearToYearField(year);
+    var yearField = 'Y' + year;
     return $scope.reviewData && $scope.reviewData[yearField] && 
         angular.isNumber($scope.reviewData[yearField][field]);
   };
+  $scope.archMinTotal = function(yearObj, fallback) {
+    return sumFields(shared.ARCH_MIN_FIELDS, yearObj, fallback);
+  };
+  $scope.isArchMinAdjusted = function(year) {
+    var yearField = 'Y' + year;
+    return anyFieldIsNumber(shared.ARCH_MIN_FIELDS, $scope.reviewData[yearField]);
+  };
+  $scope.authMinTotal = function(yearObj, fallback) {
+    return sumFields(shared.AUTH_MIN_FIELDS, yearObj, fallback);
+  };
+  $scope.isAuthMinAdjusted = function(year) {
+    var yearField = 'Y' + year;
+    return anyFieldIsNumber(shared.AUTH_MIN_FIELDS, $scope.reviewData[yearField]);
+  };
   $scope.totalDeductions = function(year) {
     if (!$scope.formData) return null;
-    var yearField = yearToYearField(year);
-    return shared.sumFields(
+    var yearField = 'Y' + year;
+    return sumFields(
         shared.DEDUCTION_FIELDS, $scope.reviewData[yearField], $scope.formData[yearField]);
   };
   $scope.editing = function() {
@@ -193,17 +219,6 @@ function looksLikeNegativeNumber(val) {
 
 function looksLikeNumber(val) {
   return looksLikePositiveNumber(val) || looksLikeNegativeNumber(val);
-}
-
-// Returns the field name of data for the specified year, i.e.
-//   Most recent year being reviews: Y2
-//   Previous year: Y1
-//   Year before that: Y0
-function yearToYearField(year) {
-  if (year > shared.FOR_YEAR - 2 || year < shared.FOR_YEAR-4) {
-    throw "Year " + year + " out of expected range.";
-  }
-  return 'Y' + (4 + year - shared.FOR_YEAR);
 }
 
 app.directive('dollars', ['currencyFilter', function(currencyFilter) {

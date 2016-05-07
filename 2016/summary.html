@@ -54,7 +54,7 @@
 <td>{{parish_data.state}}</td>
 
 <!--
-<td><a target="data-form" ng-href="parish/{{parish_id}}/data-form/{{FOR_YEAR}}?key={{parish_data.access_key}}">form</a></td>
+<td><a target="data-form" ng-href="parish/{{parish_id}}/data-form/2016?key={{parish_data.access_key}}">form</a></td>
 -->
 
 <td ng-if="dataEntered(parish_id)" class="good">Yes</td>
@@ -91,9 +91,9 @@
 <td class="small">{{ reviewData.parish[parish_id].notes | limitTo : 80 }}<span ng-if="reviewData.parish[parish_id].notes.length > 80">&hellip;</span></td>
 
 <td class="small">
-  <a target="review" ng-href="parish/{{parish_id}}/review/{{FOR_YEAR}}">review</a>
+  <a target="review" ng-href="parish/{{parish_id}}/review/2016">review</a>
   <a target="upload_folder" ng-href="https://drive.google.com/drive/#folders/{{parish_data.upload_folder}}" ng-show="parish_data.upload_folder">Drive</a>
-  <a target="report" ng-href="parish/{{parish_id}}/report/{{FOR_YEAR}}">report</a>
+  <a target="report" ng-href="parish/{{parish_id}}/report/2016">report</a>
 </td>
 </tr>
 </tbody>

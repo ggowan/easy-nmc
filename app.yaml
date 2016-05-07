@@ -12,18 +12,28 @@ handlers:
   secure: always
 
 - url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/data-form/2016
-  static_files: data-form-2016.html
-  upload: data-form-2016.html
+  static_files: 2016/data-form.html
+  upload: 2016/data-form.html
   secure: always
 
-- url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/review/20[0-9][0-9]
+- url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/review/2017
   static_files: review.html
   upload: review.html
   secure: always
 
-- url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/report/20[0-9][0-9]
+- url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/review/2016
+  static_files: 2016/review.html
+  upload: 2016/review.html
+  secure: always
+
+- url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/report/2017
   static_files: report.html
   upload: report.html
+  secure: always
+
+- url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/report/2016
+  static_files: 2016/report.html
+  upload: 2016/report.html
   secure: always
 
 - url: /metropolis/[A-Z]+/admin
@@ -46,3 +56,7 @@ handlers:
   upload: .*\.(gif|png|jpg|html|css|js)$
   secure: always
 
+- url: /2016/(.*\.(gif|png|jpg|html|css|js))$
+  static_files: \1
+  upload: 2016/.*\.(gif|png|jpg|html|css|js)$
+  secure: always
