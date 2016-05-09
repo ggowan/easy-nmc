@@ -2,7 +2,7 @@
 <html lang="en" ng-app="easyNmcReview">
 <head>
   <title>Easy NMC Review Form</title>
-  <link rel="stylesheet" href="/style.css" type="text/css">
+  <link rel="stylesheet" href="/2016/style.css" type="text/css">
 
   <!-- AngularJS -->
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
@@ -13,14 +13,14 @@
   <!-- AngularFire -->
   <script src="https://cdn.firebase.com/libs/angularfire/1.1.1/angularfire.min.js"></script>
 
-  <script src="/shared.js"></script>
-  <script src="/review.js"></script>
+  <script src="/2016/shared.js"></script>
+  <script src="/2016/review.js"></script>
 </head>
 <body class="wide" ng-controller="Ctrl" ng-cloak>
 <div class="fixed-panel">
 <div style="text-align: right">
 <button class="image-button" ng-show="formDataFinishedLoading" ng-style="editing() ? {'background-color': '#93FA86', 'border-color': '#93FA86'} : {}" ng-click="toggleEditing()">
-<img alt="pencil icon" src="/pencil-icon.png" width=36 height=36></button>
+<img alt="pencil icon" src="/2016/pencil-icon.png" width=36 height=36></button>
 </div>
 <div ng-show="error" class="error-message">
 Error: {{ error.code }}<br>
@@ -35,7 +35,7 @@ You are offline<br>
 <section>
 <h1>Review of {{ parish_name }} in {{ parish_city }}, {{ parish_state }}</h1>
 <p><strong>Review status:</strong> 
-<select ng-disabled="!editing()" ng-change="statusChanged()" ng-model="reviewStatus.review_status">
+<select ng-disabled="!editing()" ng-change="statusChanged()" ng-model="reviewData.review_status">
   <option value="">Not Started</option>
   <option value="started">Started</option>
   <option value="waiting">Waiting for Response</option>
@@ -44,11 +44,11 @@ You are offline<br>
 </select>
 <p><strong>Reviewer(s):</strong> <input size=40 ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.reviewer_name placeholder="Reviewer Name">
 <p><strong>Data form is:</strong> 
-<select ng-disabled="!editing()" ng-change="reviewStatus.$save()" ng-model="reviewStatus.form_edit_mode">
+<select ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.form_edit_mode">
   <option value="">Editable</option>
   <option value="locked">Locked</option>
 </select>
-<span class="attention" ng-if="reviewStatus.form_edit_mode !== 'locked'">
+<span class="attention" ng-if="reviewData.form_edit_mode !== 'locked'">
 <strong>Lock the data form to prevent changes before you review the form.</strong></span>
 <p>Things to look for in your review:
 <div ng-class="reviewData.all_expenses ? 'good' : 'attention'">
@@ -91,9 +91,11 @@ Review any adjustments that were made to the parish's report in the prior year a
 <br><textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.notes placeholder="Notes" cols=70 rows=10></textarea>
 
 <p>Supporting documentation is located in the <a target="drive-folder" ng-href="https://drive.google.com/drive/#folders/{{upload_folder}}">parish's Google Drive folder for {{ FOR_YEAR }}</a>.
+<p>You should also compare to the numbers reported last year. See 
+<a target="last-year-drive" href="https://drive.google.com/drive/folders/0B9GVPB85ZKRkYUMtN24zX1F3emM/0B9GVPB85ZKRkZjF0d09aNkxZdUk">last year's Google Drive folder</a>.
 <p>When communicating with the parish, you may want to provide a link to the 
-<a target="data-form" ng-href="/metropolis/{{metropolis_id}}/parish/{{parish_id}}/data-form/{{FOR_YEAR}}?key={{access_key}}">data form</a> for their convenience.
-
+<a target="data-form" ng-href="/metropolis/{{metropolis_id}}/parish/{{parish_id}}/data-form/2016?key={{access_key}}">data form</a> for their convenience.
+ 
 </section>
 <section>
 <h3>Contact Information</h3>
@@ -109,8 +111,8 @@ Review any adjustments that were made to the parish's report in the prior year a
 <tr>
   <th>Line</th>
   <th>Description</th>
-  <th>{{FOR_YEAR-3}}</th>
-  <th>{{FOR_YEAR-2}}</th>
+  <th>2013</th>
+  <th>2014</th>
   <th>Change</th>
   <th class=small>Parish Notes</th>
   <th class=small>Reviewer Comments</th></tr>
@@ -119,205 +121,242 @@ Review any adjustments that were made to the parish's report in the prior year a
 <tr>
   <td><strong>A</strong></td>
   <th scope=row><strong>Total Income</strong></th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'income') ? 'attention' : ''"><strong>{{ get(FOR_YEAR-3, 'income') | currency : $ : 0 }}</strong></td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'income') ? 'attention' : ''"><strong>{{ get(FOR_YEAR-2, 'income') | currency : $ : 0 }}</strong></td>
-  <td class=money><strong>{{ (get(FOR_YEAR-2, 'income') - get(FOR_YEAR-3, 'income') || 0) | currency : $ : 0 }}</strong></td>
+  <td class=money ng-class="isAdjusted(2013, 'income') ? 'attention' : ''"><strong>{{ get(2013, 'income') | currency : $ : 0 }}</strong></td>
+  <td class=money ng-class="isAdjusted(2014, 'income') ? 'attention' : ''"><strong>{{ get(2014, 'income') | currency : $ : 0 }}</strong></td>
+  <td class=money><strong>{{ (get(2014, 'income') - get(2013, 'income') || 0) | currency : $ : 0 }}</strong></td>
   <td class="small explanation">{{ formData.income_explanation }}</td>
   <td class="small explanation">{{ reviewData.income_comment }}</td>
 </tr>
 <tr>
   <td><strong>B</strong></td>
   <th scope=row><strong>Total Expenses</strong></th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'expenses') ? 'attention' : ''"><strong>{{ get(FOR_YEAR-3, 'expenses') | currency : $ : 0 }}</strong></td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'expenses') ? 'attention' : ''"><strong>{{ get(FOR_YEAR-2, 'expenses') | currency : $ : 0 }}</strong></td>
-  <td class=money><strong>{{ (get(FOR_YEAR-2, 'expenses') - get(FOR_YEAR-3, 'expenses') || 0) | currency : $ : 0 }}</strong></td>
+  <td class=money ng-class="isAdjusted(2013, 'expenses') ? 'attention' : ''"><strong>{{ get(2013, 'expenses') | currency : $ : 0 }}</strong></td>
+  <td class=money ng-class="isAdjusted(2014, 'expenses') ? 'attention' : ''"><strong>{{ get(2014, 'expenses') | currency : $ : 0 }}</strong></td>
+  <td class=money><strong>{{ (get(2014, 'expenses') - get(2013, 'expenses') || 0) | currency : $ : 0 }}</strong></td>
   <td class="small explanation">{{ formData.expense_explanation }}</td>
   <td class="small explanation">{{ reviewData.expense_comment }}</td>
 </tr>
 <tr>
   <td><strong>A-B</strong></td>
   <th scope=row><strong>Net Income</strong></th>
-  <td class=money><strong>{{ (get(FOR_YEAR-3, 'income') - get(FOR_YEAR-3, 'expenses') || 0) | currency : $ : 0 }}</strong></td>
-  <td class=money><strong>{{ (get(FOR_YEAR-2, 'income') - get(FOR_YEAR-2, 'expenses') || 0) | currency : $ : 0 }}</strong></td>
-  <td class=money><strong>{{ (get(FOR_YEAR-2, 'income') - get(FOR_YEAR-2, 'expenses') - (get(FOR_YEAR-3, 'income') - get(FOR_YEAR-3, 'expenses')) || 0) | currency : $ : 0 }}</strong></td>
+  <td class=money><strong>{{ (get(2013, 'income') - get(2013, 'expenses') || 0) | currency : $ : 0 }}</strong></td>
+  <td class=money><strong>{{ (get(2014, 'income') - get(2014, 'expenses') || 0) | currency : $ : 0 }}</strong></td>
+  <td class=money><strong>{{ (get(2014, 'income') - get(2014, 'expenses') - (get(2013, 'income') - get(2013, 'expenses')) || 0) | currency : $ : 0 }}</strong></td>
   <td>-</td>
   <td>-</td>
 </tr>
 <tr>
   <td>C1</td>
   <th scope=row class="small indent">National Ministries Commitment</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'nmc') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'nmc') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'nmc') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'nmc') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'nmc') - get(FOR_YEAR-3, 'nmc') || 0) | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2013, 'nmc') ? 'attention' : ''">{{ get(2013, 'nmc') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'nmc') ? 'attention' : ''">{{ get(2014, 'nmc') | currency : $ : 0 }}</td>
+  <td class=money>{{ (get(2014, 'nmc') - get(2013, 'nmc') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.nmc_lines }}</td>
   <td class="small explanation">{{ reviewData.nmc_comment }}</td>
 </tr>
 <tr>
   <td>C2</td>
   <th scope=row class="small indent">Donations to Archdiocese</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'arch') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'arch') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'arch') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'arch') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'arch') - get(FOR_YEAR-3, 'arch') || 0) | currency : $ : 0 }}</td>
+  <td class=money ng-class="isArchMinAdjusted(2013) ? 'attention' : ''">{{ archMinTotal(reviewData.Y2013, formData.Y2013) | currency : $ : 0 }}</td>
+  <td class=money ng-class="isArchMinAdjusted(2014) ? 'attention' : ''">{{ archMinTotal(reviewData.Y2014, formData.Y2014) | currency : $ : 0 }}</td>
+  <td class=money>{{ archMinTotal(reviewData.Y2014, formData.Y2014) - archMinTotal(reviewData.Y2013, formData.Y2013) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.arch_don_lines }} {{ formData.other_arch_don_breakdown }}</td>
   <td class="small explanation">{{ reviewData.arch_don_comment }}</td>
 </tr>
 <tr>
   <td>C3</td>
   <th scope=row class="small indent">Assembly of Bishops Ministries</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'auth_min') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'auth_min') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'auth_min') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'auth_min') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'auth_min') - get(FOR_YEAR-3, 'auth_min') || 0) | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAuthMinAdjusted(2013) ? 'attention' : ''">{{ authMinTotal(reviewData.Y2013, formData.Y2013) | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAuthMinAdjusted(2014) ? 'attention' : ''">{{ authMinTotal(reviewData.Y2014, formData.Y2014) | currency : $ : 0 }}</td>
+  <td class=money>{{ authMinTotal(reviewData.Y2014, formData.Y2014) - authMinTotal(reviewData.Y2013, formData.Y2013) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.auth_min_lines }}</td>
   <td class="small explanation">{{ reviewData.auth_min_comment }}</td>
 </tr>
 <tr>
   <td>C4</td>
   <th scope=row class="small indent">Donations to Metropolis </th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'metro') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'metro') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'metro') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'metro') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'metro') - get(FOR_YEAR-3, 'metro')|| 0) | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2013, 'metro') ? 'attention' : ''">{{ get(2013, 'metro') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'metro') ? 'attention' : ''">{{ get(2014, 'metro') | currency : $ : 0 }}</td>
+  <td class=money>{{ (get(2014, 'metro') - get(2013, 'metro')|| 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.metro_lines }}</td>
   <td class="small explanation">{{ reviewData.metro_comment }}</td>
 </tr>
 <tr>
   <td>C5</td>
   <th scope=row class="small indent">Donations to Patriarchate </th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'patriarch') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'patriarch') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'patriarch') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'patriarch') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'patriarch') - get(FOR_YEAR-3, 'patriarch') || 0) | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2013, 'patriarch') ? 'attention' : ''">{{ get(2013, 'patriarch') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'patriarch') ? 'attention' : ''">{{ get(2014, 'patriarch') | currency : $ : 0 }}</td>
+  <td class=money>{{ (get(2014, 'patriarch') - get(2013, 'patriarch') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.patriarch_lines }}</td>
   <td class="small explanation">{{ reviewData.patriarch_comment }}</td>
 </tr>
 <tr>
   <td>C6</td>
   <th scope=row class="small indent">Capital Improvement</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'cap') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'cap') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'cap') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'cap') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'cap') - get(FOR_YEAR-3, 'cap') || 0) | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2013, 'cap') ? 'attention' : ''">{{ get(2013, 'cap') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'cap') ? 'attention' : ''">{{ get(2014, 'cap') | currency : $ : 0 }}</td>
+  <td class=money>{{ (get(2014, 'cap') - get(2013, 'cap') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.cap_lines }} {{ formData.cap_projects }} </td>
   <td class="small explanation">{{ reviewData.cap_comment }}</td>
 </tr>
 <tr>
   <td>C7</td>
   <th scope=row class="small indent">Construction Loan</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'const_loan') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'const_loan') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'const_loan') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'const_loan') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'const_loan') - get(FOR_YEAR-3, 'const_loan') || 0) | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2013, 'const_loan') ? 'attention' : ''">{{ get(2013, 'const_loan') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'const_loan') ? 'attention' : ''">{{ get(2014, 'const_loan') | currency : $ : 0 }}</td>
+  <td class=money>{{ (get(2014, 'const_loan') - get(2013, 'const_loan') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.const_loan_lines }}</td>
   <td class="small explanation">{{ reviewData.const_loan_comment }}</td>
 </tr>
 <tr>
   <td>C8</td>
   <th scope=row class="small indent">Mortgage</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'mort') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'mort') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'mort') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'mort') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'mort') - get(FOR_YEAR-3, 'mort') || 0) | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2013, 'mort') ? 'attention' : ''">{{ get(2013, 'mort') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'mort') ? 'attention' : ''">{{ get(2014, 'mort') | currency : $ : 0 }}</td>
+  <td class=money>{{ (get(2014, 'mort') - get(2013, 'mort') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.mort_lines }}</td>
   <td class="small explanation">{{ reviewData.mort_comment }}</td>
 </tr>
 <tr>
   <td>C9</td>
   <th scope=row class="small indent">Fundraising Expenses</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'fundraising') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'fundraising') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'fundraising') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'fundraising') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'fundraising') - get(FOR_YEAR-3, 'fundraising') || 0) | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2013, 'fundraising') ? 'attention' : ''">{{ get(2013, 'fundraising') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'fundraising') ? 'attention' : ''">{{ get(2014, 'fundraising') | currency : $ : 0 }}</td>
+  <td class=money>{{ (get(2014, 'fundraising') - get(2013, 'fundraising') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.fundraising_lines }}</td>
   <td class="small explanation">{{ reviewData.fundraising_comment }}</td>
 </tr>
 <tr>
   <td>C10</td>
   <th scope=row class="small indent">Greek/Day School Expenses</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'school') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'school') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'school') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'school') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'school') - get(FOR_YEAR-3, 'school') || 0) | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2013, 'school') ? 'attention' : ''">{{ get(2013, 'school') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'school') ? 'attention' : ''">{{ get(2014, 'school') | currency : $ : 0 }}</td>
+  <td class=money>{{ (get(2014, 'school') - get(2013, 'school') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.school_lines }}</td>
   <td class="small explanation">{{ reviewData.school_comment }}</td>
 </tr>
 <tr>
   <td>C11</td>
   <th scope=row class="small indent">Religious Ed.</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'religious_ed') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'religious_ed') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'religious_ed') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'religious_ed') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'religious_ed') - get(FOR_YEAR-3, 'religious_ed') || 0) | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2013, 'religious_ed') ? 'attention' : ''">{{ get(2013, 'religious_ed') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'religious_ed') ? 'attention' : ''">{{ get(2014, 'religious_ed') | currency : $ : 0 }}</td>
+  <td class=money>{{ (get(2014, 'religious_ed') - get(2013, 'religious_ed') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.religious_ed_lines }}</td>
   <td class="small explanation">{{ reviewData.religious_ed_comment }}</td>
 </tr>
 <tr>
   <td>C12</td>
   <th scope=row class="small indent">Catastrophic Risk Insurance</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'catastrophic') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'catastrophic') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'catastrophic') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'catastrophic') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'catastrophic') - get(FOR_YEAR-3, 'catastrophic') || 0) | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2013, 'unusual') ? 'attention' : ''">{{ get(2013, 'unusual') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'unusual') ? 'attention' : ''">{{ get(2014, 'unusual') | currency : $ : 0 }}</td>
+  <td class=money>{{ (get(2014, 'unusual') - get(2013, 'unusual') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.catastrophic_lines }}</td>
   <td class="small explanation">{{ reviewData.catastrophic_comment }}</td>
 </tr>
 <tr>
   <td>C13</td>
   <th scope=row class="small indent">Clergy Moving Expenses</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'moving') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'moving') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'moving') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'moving') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'moving') - get(FOR_YEAR-3, 'moving') || 0) | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2013, 'moving') ? 'attention' : ''">{{ get(2013, 'moving') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'moving') ? 'attention' : ''">{{ get(2014, 'moving') | currency : $ : 0 }}</td>
+  <td class=money>{{ (get(2014, 'moving') - get(2013, 'moving') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.moving_lines }}</td>
   <td class="small explanation">{{ reviewData.moving_comment }}</td>
 </tr>
 <tr>
   <td>C14</td>
   <th scope=row class="small indent">Outreach and Evangelism</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'outreach') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'outreach') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'outreach') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'outreach') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'outreach') - get(FOR_YEAR-3, 'outreach') || 0) | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2013, 'outreach') ? 'attention' : ''">{{ get(2013, 'outreach') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'outreach') ? 'attention' : ''">{{ get(2014, 'outreach') | currency : $ : 0 }}</td>
+  <td class=money>{{ (get(2014, 'outreach') - get(2013, 'outreach') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.outreach_lines }}</td>
   <td class="small explanation">{{ reviewData.outreach_comment }}</td>
 </tr>
 <tr>
   <td>C15</td>
   <th scope=row class="small indent">Clergy Laity Congress</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'clergy_laity') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'clergy_laity') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'clergy_laity') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'clergy_laity') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'clergy_laity') - get(FOR_YEAR-3, 'clergy_laity') || 0) | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2013, 'clergy_laity') ? 'attention' : ''">{{ get(2013, 'clergy_laity') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'clergy_laity') ? 'attention' : ''">{{ get(2014, 'clergy_laity') | currency : $ : 0 }}</td>
+  <td class=money>{{ (get(2014, 'clergy_laity') - get(2013, 'clergy_laity') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.clergy_laity_lines }}</td>
   <td class="small explanation">{{ reviewData.clergy_laity_comment }}</td>
 </tr>
 <tr>
   <td>C16</td>
   <th scope=row class="small indent">Other Deductions</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'other_hier') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'other_hier') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'other_hier') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'other_hier') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'other_hier') - get(FOR_YEAR-3, 'other_hier') || 0) | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2013, 'other_hier') ? 'attention' : ''">{{ get(2013, 'other_hier') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'other_hier') ? 'attention' : ''">{{ get(2014, 'other_hier') | currency : $ : 0 }}</td>
+  <td class=money>{{ (get(2014, 'other_hier') - get(2013, 'other_hier') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.other_hier_lines }} {{ formData.other_hier_explanation }}</td>
   <td class="small explanation">{{ reviewData.other_hier_comment }}</td>
 </tr>
 <tr>
   <td><strong>C</strong></td>
   <th scope=row><strong>Total Deductions</strong></th>
-  <td class=money><strong>{{ totalDeductions(FOR_YEAR-3) | currency : $ : 0 }}</strong></td>
-  <td class=money><strong>{{ totalDeductions(FOR_YEAR-2) | currency : $ : 0 }}</strong></td>
-  <td class=money><strong>{{ totalDeductions(FOR_YEAR-2) - totalDeductions(FOR_YEAR-3) | currency : $ : 0 }}</strong></td>
+  <td class=money><strong>{{ totalDeductions(2013) | currency : $ : 0 }}</strong></td>
+  <td class=money><strong>{{ totalDeductions(2014) | currency : $ : 0 }}</strong></td>
+  <td class=money><strong>{{ totalDeductions(2014) - totalDeductions(2013) | currency : $ : 0 }}</strong></td>
 </tr>
 <tr>
   <td><strong>B-C</strong></td>
   <th scope=row><strong>Net Expenses</strong></th>
-  <td class=money><strong>{{ get(FOR_YEAR-3, 'expenses') - totalDeductions(FOR_YEAR-3) | currency : $ : 0 }}</strong></td>
-  <td class=money><strong>{{ get(FOR_YEAR-2, 'expenses') - totalDeductions(FOR_YEAR-2) | currency : $ : 0 }}</strong></td>
-  <td class=money><strong>{{ get(FOR_YEAR-2, 'expenses') - totalDeductions(FOR_YEAR-2) - get(FOR_YEAR-3, 'expenses') + totalDeductions(FOR_YEAR-3) | currency : $ : 0 }}</strong></td>
+  <td class=money><strong>{{ get(2013, 'expenses') - totalDeductions(2013) | currency : $ : 0 }}</strong></td>
+  <td class=money><strong>{{ get(2014, 'expenses') - totalDeductions(2014) | currency : $ : 0 }}</strong></td>
+  <td class=money><strong>{{ get(2014, 'expenses') - totalDeductions(2014) - get(2013, 'expenses') + totalDeductions(2013) | currency : $ : 0 }}</strong></td>
 </tr>
 <tr style="height: 1em"></tr>
 <tr>
   <td style="border:none"></td>
   <th scope=row>Property and Liability Insurance</th>
-  <td class=money>{{ (formData.Y1.prop_liab || 0) | currency : $ : 0 }}</td>
-  <td class=money>{{ (formData.Y2.prop_liab || 0) | currency : $ : 0 }}</td>
-  <td class=money>{{ (formData.Y2.prop_liab - formData.Y1.prop_liab || 0) | currency : $ : 0 }}</td>
+  <td class=money>{{ (formData.Y2013.prop_liab || 0) | currency : $ : 0 }}</td>
+  <td class=money>{{ (formData.Y2014.prop_liab || 0) | currency : $ : 0 }}</td>
+  <td class=money>{{ (formData.Y2014.prop_liab - formData.Y2013.prop_liab || 0) | currency : $ : 0 }}</td>
 </tr>
 <tr>
   <td style="border:none"></td>
   <th scope=row>Stewardship/Dues Income</th>
-  <td class=money>{{ (formData.Y1.stew_income || 0) | currency : $ : 0 }}</td>
-  <td class=money>{{ (formData.Y2.stew_income || 0) | currency : $ : 0 }}</td>
-  <td class=money>{{ (formData.Y2.stew_income - formData.Y1.stew_income || 0) | currency : $ : 0 }}</td>
+  <td class=money>{{ (formData.Y2013.stew_income || 0) | currency : $ : 0 }}</td>
+  <td class=money>{{ (formData.Y2014.stew_income || 0) | currency : $ : 0 }}</td>
+  <td class=money>{{ (formData.Y2014.stew_income - formData.Y2013.stew_income || 0) | currency : $ : 0 }}</td>
 </tr>
 </tbody>
 </table>
+</section>
+<section>
+<h3>Reviewer Tallies</h3>
+<div ng-repeat="(tallyKey, tally) in reviewData.tallies">
+<h4>Tally #{{$index + 1}}: 
+<input ng-if="editing()" type="text" ng-change="reviewData.$save()" ng-model="tally.name" ng-readonly="!editing()" size=90 placeholder="Tally name">
+<span ng-if="!editing()">{{tally.name}}</span>
+</h4>
+<table class="bordered-table">
+<thead>
+<tr>
+<th>Description</th>
+<th>Amount</th>
+</tr>
+</thead>
+<tbody>
+<tr ng-repeat="(rowKey, tallyRow) in tally.rows">
+<th scope="row">
+<input ng-if="editing()" type="text" ng-change="reviewData.$save()" ng-model="tallyRow.description" size=40>
+<span ng-if="!editing()">{{ tallyRow.description }}</span>
+</th>
+<td class=money>
+<input ng-if="editing()" class="money" dollars ng-change="reviewData.$save()" ng-model="tallyRow.amount" type="text" size=10>
+<span ng-if="!editing()">{{tallyRow.amount | currency : $ : 0}}</span>
+</td>
+<td ng-if="editing()">
+<button ng-click="deleteRow(tally, rowKey)">Delete Row</button>
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr><th scope="row"><strong>Total</strong></th><td class=money><strong>{{ tallyTotal(tally) | currency : $ : 0 }}</strong></td></tr>
+</tfoot>
+</table>
+<button ng-click="addRow(tally)" ng-disabled="!editing()">Add Row</button>
+</div>
+<p><button ng-click="addTally()" ng-disabled="!editing()">Add Tally</button>
 </section>
 <section>
 <h3>Details</h3>
@@ -325,18 +364,18 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>Please report gross income for your parish below. Include all parish income from all sources and for all purposes, including income imputed to the parish from indirect support.
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th>Source</th><th>2013<th>2014</tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.income | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.income | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2013.income | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2014.income | currency : $ : 0 }}
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.income" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.income" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.income" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.income" type="text" size=10>
     </tr>
   </tbody>
 </table>
@@ -350,18 +389,18 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>Please report gross expenses for your parish below. Include expenses for all purposes from all funds, including expenses imputed to the parish from indirect support. Do not include depreciation.
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th>Source</th><th>2013<th>2014</tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.expenses | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.expenses | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2013.expenses | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2014.expenses | currency : $ : 0 }}
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.expenses" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.expenses" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.expenses" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.expenses" type="text" size=10>
     </tr>
   </tbody>
 </table>
@@ -381,18 +420,18 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>Please report your parish's payments to the Archdiocese for the National Ministries Commitment. Do not include payments for clergy pension or other benefits.
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th>Source</th><th>2013<th>2014</tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.nmc | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.nmc | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2013.nmc | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2014.nmc | currency : $ : 0 }}
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.nmc" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.nmc" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.nmc" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.nmc" type="text" size=10>
     </tr>
   </tbody>
 </table>
@@ -406,23 +445,81 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>If your parish made additional donations to the Archdiocese or to its ministries, please report those here.
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th style="border: none"><th colspan=2>2013<th colspan=2>2014</tr>
+    <tr><th style="border: none"><th>Parish<th>Reviewer<th>Parish<th>Reviewer</tr>
   </thead>
   <tbody>
     <tr>
-      <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.arch | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.arch | currency : $ : 0 }}
+      <th scope="row">Archdiocese (do not include allocation)
+      <td class=money>{{ formData.Y2013.arch_don | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.arch_don" type="text" size=10>
+      <td class=money>{{ formData.Y2014.arch_don | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.arch_don" type="text" size=10>
     </tr>
     <tr>
-      <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.arch" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.arch" type="text" size=10>
+      <th scope="row">Hellenic College/Holy Cross
+      <td class=money>{{ formData.Y2013.hchc | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.hchc" type="text" size=10>
+      <td class=money>{{ formData.Y2014.hchc | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.hchc" type="text" size=10>
+    </tr>
+    <tr>
+      <th scope="row">St. Basil Academy
+      <td class=money>{{ formData.Y2013.stbasil | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.stbasil" type="text" size=10>
+      <td class=money>{{ formData.Y2014.stbasil | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.stbasil" type="text" size=10>
+    </tr>
+    <tr>
+      <th scope="row">St. Michael Home
+      <td class=money>{{ formData.Y2013.stmichael | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.stmichael" type="text" size=10>
+      <td class=money>{{ formData.Y2014.stmichael | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.stmichael" type="text" size=10>
+    </tr>
+    <tr>
+      <th scope="row">St. Photios Shrine
+      <td class=money>{{ formData.Y2013.stphotios | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.stphotios" type="text" size=10>
+      <td class=money>{{ formData.Y2014.stphotios | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.stphotios" type="text" size=10>
+    </tr>
+    <tr>
+      <th scope="row">Ionian Village
+      <td class=money>{{ formData.Y2013.ionian | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.ionian" type="text" size=10>
+      <td class=money>{{ formData.Y2014.ionian | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.ionian" type="text" size=10>
+    </tr>
+    <tr>
+      <th scope="row">Order of St. Andrew
+      <td class=money>{{ formData.Y2013.standrew | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.standrew" type="text" size=10>
+      <td class=money>{{ formData.Y2014.standrew | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.standrew" type="text" size=10>
+    </tr>
+    <tr>
+      <th scope="row">Other
+      <td class=money>{{ formData.Y2013.other_arch | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.other_arch" type="text" size=10>
+      <td class=money>{{ formData.Y2014.other_arch | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.other_arch" type="text" size=10>
     </tr>
   </tbody>
+  <tfoot>
+    <tr>
+      <th scope="row"><strong>Total</strong>
+      <td class=money><strong>{{ archMinTotal(formData.Y2013) | currency : $ : 0 }}</strong>
+      <td class=money><strong>{{ archMinTotal(reviewData.Y2013, formData.Y2013) | currency : $ : 0 }}</strong>
+      <td class=money><strong>{{ archMinTotal(formData.Y2014) | currency : $ : 0 }}</strong>
+      <td class=money><strong>{{ archMinTotal(reviewData.Y2014, formData.Y2014) | currency : $ : 0 }}</strong>
+    </tr>
+  </tfoot>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
 <textarea ng-readonly="true" ng-model=formData.arch_don_lines cols=70 rows=3></textarea>
+<p>If you included an amount for "Other", please provide a breakdown by ministry and year here:<br>
+<textarea ng-readonly="true" ng-model=formData.other_arch_don_breakdown placeholder="Breakdown of donations to other Archdiocesen ministries" cols=70 rows=3></textarea>
 
 <p>Reviewer comments:<br>
 <textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.arch_don_comment placeholder="Comments on Archdiocese donations" cols=70 rows=3></textarea>
@@ -431,20 +528,83 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>If your parish made donations to any of the following organizations, please report those here.
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th style="border: none"><th colspan=2>2013<th colspan=2>2014</tr>
+    <tr><th style="border: none"><th>Parish<th>Reviewer<th>Parish<th>Reviewer</tr>
   </thead>
   <tbody>
     <tr>
-      <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.auth_min | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.auth_min | currency : $ : 0 }}
+      <th scope="row">IOCC (International Orthodox Christian Charities)
+      <td class=money>{{ formData.Y2013.iocc | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.iocc" type="text" size=10>
+      <td class=money>{{ formData.Y2014.iocc | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.iocc" type="text" size=10>
     </tr>
     <tr>
-      <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.auth_min" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.auth_min" type="text" size=10>
+      <th scope="row">OCMC (Orthodox Christian Mission Center)
+      <td class=money>{{ formData.Y2013.ocmc | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.ocmc" type="text" size=10>
+      <td class=money>{{ formData.Y2014.ocmc | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.ocmc" type="text" size=10>
+    </tr>
+    <tr>
+      <th scope="row">OCF (Orthodox Christian Fellowship)
+      <td class=money>{{ formData.Y2013.ocf | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.ocf" type="text" size=10>
+      <td class=money>{{ formData.Y2014.ocf | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.ocf" type="text" size=10>
+    </tr>
+    <tr>
+      <th scope="row">Orthodox Christian Prison Ministries
+      <td class=money>{{ formData.Y2013.prison_min | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.prison_min" type="text" size=10>
+      <td class=money>{{ formData.Y2014.prison_min | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.prison_min" type="text" size=10>
+    </tr>
+    <tr>
+      <th scope="row">EOCS (Eastern Orthodox Committee on Scouting)
+      <td class=money>{{ formData.Y2013.eocs | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.eocs" type="text" size=10>
+      <td class=money>{{ formData.Y2014.eocs | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.eocs" type="text" size=10>
+    </tr>
+    <tr>
+      <th scope="row">OCN (Orthodox Christian Network)
+      <td class=money>{{ formData.Y2013.ocn | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.ocn" type="text" size=10>
+      <td class=money>{{ formData.Y2014.ocn | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.ocn" type="text" size=10>
+    </tr>
+    <tr>
+      <th scope="row">OCEC (Orthodox Christian Education Commission)
+      <td class=money>{{ formData.Y2013.ocec | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.ocec" type="text" size=10>
+      <td class=money>{{ formData.Y2014.ocec | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.ocec" type="text" size=10>
+    </tr>
+    <tr>
+      <th scope="row">OCAMPR (Orthodox Christian Association of Medicine, Psychology and Religion)
+      <td class=money>{{ formData.Y2013.ocampr | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.ocampr" type="text" size=10>
+      <td class=money>{{ formData.Y2014.ocampr | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.ocampr" type="text" size=10>
+    </tr>
+    <tr>
+      <th scope="row">Orthodox Christian Education Commission
+      <td class=money>{{ formData.Y2013.ed_comm | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.ed_comm" type="text" size=10>
+      <td class=money>{{ formData.Y2014.ed_comm | currency : $ : 0 }}
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.ed_comm" type="text" size=10>
     </tr>
   </tbody>
+  <tfoot>
+    <tr>
+      <th scope="row"><strong>Total</strong>
+      <td class=money><strong>{{ authMinTotal(formData.Y2013) | currency : $ : 0 }}</strong>
+      <td class=money><strong>{{ authMinTotal(reviewData.Y2013, formData.Y2013) | currency : $ : 0 }}</strong>
+      <td class=money><strong>{{ authMinTotal(formData.Y2014) | currency : $ : 0 }}</strong>
+      <td class=money><strong>{{ authMinTotal(reviewData.Y2014, formData.Y2014) | currency : $ : 0 }}</strong>
+    </tr>
+  </tfoot>
 </table>
 <p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
 <textarea ng-readonly="true" ng-model=formData.auth_min_lines cols=70 rows=3></textarea>
@@ -456,18 +616,18 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>If your parish made payments or donations to support the Metropolis or any of its ministries, please report the total below.
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th>Source</th><th>2013<th>2014</tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.metro | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.metro | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2013.metro | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2014.metro | currency : $ : 0 }}
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.metro" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.metro" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.metro" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.metro" type="text" size=10>
     </tr>
   </tbody>
 </table>
@@ -481,18 +641,18 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>If your parish made donations to support the Ecumenical Patriarchate or any of its Patriarchal Institutions, please report the total below.
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th>Source</th><th>2013<th>2014</tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.patriarch | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.patriarch | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2013.patriarch | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2014.patriarch | currency : $ : 0 }}
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.patriarch" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.patriarch" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.patriarch" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.patriarch" type="text" size=10>
     </tr>
   </tbody>
 </table>
@@ -512,18 +672,18 @@ Review any adjustments that were made to the parish's report in the prior year a
 </ul>
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th>Source</th><th>2013<th>2014</tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.cap | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.cap | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2013.cap | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2014.cap | currency : $ : 0 }}
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.cap" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.cap" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.cap" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.cap" type="text" size=10>
     </tr>
   </tbody>
 </table>
@@ -540,18 +700,18 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>Construction loans are short-term, interest-only loans in which the balance increases as payments are made on an ongoing construction project. If your parish's loan requires fixed monthly payments over a period of years and the balance is going down, not up, it is a mortgage and should be reported in section C8 below.
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th>Source</th><th>2013<th>2014</tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.const_loan | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.const_loan | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2013.const_loan | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2014.const_loan | currency : $ : 0 }}
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.const_loan" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.const_loan" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.const_loan" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.const_loan" type="text" size=10>
     </tr>
   </tbody>
 </table>
@@ -569,18 +729,18 @@ Review any adjustments that were made to the parish's report in the prior year a
 </ul>
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th>Source</th><th>2013<th>2014</tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.mort | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.mort | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2013.mort | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2014.mort | currency : $ : 0 }}
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.mort" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.mort" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.mort" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.mort" type="text" size=10>
     </tr>
   </tbody>
 </table>
@@ -603,18 +763,18 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>Expenses that are typically deducted in this section cover food, materials, rental expenses, and special labor for events such as festivals, dinner dances, and golf outings.
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th>Source</th><th>2013<th>2014</tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.fundraising | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.fundraising | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2013.fundraising | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2014.fundraising | currency : $ : 0 }}
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.fundraising" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.fundraising" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.fundraising" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.fundraising" type="text" size=10>
     </tr>
   </tbody>
 </table>
@@ -634,18 +794,18 @@ Review any adjustments that were made to the parish's report in the prior year a
 </ul>
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th>Source</th><th>2013<th>2014</tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.school | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.school | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2013.school | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2014.school | currency : $ : 0 }}
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.school" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.school" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.school" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.school" type="text" size=10>
     </tr>
   </tbody>
 </table>
@@ -665,18 +825,18 @@ Review any adjustments that were made to the parish's report in the prior year a
 </ul>
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th>Source</th><th>2013<th>2014</tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.religious_ed | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.religious_ed | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2013.religious_ed | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2014.religious_ed | currency : $ : 0 }}
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.religious_ed" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.religious_ed" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.religious_ed" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.religious_ed" type="text" size=10>
     </tr>
   </tbody>
 </table>
@@ -690,18 +850,18 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>Please report expenses for catastrophic risk insurance such as earthquake or flood insurance below. Please note that typical fire and liability insurance should not be included.
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th>Source</th><th>2013<th>2014</tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.catastrophic | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.catastrophic | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2013.unusual | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2014.unusual | currency : $ : 0 }}
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.catastrophic" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.catastrophic" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.unusual" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.unusual" type="text" size=10>
     </tr>
   </tbody>
 </table>
@@ -716,18 +876,18 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>Please report expenses for relocating clergymen to your parish.
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th>Source</th><th>2013<th>2014</tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.moving | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.moving | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2013.moving | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2014.moving | currency : $ : 0 }}
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.moving" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.moving" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.moving" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.moving" type="text" size=10>
     </tr>
   </tbody>
 </table>
@@ -747,18 +907,18 @@ Review any adjustments that were made to the parish's report in the prior year a
 </ul>
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th>Source</th><th>2013<th>2014</tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.outreach | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.outreach | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2013.outreach | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2014.outreach | currency : $ : 0 }}
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.outreach" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.outreach" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.outreach" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.outreach" type="text" size=10>
     </tr>
   </tbody>
 </table>
@@ -772,18 +932,18 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>Please report expenses for sending delegates to the Archdiocese Clergy Laity Congress below. Do not include expenses associated with metropolis assembly meetings or other organizations. Note that the Clergy Laity Congress happens only once every two years, so you should only have expenses for it on even years.
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th>Source</th><th>2013<th>2014</tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.clergy_laity | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.clergy_laity | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2013.clergy_laity | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2014.clergy_laity | currency : $ : 0 }}
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.clergy_laity" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.clergy_laity" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.clergy_laity" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.clergy_laity" type="text" size=10>
     </tr>
   </tbody>
 </table>
@@ -797,18 +957,18 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>Please report any special deductions that have been approved by your hierarch below.
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th>Source</th><th>2013<th>2014</tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.other_hier | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.other_hier | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2013.other_hier | currency : $ : 0 }}
+      <td class=money>{{ formData.Y2014.other_hier | currency : $ : 0 }}
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.other_hier" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.other_hier" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2013.other_hier" type="text" size=10>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2014.other_hier" type="text" size=10>
     </tr>
   </tbody>
 </table>
@@ -824,10 +984,10 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>Please report the total amount paid for property and liability insurance for your parish. This is collected for informational purposes but is not a deductible expense.
 <table>
   <thead>
-    <tr><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th>2013<th>2014</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="true" ng-model="formData.Y1.prop_liab" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-model="formData.Y2.prop_liab" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="true" ng-model="formData.Y2013.prop_liab" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-model="formData.Y2014.prop_liab" type="text" size=10></tr>
   </tbody>
 </table>
 

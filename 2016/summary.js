@@ -55,6 +55,14 @@ function setupScope($scope, $firebaseObject) {
     $scope.error = error;
   });
 
+  $scope.firebaseInfo = $firebaseObject(ref.child(".info"));
+  $scope.firebaseInfo.$loaded().then(function() {
+    console.log(".info finished loading");
+    $scope.infoFinishedLoading = true;
+  }).catch(function(error) {
+    $scope.error = error;
+  });
+
   $scope.formData = $firebaseObject($scope.metroRef.child("data-form/" + shared.FOR_YEAR));
   $scope.formData.$loaded().then(function(data) {
     console.log("form data finished loading");
@@ -64,10 +72,10 @@ function setupScope($scope, $firebaseObject) {
     $scope.error = error;
   });
 
-  $scope.reviewStatus = $firebaseObject($scope.metroRef.child("review-status/" + shared.FOR_YEAR));
-  $scope.reviewStatus.$loaded().then(function(data) {
+  $scope.reviewData = $firebaseObject($scope.metroRef.child("review-data/" + shared.FOR_YEAR));
+  $scope.reviewData.$loaded().then(function(data) {
     console.log("review data finished loading");
-    $scope.reviewStatusFinishedLoading = true;
+    $scope.reviewDataFinishedLoading = true;
   }).catch(function(error) {
     console.log("loading review data failed: ", error);
     $scope.error = error;
@@ -97,7 +105,7 @@ function setupScope($scope, $firebaseObject) {
     if (!$scope.formData || !$scope.formData.parish) return null;
     var parishData = $scope.formData.parish[parishId];
     if (!parishData) return null;
-    var yearData = parishData[shared.yearToYearField(year)];
+    var yearData = parishData['Y' + year];
     if (!yearData) return null;
     return yearData[fieldName];
   };
@@ -128,16 +136,16 @@ function setupScope($scope, $firebaseObject) {
     console.log('entering countParishesByReviewerStatus');
     var result = {};
     angular.forEach($scope.parishIds, function(parishData, parishId) {
-      if (parishData.excused || !$scope.reviewStatus.parish) return;
-      var parishReviewStatus = $scope.reviewStatus.parish[parishId];
-      if (!parishReviewStatus) {
+      if (parishData.excused || !$scope.reviewData.parish) return;
+      var parishReviewData = $scope.reviewData.parish[parishId];
+      if (!parishReviewData) {
         if (!result['']) result[''] = {};
         if (!result['']['']) result[''][''] = 0;
         result[''][''] += 1;
         return;
       }
-      var reviewer = parishReviewStatus.reviewer_name ? parishReviewStatus.reviewer_name : '';
-      var status = parishReviewStatus.review_status ? parishReviewStatus.review_status : '';
+      var reviewer = parishReviewData.reviewer_name ? parishReviewData.reviewer_name : '';
+      var status = parishReviewData.review_status ? parishReviewData.review_status : '';
       if (!result[reviewer]) result[reviewer] = {};
       if (!result[reviewer][status]) result[reviewer][status] = 0;
       result[reviewer][status] += 1;

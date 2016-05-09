@@ -40,8 +40,8 @@ function bindFirebase($scope, $firebaseObject, ref) {
     console.log("loading upload_folder failed: ", error);
     $scope.error = error;
   });
-  var reviewDataRef = metroRef.child("/review-data/" + $scope.year + "/parish/" + $scope.parish_id);
-  reviewDataRef.child("form_edit_mode").on("value", function(snap) {
+  var reviewStatusRef = metroRef.child("/review-status/" + $scope.year + "/parish/" + $scope.parish_id);
+  reviewStatusRef.child("form_edit_mode").on("value", function(snap) {
     $scope.form_edit_mode = snap.val();
   });
   var dataFormRef = metroRef.child("/data-form/" + $scope.year + "/parish/" + $scope.parish_id);

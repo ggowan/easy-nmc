@@ -19,7 +19,7 @@
   <script src="/shared.js"></script>
   <script src="/summary.js"></script>
 </head>
-<body class="wide" ng-controller="Ctrl" ng-cloak ng-show="parishIdsFinishedLoading && formDataFinishedLoading && reviewStatusFinishedLoading">
+<body class="wide" ng-controller="Ctrl" ng-cloak ng-show="parishIdsFinishedLoading && infoFinishedLoading && formDataFinishedLoading && reviewDataFinishedLoading">
 <p><button ng-click="refreshDriveData()">Refresh Google Drive Data</button>
 <table class="bordered-table">
 <thead>
@@ -37,6 +37,7 @@
 <th colspan=2 class="small">Balance Sheet Submitted?</th>
 <th rowspan=2 class="small">Reviewer</th>
 <th rowspan=2 class="small">Review Status</th>
+<th rowspan=2 class="small">Notes</th>
 <th rowspan=2 class="small">Links</th>
 </tr>
 <tr>
@@ -53,7 +54,7 @@
 <td>{{parish_data.state}}</td>
 
 <!--
-<td><a target="data-form" ng-href="parish/{{parish_id}}/data-form/{{FOR_YEAR}}?key={{parish_data.access_key}}">form</a></td>
+<td><a target="data-form" ng-href="parish/{{parish_id}}/data-form/2016?key={{parish_data.access_key}}">form</a></td>
 -->
 
 <td ng-if="dataEntered(parish_id)" class="good">Yes</td>
@@ -82,16 +83,17 @@
 <input type="checkbox" ng-change="parishIds.$save()" ng-model="parish_data[FOR_YEAR - 2].have_bal">
 </td>
 
-<td class="small">{{ reviewStatus.parish[parish_id].reviewer_name }}</td>
-<td ng-class="'small ' + statusClass(reviewStatus.parish[parish_id].review_status, reviewStatus.parish[parish_id].form_edit_mode)">
-  {{ reviewStatus.parish[parish_id].review_status | shortReviewStatus }}, 
-  {{ reviewStatus.parish[parish_id].form_edit_mode | formEditMode }}
+<td class="small">{{ reviewData.parish[parish_id].reviewer_name }}</td>
+<td ng-class="'small ' + statusClass(reviewData.parish[parish_id].review_status, reviewData.parish[parish_id].form_edit_mode)">
+  {{ reviewData.parish[parish_id].review_status | shortReviewStatus }}, 
+  {{ reviewData.parish[parish_id].form_edit_mode | formEditMode }}
 </td>
+<td class="small">{{ reviewData.parish[parish_id].notes | limitTo : 80 }}<span ng-if="reviewData.parish[parish_id].notes.length > 80">&hellip;</span></td>
 
 <td class="small">
-  <a target="review" ng-href="parish/{{parish_id}}/review/{{FOR_YEAR}}">review</a>
+  <a target="review" ng-href="parish/{{parish_id}}/review/2016">review</a>
   <a target="upload_folder" ng-href="https://drive.google.com/drive/#folders/{{parish_data.upload_folder}}" ng-show="parish_data.upload_folder">Drive</a>
-  <a target="report" ng-href="parish/{{parish_id}}/report/{{FOR_YEAR}}">report</a>
+  <a target="report" ng-href="parish/{{parish_id}}/report/2016">report</a>
 </td>
 </tr>
 </tbody>

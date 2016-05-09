@@ -19,17 +19,15 @@
   <script src="/shared.js"></script>
   <script src="/admin.js"></script>
 </head>
-<body class="wide" ng-controller="Ctrl" ng-cloak ng-show="parishInfosFinishedLoading && infoFinishedLoading">
+<body class="wide" ng-controller="Ctrl" ng-cloak ng-show="parishIdsFinishedLoading && infoFinishedLoading">
 <p><label>Metropolis Upload Folder ID: <input type="text" ng-model="metaData.upload_folder" size=40 ng-show="metaDataFinishedLoading"></label>
 <button ng-click="createFolders(metaData.upload_folder)">Create Folders</button>
-<button ng-click="autoFillForms()">Copy Last Year's Data</button>
-<button ng-click="generateKeys()">Generate Keys</button>
 <table class="bordered-table">
 <thead>
 <tr><th>Parish ID</th><th>Parish Code</th><th>Parish Name</th><th>City</th><th>State</th><th>Required to Report</th><th>Data Forms</th><th>Upload Folder</th></tr>
 </thead>
 <tbody>
-<tr ng-repeat="(parish_id, parish_data) in parishInfos">
+<tr ng-repeat="(parish_id, parish_data) in parishIds">
 <td>{{ parish_id }}</td>
 <td><input type="text" class=number ng-model=parish_data.parish_code size=6></td>
 <td><input type="text" ng-model=parish_data.name size=25></td>
@@ -41,7 +39,7 @@
     <option value="true">No</option>
   </select>
 </td>
-<td><a target="data-form" ng-href="parish/{{parish_id}}/data-form/{{forYear}}?key={{parish_data.access_key}}">form</a></td>
+<td><a target="data-form" ng-href="parish/{{parish_id}}/data-form/2016?key={{parish_data.access_key}}">form</a></td>
 <td><a target="upload_folder" ng-href="https://drive.google.com/drive/#folders/{{parish_data.upload_folder}}" ng-show="parish_data.upload_folder">Drive</a></td>
 </tr>
 </tbody>
@@ -52,22 +50,20 @@
 <div ng-repeat="(token, name) in committeeInvites" class="small">{{ name }}: https://easy-nmc.appspot.com/metropolis/SF/summary?invite={{token}}</div>
 <p><input type="text" ng-model="recipientName" size=20 placeholder="Name of Recipient">
 <button ng-click="createInvitation(recipientName)">Create Invitation</button>
-<!-- -->
+<!--
 <table class="bordered-table">
 <thead>
-<tr><th>Code</th><th>Parish Name</th><th>City</th><th>State</th><th>Form Address</th><th>Excused</th></tr>
+<tr><th>Parish Name</th><th>City</th><th>State</th><th>Form Address</th></tr>
 </thead>
 <tbody>
-<tr ng-repeat="(parish_id, parish_data) in parishInfos">
-<td>{{parish_data.parish_code}}</td>
+<tr ng-repeat="(parish_id, parish_data) in parishIds">
 <td>{{parish_data.name}}</td>
 <td>{{parish_data.city}}</td>
 <td>{{parish_data.state}}</td>
-<td>https://easy-nmc.appspot.com/metropolis/{{metropolis_id}}/parish/{{parish_id}}/data-form/{{forYear}}?key={{parish_data.access_key}}</td>
-<td>{{parish_data.excused}}</td>
+<td>https://easy-nmc.appspot.com/metropolis/{{metropolis_id}}/parish/{{parish_id}}/data-form/2016?key={{parish_data.access_key}}</td>
 </tr>
 </tbody>
 </table>
-<!-- -->
+-->
 </body>
 </html>
