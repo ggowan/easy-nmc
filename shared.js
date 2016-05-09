@@ -160,6 +160,17 @@ shared.sumFields = function(fields, obj, fallback) {
   return total;
 }
 
+// Returns the field name of data for the specified year, i.e.
+//   Most recent year being reviewed: Y2
+//   Previous year: Y1
+//   Year before that: Y0
+shared.yearToYearField = function (year) {
+  if (year > shared.FOR_YEAR - 2 || year < shared.FOR_YEAR-4) {
+    throw "Year " + year + " out of expected range.";
+  }
+  return 'Y' + (4 + year - shared.FOR_YEAR);
+}
+
 function setupSession($scope, ref, auth, callback) {
   var url_parser = document.createElement('a');
   url_parser.href = document.URL;

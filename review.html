@@ -35,7 +35,7 @@ You are offline<br>
 <section>
 <h1>Review of {{ parish_name }} in {{ parish_city }}, {{ parish_state }}</h1>
 <p><strong>Review status:</strong> 
-<select ng-disabled="!editing()" ng-change="statusChanged()" ng-model="reviewData.review_status">
+<select ng-disabled="!editing()" ng-change="statusChanged()" ng-model="reviewStatus.review_status">
   <option value="">Not Started</option>
   <option value="started">Started</option>
   <option value="waiting">Waiting for Response</option>
@@ -44,11 +44,11 @@ You are offline<br>
 </select>
 <p><strong>Reviewer(s):</strong> <input size=40 ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.reviewer_name placeholder="Reviewer Name">
 <p><strong>Data form is:</strong> 
-<select ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.form_edit_mode">
+<select ng-disabled="!editing()" ng-change="reviewStatus.$save()" ng-model="reviewStatus.form_edit_mode">
   <option value="">Editable</option>
   <option value="locked">Locked</option>
 </select>
-<span class="attention" ng-if="reviewData.form_edit_mode !== 'locked'">
+<span class="attention" ng-if="reviewStatus.form_edit_mode !== 'locked'">
 <strong>Lock the data form to prevent changes before you review the form.</strong></span>
 <p>Things to look for in your review:
 <div ng-class="reviewData.all_expenses ? 'good' : 'attention'">
@@ -318,43 +318,6 @@ Review any adjustments that were made to the parish's report in the prior year a
 </tr>
 </tbody>
 </table>
-</section>
-<section>
-<h3>Reviewer Tallies</h3>
-<div ng-repeat="(tallyKey, tally) in reviewData.tallies">
-<h4>Tally #{{$index + 1}}: 
-<input ng-if="editing()" type="text" ng-change="reviewData.$save()" ng-model="tally.name" ng-readonly="!editing()" size=90 placeholder="Tally name">
-<span ng-if="!editing()">{{tally.name}}</span>
-</h4>
-<table class="bordered-table">
-<thead>
-<tr>
-<th>Description</th>
-<th>Amount</th>
-</tr>
-</thead>
-<tbody>
-<tr ng-repeat="(rowKey, tallyRow) in tally.rows">
-<th scope="row">
-<input ng-if="editing()" type="text" ng-change="reviewData.$save()" ng-model="tallyRow.description" size=40>
-<span ng-if="!editing()">{{ tallyRow.description }}</span>
-</th>
-<td class=money>
-<input ng-if="editing()" class="money" dollars ng-change="reviewData.$save()" ng-model="tallyRow.amount" type="text" size=10>
-<span ng-if="!editing()">{{tallyRow.amount | currency : $ : 0}}</span>
-</td>
-<td ng-if="editing()">
-<button ng-click="deleteRow(tally, rowKey)">Delete Row</button>
-</td>
-</tr>
-</tbody>
-<tfoot>
-<tr><th scope="row"><strong>Total</strong></th><td class=money><strong>{{ tallyTotal(tally) | currency : $ : 0 }}</strong></td></tr>
-</tfoot>
-</table>
-<button ng-click="addRow(tally)" ng-disabled="!editing()">Add Row</button>
-</div>
-<p><button ng-click="addTally()" ng-disabled="!editing()">Add Tally</button>
 </section>
 <section>
 <h3>Details</h3>

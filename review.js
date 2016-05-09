@@ -58,6 +58,15 @@ function setupScope($scope, $firebaseObject) {
     $scope.error = error;
   });
   
+  var reviewStatusRef = metroRef.child("/review-status/" + $scope.year + "/parish/" + $scope.parish_id);
+  $scope.reviewStatus = $firebaseObject(reviewStatusRef);
+  $scope.reviewStatus.$loaded().then(function(data) {
+    $scope.reviewStatusFinishedLoading = true;
+  }).catch(function(error) {
+    console.log("loading review data failed: ", error);
+    $scope.error = error;
+  });
+
   var reviewDataRef = metroRef.child("/review-data/" + $scope.year + "/parish/" + $scope.parish_id);
   $scope.reviewData = $firebaseObject(reviewDataRef);
   $scope.reviewData.$loaded().then(function(data) {
@@ -68,7 +77,7 @@ function setupScope($scope, $firebaseObject) {
   });
 
   $scope.get = function(year, field) {
-    var yearField = yearToYearField(year);
+    var yearField = shared.yearToYearField(year);
     if ($scope.reviewData && $scope.reviewData[yearField] && 
         angular.isNumber($scope.reviewData[yearField][field])) {
       return $scope.reviewData[yearField][field];
@@ -80,13 +89,13 @@ function setupScope($scope, $firebaseObject) {
     return 0;
   };
   $scope.isAdjusted = function(year, field) {
-    var yearField = yearToYearField(year);
+    var yearField = shared.yearToYearField(year);
     return $scope.reviewData && $scope.reviewData[yearField] && 
         angular.isNumber($scope.reviewData[yearField][field]);
   };
   $scope.totalDeductions = function(year) {
     if (!$scope.formData) return null;
-    var yearField = yearToYearField(year);
+    var yearField = shared.yearToYearField(year);
     return shared.sumFields(
         shared.DEDUCTION_FIELDS, $scope.reviewData[yearField], $scope.formData[yearField]);
   };
@@ -116,47 +125,12 @@ function setupScope($scope, $firebaseObject) {
     $scope.error = error;
   });
   $scope.FOR_YEAR = shared.FOR_YEAR;
-  // We use objects instead of arrays for the tallies to work around a bug.
-  // https://github.com/firebase/angularfire/issues/623
-  $scope.addTally = function() {
-    if (!$scope.reviewData.nextTally) $scope.reviewData.nextTally = 100;
-    if (!$scope.reviewData.tallies) $scope.reviewData.tallies = {};
-    $scope.reviewData.tallies['tally' + $scope.reviewData.nextTally] = {
-      rows: {
-        'row100': {description: ''},
-        'row101': {description: ''}
-      },
-      nextRow: 102
-    };
-    $scope.reviewData.nextTally += 1;
-    $scope.reviewData.$save();
-  };
-  $scope.addRow = function(tally) {
-    if (!tally.rows) tally.rows = {};
-    if (!tally.nextRow) tally.nextRow = 100;
-    tally.rows['row' + tally.nextRow] = {description: ''};
-    tally.nextRow += 1;
-    $scope.reviewData.$save();
-  };
-  $scope.deleteRow = function(tally, rowKey) {
-    delete tally.rows[rowKey];
-    $scope.reviewData.$save();
-  }
-  $scope.tallyTotal = function(tally) {
-    result = 0;
-    angular.forEach(tally.rows, function(row, rowKey) {
-      if (angular.isNumber(row.amount)) {
-        result += row.amount;
-      }
-    });
-    return result;
-  }
   $scope.statusChanged = function() {
-    if ($scope.reviewData.review_status === 'started' ||
-        $scope.reviewData.review_status === 'finished') {
-      $scope.reviewData.form_edit_mode = 'locked';
+    if ($scope.reviewStatus.review_status === 'started' ||
+        $scope.reviewStatus.review_status === 'finished') {
+      $scope.reviewStatus.form_edit_mode = 'locked';
     }
-    $scope.reviewData.$save();
+    $scope.reviewStatus.$save();
   };
 }
 
@@ -166,7 +140,7 @@ app.controller("Ctrl", function($scope, $firebaseObject) {
   });
 });
 
-// Checks whether the specified string appears to be a number, optionally
+// Checks whether the specified string appears to be a positive number, optionally
 // formatted like currency.
 function looksLikePositiveNumber(val) {
   if (!angular.isString(val)) return false;
@@ -175,7 +149,7 @@ function looksLikePositiveNumber(val) {
   return /^\s*\$?\s*[,0-9]+\.?\d*\s*$/.test(val);
 }
 
-// Checks whether the specified string appears to be a number, optionally
+// Checks whether the specified string appears to be a negative number, optionally
 // formatted like currency.
 function looksLikeNegativeNumber(val) {
   if (!angular.isString(val)) return false;
@@ -193,17 +167,6 @@ function looksLikeNegativeNumber(val) {
 
 function looksLikeNumber(val) {
   return looksLikePositiveNumber(val) || looksLikeNegativeNumber(val);
-}
-
-// Returns the field name of data for the specified year, i.e.
-//   Most recent year being reviews: Y2
-//   Previous year: Y1
-//   Year before that: Y0
-function yearToYearField(year) {
-  if (year > shared.FOR_YEAR - 2 || year < shared.FOR_YEAR-4) {
-    throw "Year " + year + " out of expected range.";
-  }
-  return 'Y' + (4 + year - shared.FOR_YEAR);
 }
 
 app.directive('dollars', ['currencyFilter', function(currencyFilter) {
