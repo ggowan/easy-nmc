@@ -117,22 +117,7 @@ function setupScope($scope, $firebaseObject) {
         shared.DEDUCTION_FIELDS, $scope.reviewData[yearField], $scope.formData[yearField]);
   };
   $scope.editing = function() {
-    return $scope.reviewData.editing_user && $scope.reviewData.editing_user === $scope.auth.uid
-        && $scope.infoFinishedLoading && $scope.firebaseInfo.connected;
-  };
-  $scope.toggleEditing = function() {
-    console.log("toggleEditing");
-    if ($scope.editing()) {
-      console.log("clearing editing_user");
-      $scope.reviewData.editing_user = '';
-    } else {
-      console.log("setting editing_user");
-      $scope.reviewData.editing_user = $scope.auth.uid;
-    }
-    $scope.reviewData.$save().then(function(ref) {
-    }, function(error) {
-      console.log("Error saving editing toggle:", error);
-    });
+    return false;
   };
   $scope.firebaseInfo = $firebaseObject(ref.child(".info"));
   $scope.firebaseInfo.$loaded().then(function(data) {

@@ -70,17 +70,7 @@ function bindFirebase($scope, $firebaseObject, ref) {
     return total;
   };
   $scope.editing = function() {
-    return $scope.form_edit_mode !== 'locked' && $scope.firebaseData.editing_user && 
-        $scope.firebaseData.editing_user === $scope.auth.uid && $scope.infoFinishedLoading &&
-        $scope.firebaseInfo.connected;
-  };
-  $scope.toggleEditing = function() {
-    if ($scope.editing()) {
-      $scope.firebaseData.editing_user = '';
-    } else {
-      $scope.firebaseData.editing_user = $scope.auth.uid;
-    }
-    $scope.firebaseData.$save();
+    return false;
   };
   $scope.firebaseInfo = $firebaseObject(ref.child(".info"));
   $scope.firebaseInfo.$loaded().then(function(data) {
