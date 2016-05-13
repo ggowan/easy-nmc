@@ -42,7 +42,8 @@ You are offline<br>
   <option value="re-review">Needs Re-Review</option>
   <option value="finished">Finished</option>
 </select>
-<p><strong>Reviewer(s):</strong> <input size=40 ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.reviewer_name placeholder="Reviewer Name">
+<p><strong>Status note:</strong> <input size=40 ng-readonly="!editing()" ng-change="reviewStatus.$save()" ng-model=reviewStatus.note placeholder="Reviewer Name">
+<p><strong>Reviewer(s):</strong> <input size=40 ng-readonly="!editing()" ng-change="reviewStatus.$save()" ng-model=reviewStatus.reviewer_name placeholder="Reviewer Name">
 <p><strong>Data form is:</strong> 
 <select ng-disabled="!editing()" ng-change="reviewStatus.$save()" ng-model="reviewStatus.form_edit_mode">
   <option value="">Editable</option>
@@ -87,7 +88,7 @@ Do the values for {{ FOR_YEAR -3 }} match what was reported on last year's form?
 <input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.prior_year_adjustments>
 Review any adjustments that were made to the parish's report in the prior year and see if they should be applied to this year's report as well.
 </div>
-<p><strong>Notes:</strong>
+<p><strong>Review notes:</strong>
 <br><textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.notes placeholder="Notes" cols=70 rows=10></textarea>
 
 <p>Supporting documentation is located in the <a target="drive-folder" ng-href="https://drive.google.com/drive/#folders/{{upload_folder}}">parish's Google Drive folder for {{ FOR_YEAR }}</a>.

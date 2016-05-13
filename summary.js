@@ -125,7 +125,6 @@ function setupScope($scope, $firebaseObject) {
     return result;
   };
   $scope.countParishesByReviewerStatus = function() {
-    console.log('entering countParishesByReviewerStatus');
     var result = {};
     angular.forEach($scope.parishIds, function(parishData, parishId) {
       if (parishData.excused || !$scope.reviewStatus.parish) return;
