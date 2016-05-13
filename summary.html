@@ -35,6 +35,8 @@
 <th rowspan=2 class="small">Drive Empty?</th>
 <th colspan=2 class="small">P&L Submitted?</th>
 <th colspan=2 class="small">Balance Sheet Submitted?</th>
+
+<th rowspan=2 class="small">Status Note</th>
 <th rowspan=2 class="small">Reviewer</th>
 <th rowspan=2 class="small">Review Status</th>
 <th rowspan=2 class="small">Links</th>
@@ -82,7 +84,8 @@
 <input type="checkbox" ng-change="parishIds.$save()" ng-model="parish_data[FOR_YEAR - 2].have_bal">
 </td>
 
-<td class="small">{{ reviewStatus.parish[parish_id].reviewer_name }}</td>
+<td><input ng-change="reviewStatus.$save()" ng-model="reviewStatus.parish[parish_id].note" type="text" size=20></td>
+<td><input ng-change="reviewStatus.$save()" ng-model="reviewStatus.parish[parish_id].reviewer_name" type="text" size=15></td>
 <td ng-class="'small ' + statusClass(reviewStatus.parish[parish_id].review_status, reviewStatus.parish[parish_id].form_edit_mode)">
   {{ reviewStatus.parish[parish_id].review_status | shortReviewStatus }}, 
   {{ reviewStatus.parish[parish_id].form_edit_mode | formEditMode }}
@@ -97,7 +100,7 @@
 </tbody>
 </table>
 <br>
-<table class="bordered-table" ng-if="reviewDataFinishedLoading">
+<table class="bordered-table" ng-if="reviewStatusFinishedLoading">
 <caption>
 <strong>Count of Parishes By Review Status and Reviewer</strong>
 </caption>
