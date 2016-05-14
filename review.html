@@ -42,7 +42,7 @@ You are offline<br>
   <option value="re-review">Needs Re-Review</option>
   <option value="finished">Finished</option>
 </select>
-<p><strong>Status note:</strong> <input size=40 ng-readonly="!editing()" ng-change="reviewStatus.$save()" ng-model=reviewStatus.note placeholder="Reviewer Name">
+<p><strong>Status note:</strong> <input size=40 ng-readonly="!editing()" ng-change="reviewStatus.$save()" ng-model=reviewStatus.note>
 <p><strong>Reviewer(s):</strong> <input size=40 ng-readonly="!editing()" ng-change="reviewStatus.$save()" ng-model=reviewStatus.reviewer_name placeholder="Reviewer Name">
 <p><strong>Data form is:</strong> 
 <select ng-disabled="!editing()" ng-change="reviewStatus.$save()" ng-model="reviewStatus.form_edit_mode">
@@ -58,7 +58,7 @@ Do the gross expenses appear to include all non-deductible expenses listed in th
 </div>
 <div ng-class="reviewData.excluded_expenses ? 'good' : 'attention'">
 <input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.excluded_expenses>
-Do the gross expenses exclude depreciation, transfers, account balances and the like that should not be included?
+Do the gross expenses exclude depreciation, transfers, uncollected pledges, lost income, write-offs, account balances, and the like that should not be included?
 </div>
 <div ng-class="reviewData.deductible_in_gross ? 'good' : 'attention'">
 <input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.deductible_in_gross>
@@ -82,7 +82,7 @@ If there was a significant change in net expenses between {{ FOR_YEAR - 2 }} and
 </div>
 <div ng-class="reviewData.prior_year_report ? 'good' : 'attention'">
 <input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.prior_year_report>
-Do the values for {{ FOR_YEAR -3 }} match what was reported on last year's form? If not, do the changes make sense?
+Do the values for {{ FOR_YEAR -3 }} match what was reported on <a target="last-year-review" ng-href="/metropolis/{{metropolis_id}}/parish/{{parish_id}}/review/{{FOR_YEAR-1}}">last year's form</a>? If not, do the changes make sense?
 </div>
 <div ng-class="reviewData.prior_year_adjustments ? 'good' : 'attention'">
 <input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.prior_year_adjustments>
