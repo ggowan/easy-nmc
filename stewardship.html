@@ -32,12 +32,15 @@
 <th colspan=2 class="small">Total Stewardship</th>
 <th colspan=2 class="small">Total Income</th>
 <th colspan=2 class="small"># of Members</th>
-<th rowspan=2># > $2,000</th>
+<th rowspan=2># > $5,000</th>
+<th rowspan=2># $3,000-$4,999</th>
+<th rowspan=2># $2,000-$2,999</th>
 <th rowspan=2># $1,000-$1,999</th>
 <th rowspan=2># $800-$999</th>
 <th rowspan=2># $500-$799</th>
 <th rowspan=2># $300-$499</th>
 <th rowspan=2># < $300</th>
+<th rowspan=2># of new families in {{ FOR_YEAR - 2 }}</th>
 </tr>
 <tr>
 <th class="small">{{ FOR_YEAR - 3 }}</th>
@@ -62,12 +65,15 @@
 <td>{{yearField(parish_id, FOR_YEAR - 2, 'income')}}</td>
 <td>{{yearField(parish_id, FOR_YEAR - 3, 'num_members')}}</td>
 <td>{{yearField(parish_id, FOR_YEAR - 2, 'num_members')}}</td>
-<td>{{formData.parish[parish_id].num_stew_over_2000}}</td>
+<td>{{formData.parish[parish_id].num_stew_over_5000}}</td>
+<td>{{formData.parish[parish_id].num_stew_3000_4999}}</td>
+<td>{{formData.parish[parish_id].num_stew_2000_2999}}</td>
 <td>{{formData.parish[parish_id].num_stew_1000_1999}}</td>
 <td>{{formData.parish[parish_id].num_stew_800_999}}</td>
 <td>{{formData.parish[parish_id].num_stew_500_799}}</td>
 <td>{{formData.parish[parish_id].num_stew_300_499}}</td>
 <td>{{formData.parish[parish_id].num_stew_under_300}}</td>
+<td>{{formData.parish[parish_id].num_new_families}}</td>
 </tr>
 </tbody>
 </table>

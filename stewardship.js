@@ -43,7 +43,7 @@ function setupScope($scope, $firebaseObject) {
     if (!$scope.formData || !$scope.formData.parish) return null;
     var parishData = $scope.formData.parish[parishId];
     if (!parishData) return null;
-    var yearData = parishData['Y' + year];
+    var yearData = parishData[shared.yearToYearField(year)];
     if (!yearData) return null;
     return yearData[fieldName];
   };
