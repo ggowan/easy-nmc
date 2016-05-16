@@ -46,8 +46,13 @@ handlers:
   upload: summary.html
   secure: always
 
-- url: /metropolis/[A-Z]+/stewardship
+- url: /metropolis/[A-Z]+/stewardship/2017
   static_files: stewardship.html
+  upload: stewardship.html
+  secure: always
+
+- url: /metropolis/[A-Z]+/stewardship/2016
+  static_files: 2016/stewardship.html
   upload: stewardship.html
   secure: always
 
