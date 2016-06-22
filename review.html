@@ -120,8 +120,8 @@ Review any adjustments that were made to the parish's report in the prior year a
 <tr>
   <td><strong>A</strong></td>
   <th scope=row><strong>Total Income</strong></th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'income') ? 'attention' : ''"><strong>{{ get(FOR_YEAR-3, 'income') | currency : $ : 0 }}</strong></td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'income') ? 'attention' : ''"><strong>{{ get(FOR_YEAR-2, 'income') | currency : $ : 0 }}</strong></td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'income') ? 'attention' : ''"><strong><del>{{ originalIfChanged(FOR_YEAR-3, 'income') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'income') | currency : $ : 0 }}</strong></td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'income') ? 'attention' : ''"><strong><del>{{ originalIfChanged(FOR_YEAR-2, 'income') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'income') | currency : $ : 0 }}</strong></td>
   <td class=money><strong>{{ (get(FOR_YEAR-2, 'income') - get(FOR_YEAR-3, 'income') || 0) | currency : $ : 0 }}</strong></td>
   <td class="small explanation">{{ formData.income_explanation }}</td>
   <td class="small explanation">{{ reviewData.income_comment }}</td>
@@ -129,26 +129,17 @@ Review any adjustments that were made to the parish's report in the prior year a
 <tr>
   <td><strong>B</strong></td>
   <th scope=row><strong>Total Expenses</strong></th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'expenses') ? 'attention' : ''"><strong>{{ get(FOR_YEAR-3, 'expenses') | currency : $ : 0 }}</strong></td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'expenses') ? 'attention' : ''"><strong>{{ get(FOR_YEAR-2, 'expenses') | currency : $ : 0 }}</strong></td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'expenses') ? 'attention' : ''"><strong><del>{{ originalIfChanged(FOR_YEAR-3, 'expenses') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'expenses') | currency : $ : 0 }}</strong></td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'expenses') ? 'attention' : ''"><strong><del>{{ originalIfChanged(FOR_YEAR-2, 'expenses') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'expenses') | currency : $ : 0 }}</strong></td>
   <td class=money><strong>{{ (get(FOR_YEAR-2, 'expenses') - get(FOR_YEAR-3, 'expenses') || 0) | currency : $ : 0 }}</strong></td>
   <td class="small explanation">{{ formData.expense_explanation }}</td>
   <td class="small explanation">{{ reviewData.expense_comment }}</td>
 </tr>
 <tr>
-  <td><strong>A-B</strong></td>
-  <th scope=row><strong>Net Income</strong></th>
-  <td class=money><strong>{{ (get(FOR_YEAR-3, 'income') - get(FOR_YEAR-3, 'expenses') || 0) | currency : $ : 0 }}</strong></td>
-  <td class=money><strong>{{ (get(FOR_YEAR-2, 'income') - get(FOR_YEAR-2, 'expenses') || 0) | currency : $ : 0 }}</strong></td>
-  <td class=money><strong>{{ (get(FOR_YEAR-2, 'income') - get(FOR_YEAR-2, 'expenses') - (get(FOR_YEAR-3, 'income') - get(FOR_YEAR-3, 'expenses')) || 0) | currency : $ : 0 }}</strong></td>
-  <td>-</td>
-  <td>-</td>
-</tr>
-<tr>
   <td>C1</td>
   <th scope=row class="small indent">National Ministries Commitment</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'nmc') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'nmc') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'nmc') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'nmc') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'nmc') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'nmc') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'nmc') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'nmc') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'nmc') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'nmc') | currency : $ : 0 }}</td>
   <td class=money>{{ (get(FOR_YEAR-2, 'nmc') - get(FOR_YEAR-3, 'nmc') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.nmc_lines }}</td>
   <td class="small explanation">{{ reviewData.nmc_comment }}</td>
@@ -156,8 +147,8 @@ Review any adjustments that were made to the parish's report in the prior year a
 <tr>
   <td>C2</td>
   <th scope=row class="small indent">Donations to Archdiocese</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'arch') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'arch') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'arch') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'arch') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'arch') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'arch') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'arch') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'arch') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'arch') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'arch') | currency : $ : 0 }}</td>
   <td class=money>{{ (get(FOR_YEAR-2, 'arch') - get(FOR_YEAR-3, 'arch') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.arch_don_lines }} {{ formData.other_arch_don_breakdown }}</td>
   <td class="small explanation">{{ reviewData.arch_don_comment }}</td>
@@ -165,8 +156,8 @@ Review any adjustments that were made to the parish's report in the prior year a
 <tr>
   <td>C3</td>
   <th scope=row class="small indent">Assembly of Bishops Ministries</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'auth_min') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'auth_min') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'auth_min') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'auth_min') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'auth_min') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'auth_min') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'auth_min') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'auth_min') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'auth_min') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'auth_min') | currency : $ : 0 }}</td>
   <td class=money>{{ (get(FOR_YEAR-2, 'auth_min') - get(FOR_YEAR-3, 'auth_min') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.auth_min_lines }}</td>
   <td class="small explanation">{{ reviewData.auth_min_comment }}</td>
@@ -174,8 +165,8 @@ Review any adjustments that were made to the parish's report in the prior year a
 <tr>
   <td>C4</td>
   <th scope=row class="small indent">Donations to Metropolis </th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'metro') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'metro') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'metro') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'metro') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'metro') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'metro') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'metro') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'metro') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'metro') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'metro') | currency : $ : 0 }}</td>
   <td class=money>{{ (get(FOR_YEAR-2, 'metro') - get(FOR_YEAR-3, 'metro')|| 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.metro_lines }}</td>
   <td class="small explanation">{{ reviewData.metro_comment }}</td>
@@ -183,8 +174,8 @@ Review any adjustments that were made to the parish's report in the prior year a
 <tr>
   <td>C5</td>
   <th scope=row class="small indent">Donations to Patriarchate </th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'patriarch') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'patriarch') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'patriarch') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'patriarch') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'patriarch') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'patriarch') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'patriarch') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'patriarch') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'patriarch') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'patriarch') | currency : $ : 0 }}</td>
   <td class=money>{{ (get(FOR_YEAR-2, 'patriarch') - get(FOR_YEAR-3, 'patriarch') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.patriarch_lines }}</td>
   <td class="small explanation">{{ reviewData.patriarch_comment }}</td>
@@ -192,8 +183,8 @@ Review any adjustments that were made to the parish's report in the prior year a
 <tr>
   <td>C6</td>
   <th scope=row class="small indent">Capital Improvement</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'cap') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'cap') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'cap') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'cap') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'cap') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'cap') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'cap') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'cap') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'cap') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'cap') | currency : $ : 0 }}</td>
   <td class=money>{{ (get(FOR_YEAR-2, 'cap') - get(FOR_YEAR-3, 'cap') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.cap_lines }} {{ formData.cap_projects }} </td>
   <td class="small explanation">{{ reviewData.cap_comment }}</td>
@@ -201,8 +192,8 @@ Review any adjustments that were made to the parish's report in the prior year a
 <tr>
   <td>C7</td>
   <th scope=row class="small indent">Construction Loan</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'const_loan') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'const_loan') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'const_loan') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'const_loan') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'const_loan') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'const_loan') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'const_loan') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'const_loan') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'const_loan') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'const_loan') | currency : $ : 0 }}</td>
   <td class=money>{{ (get(FOR_YEAR-2, 'const_loan') - get(FOR_YEAR-3, 'const_loan') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.const_loan_lines }}</td>
   <td class="small explanation">{{ reviewData.const_loan_comment }}</td>
@@ -210,8 +201,8 @@ Review any adjustments that were made to the parish's report in the prior year a
 <tr>
   <td>C8</td>
   <th scope=row class="small indent">Mortgage</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'mort') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'mort') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'mort') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'mort') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'mort') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'mort') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'mort') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'mort') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'mort') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'mort') | currency : $ : 0 }}</td>
   <td class=money>{{ (get(FOR_YEAR-2, 'mort') - get(FOR_YEAR-3, 'mort') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.mort_lines }}</td>
   <td class="small explanation">{{ reviewData.mort_comment }}</td>
@@ -219,8 +210,8 @@ Review any adjustments that were made to the parish's report in the prior year a
 <tr>
   <td>C9</td>
   <th scope=row class="small indent">Fundraising Expenses</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'fundraising') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'fundraising') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'fundraising') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'fundraising') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'fundraising') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'fundraising') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'fundraising') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'fundraising') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'fundraising') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'fundraising') | currency : $ : 0 }}</td>
   <td class=money>{{ (get(FOR_YEAR-2, 'fundraising') - get(FOR_YEAR-3, 'fundraising') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.fundraising_lines }}</td>
   <td class="small explanation">{{ reviewData.fundraising_comment }}</td>
@@ -228,8 +219,8 @@ Review any adjustments that were made to the parish's report in the prior year a
 <tr>
   <td>C10</td>
   <th scope=row class="small indent">Greek/Day School Expenses</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'school') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'school') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'school') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'school') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'school') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'school') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'school') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'school') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'school') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'school') | currency : $ : 0 }}</td>
   <td class=money>{{ (get(FOR_YEAR-2, 'school') - get(FOR_YEAR-3, 'school') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.school_lines }}</td>
   <td class="small explanation">{{ reviewData.school_comment }}</td>
@@ -237,8 +228,8 @@ Review any adjustments that were made to the parish's report in the prior year a
 <tr>
   <td>C11</td>
   <th scope=row class="small indent">Religious Ed.</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'religious_ed') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'religious_ed') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'religious_ed') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'religious_ed') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'religious_ed') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'religious_ed') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'religious_ed') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'religious_ed') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'religious_ed') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'religious_ed') | currency : $ : 0 }}</td>
   <td class=money>{{ (get(FOR_YEAR-2, 'religious_ed') - get(FOR_YEAR-3, 'religious_ed') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.religious_ed_lines }}</td>
   <td class="small explanation">{{ reviewData.religious_ed_comment }}</td>
@@ -246,8 +237,8 @@ Review any adjustments that were made to the parish's report in the prior year a
 <tr>
   <td>C12</td>
   <th scope=row class="small indent">Catastrophic Risk Insurance</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'catastrophic') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'catastrophic') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'catastrophic') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'catastrophic') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'catastrophic') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'catastrophic') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'catastrophic') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'catastrophic') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'catastrophic') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'catastrophic') | currency : $ : 0 }}</td>
   <td class=money>{{ (get(FOR_YEAR-2, 'catastrophic') - get(FOR_YEAR-3, 'catastrophic') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.catastrophic_lines }}</td>
   <td class="small explanation">{{ reviewData.catastrophic_comment }}</td>
@@ -255,8 +246,8 @@ Review any adjustments that were made to the parish's report in the prior year a
 <tr>
   <td>C13</td>
   <th scope=row class="small indent">Clergy Moving Expenses</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'moving') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'moving') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'moving') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'moving') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'moving') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'moving') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'moving') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'moving') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'moving') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'moving') | currency : $ : 0 }}</td>
   <td class=money>{{ (get(FOR_YEAR-2, 'moving') - get(FOR_YEAR-3, 'moving') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.moving_lines }}</td>
   <td class="small explanation">{{ reviewData.moving_comment }}</td>
@@ -264,8 +255,8 @@ Review any adjustments that were made to the parish's report in the prior year a
 <tr>
   <td>C14</td>
   <th scope=row class="small indent">Outreach and Evangelism</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'outreach') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'outreach') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'outreach') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'outreach') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'outreach') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'outreach') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'outreach') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'outreach') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'outreach') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'outreach') | currency : $ : 0 }}</td>
   <td class=money>{{ (get(FOR_YEAR-2, 'outreach') - get(FOR_YEAR-3, 'outreach') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.outreach_lines }}</td>
   <td class="small explanation">{{ reviewData.outreach_comment }}</td>
@@ -273,8 +264,8 @@ Review any adjustments that were made to the parish's report in the prior year a
 <tr>
   <td>C15</td>
   <th scope=row class="small indent">Clergy Laity Congress</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'clergy_laity') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'clergy_laity') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'clergy_laity') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'clergy_laity') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'clergy_laity') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'clergy_laity') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'clergy_laity') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'clergy_laity') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'clergy_laity') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'clergy_laity') | currency : $ : 0 }}</td>
   <td class=money>{{ (get(FOR_YEAR-2, 'clergy_laity') - get(FOR_YEAR-3, 'clergy_laity') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.clergy_laity_lines }}</td>
   <td class="small explanation">{{ reviewData.clergy_laity_comment }}</td>
@@ -282,8 +273,8 @@ Review any adjustments that were made to the parish's report in the prior year a
 <tr>
   <td>C16</td>
   <th scope=row class="small indent">Other Deductions</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'other_hier') ? 'attention' : ''">{{ get(FOR_YEAR-3, 'other_hier') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'other_hier') ? 'attention' : ''">{{ get(FOR_YEAR-2, 'other_hier') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'other_hier') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'other_hier') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'other_hier') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'other_hier') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'other_hier') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'other_hier') | currency : $ : 0 }}</td>
   <td class=money>{{ (get(FOR_YEAR-2, 'other_hier') - get(FOR_YEAR-3, 'other_hier') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.other_hier_lines }} {{ formData.other_hier_explanation }}</td>
   <td class="small explanation">{{ reviewData.other_hier_comment }}</td>
@@ -291,16 +282,16 @@ Review any adjustments that were made to the parish's report in the prior year a
 <tr>
   <td><strong>C</strong></td>
   <th scope=row><strong>Total Deductions</strong></th>
-  <td class=money><strong>{{ totalDeductions(FOR_YEAR-3) | currency : $ : 0 }}</strong></td>
-  <td class=money><strong>{{ totalDeductions(FOR_YEAR-2) | currency : $ : 0 }}</strong></td>
+  <td class=money ng-class="totalOriginalDeductionsIfChanged(FOR_YEAR-3) != null ? 'attention' : ''"><strong><del>{{ totalOriginalDeductionsIfChanged(FOR_YEAR-3) | currency : $ : 0 }}</del> {{ totalDeductions(FOR_YEAR-3) | currency : $ : 0 }}</strong></td>
+  <td class=money ng-class="totalOriginalDeductionsIfChanged(FOR_YEAR-2) != null ? 'attention' : ''"><strong><del>{{ totalOriginalDeductionsIfChanged(FOR_YEAR-2) | currency : $ : 0 }}</del> {{ totalDeductions(FOR_YEAR-2) | currency : $ : 0 }}</strong></td>
   <td class=money><strong>{{ totalDeductions(FOR_YEAR-2) - totalDeductions(FOR_YEAR-3) | currency : $ : 0 }}</strong></td>
 </tr>
 <tr>
   <td><strong>B-C</strong></td>
   <th scope=row><strong>Net Expenses</strong></th>
-  <td class=money><strong>{{ get(FOR_YEAR-3, 'expenses') - totalDeductions(FOR_YEAR-3) | currency : $ : 0 }}</strong></td>
-  <td class=money><strong>{{ get(FOR_YEAR-2, 'expenses') - totalDeductions(FOR_YEAR-2) | currency : $ : 0 }}</strong></td>
-  <td class=money><strong>{{ get(FOR_YEAR-2, 'expenses') - totalDeductions(FOR_YEAR-2) - get(FOR_YEAR-3, 'expenses') + totalDeductions(FOR_YEAR-3) | currency : $ : 0 }}</strong></td>
+  <td class=money ng-class="originalNetIfChanged(FOR_YEAR-3) != null ? 'attention' : ''"><strong><del>{{ originalNetIfChanged(FOR_YEAR-3) | currency : $ : 0 }}</del> {{ netExpenses(FOR_YEAR-3) | currency : $ : 0 }}</strong></td>
+  <td class=money ng-class="originalNetIfChanged(FOR_YEAR-2) != null ? 'attention' : ''"><strong><del>{{ originalNetIfChanged(FOR_YEAR-2) | currency : $ : 0 }}</del> {{ netExpenses(FOR_YEAR-2) | currency : $ : 0 }}</strong></td>
+  <td class=money><strong>{{ netExpenses(FOR_YEAR-2) - netExpenses(FOR_YEAR-3) | currency : $ : 0 }}</strong></td>
 </tr>
 <tr style="height: 1em"></tr>
 <tr>
