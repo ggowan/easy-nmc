@@ -88,6 +88,27 @@ function setupScope($scope, $firebaseObject) {
     }
     return 0;
   };
+  $scope.original = function(year, field) {
+    var yearField = shared.yearToYearField(year);
+    if ($scope.formData && $scope.formData[yearField] && 
+        angular.isNumber($scope.formData[yearField][field])) {
+      return $scope.formData[yearField][field];
+    }
+    return null;
+  };
+  // Only returns a non-null value if there was an adjustment.
+  $scope.originalIfChanged = function(year, field) {
+    var yearField = shared.yearToYearField(year);
+    if ($scope.reviewData && $scope.reviewData[yearField] && 
+        angular.isNumber($scope.reviewData[yearField][field])) {
+      if ($scope.formData && $scope.formData[yearField] && 
+          angular.isNumber($scope.formData[yearField][field])) {
+        return $scope.formData[yearField][field];
+      }
+      return 0;
+    }
+    return null;
+  };
   $scope.isAdjusted = function(year, field) {
     var yearField = shared.yearToYearField(year);
     return $scope.reviewData && $scope.reviewData[yearField] && 
@@ -98,6 +119,37 @@ function setupScope($scope, $firebaseObject) {
     var yearField = shared.yearToYearField(year);
     return shared.sumFields(
         shared.DEDUCTION_FIELDS, $scope.reviewData[yearField], $scope.formData[yearField]);
+  };
+  $scope.totalOriginalDeductions = function(year) {
+    if (!$scope.formData) return null;
+    var yearField = shared.yearToYearField(year);
+    return shared.sumFields(
+        shared.DEDUCTION_FIELDS, $scope.formData[yearField]);
+  };
+  $scope.totalOriginalDeductionsIfChanged = function(year) {
+    if (!$scope.formData) return null;
+    var yearField = shared.yearToYearField(year);
+    var original = $scope.totalOriginalDeductions(year);
+    var adjusted = $scope.totalDeductions(year);
+    if (Math.abs(adjusted - original) > 0.5) {
+      return original;
+    }
+    return null;
+  };
+  $scope.netExpenses = function(year) {
+    return $scope.get(year, 'expenses') - $scope.totalDeductions(year);
+  };
+  $scope.originalNetExpenses = function(year) {
+    return $scope.original(year, 'expenses') - $scope.totalOriginalDeductions(year);
+  };
+  $scope.originalNetIfChanged = function(year) {
+    if (!$scope.formData) return null;
+    var originalNet = $scope.originalNetExpenses(year);
+    var net = $scope.netExpenses(year);
+    if (Math.abs(net - originalNet) > 0.5) {
+      return originalNet;
+    }
+    return null;
   };
   $scope.editing = function() {
     return $scope.reviewData.editing_user && $scope.reviewData.editing_user === $scope.auth.uid
