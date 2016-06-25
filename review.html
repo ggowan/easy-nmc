@@ -54,7 +54,7 @@ You are offline<br>
 <p>Things to look for in your review:
 <div ng-class="reviewData.all_expenses ? 'good' : 'attention'">
 <input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.all_expenses>
-Do the gross expenses appear to include all non-deductible expenses listed in the financial reports?
+Do the gross expenses appear to include all non-deductible expenses listed in the financial reports? Check for additional expenses reported as negative income, or in an "Other Expenses" section, or in separate P&Ls.
 </div>
 <div ng-class="reviewData.excluded_expenses ? 'good' : 'attention'">
 <input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.excluded_expenses>
