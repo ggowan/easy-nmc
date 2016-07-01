@@ -77,16 +77,7 @@ function setupScope($scope, $firebaseObject) {
   });
 
   $scope.get = function(year, field) {
-    var yearField = shared.yearToYearField(year);
-    if ($scope.reviewData && $scope.reviewData[yearField] && 
-        angular.isNumber($scope.reviewData[yearField][field])) {
-      return $scope.reviewData[yearField][field];
-    }
-    if ($scope.formData && $scope.formData[yearField] && 
-        angular.isNumber($scope.formData[yearField][field])) {
-      return $scope.formData[yearField][field];
-    }
-    return 0;
+    return shared.getNumericField(year, field, $scope.reviewData, $scope.formData);
   };
   $scope.original = function(year, field) {
     var yearField = shared.yearToYearField(year);

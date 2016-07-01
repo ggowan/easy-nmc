@@ -33,6 +33,367 @@ function refreshDriveDataHelper($scope) {
   });
 }
 
+function exportSpreadsheetHelper($scope) {
+  var reviewDataRef = $scope.metroRef.child("/review-data/" + shared.FOR_YEAR + "/parish");
+  reviewDataRef.once("value", function(snap) {
+    exportSpreadsheetWithData($scope, snap.val());
+  }, function(error) {
+    console.log("loading state failed: ", error);
+    $scope.error = error;
+  });
+}
+
+// Converts the value to a Google Sheets API CellData JSON object
+// if it is not an object already.
+function cell(value) {
+  if (angular.isString(value)) {
+    return {
+      userEnteredValue: {
+        stringValue: value,
+      },
+    };
+  } else if (angular.isNumber(value)) {
+    return {
+      userEnteredValue: {
+        numberValue: value,
+      },
+    };
+  } else {
+    return value;
+  };
+}
+
+function formulaCell(formula) {
+  return {
+      userEnteredValue: {
+        formulaValue: formula,
+      },
+  };
+}
+
+// Returns a Google Sheets API RowData JSON object.
+// Takes a variable number of arguments, which must be
+// CellData objects, strings or numbers.
+function row() {
+  var v = [];
+  for (var i = 0; i < arguments.length; i++) {
+    v.push(cell(arguments[i]));
+  }
+  return {values: v};
+}
+
+function contactRow(contactType, prefix, parishFormData) {
+  return row(contactType, parishFormData[prefix + "_name"], "",
+    parishFormData[prefix + "_phone"], "", parishFormData[prefix + "_email"]);
+}
+
+function dataRow(line, description, fieldName, parishReviewData, parishFormData, expFields, commentField) {
+  var explanation = "";
+  if (angular.isString(expFields)) {
+    expFields = [expFields];
+  } else if (!expFields) {
+    expFields = [fieldName + "_lines"];
+  }
+  for (var i = 0; i < expFields.length; i++) {
+    if (parishFormData && parishFormData[expFields[i]]) {
+      if (explanation) explanation += " ";
+      explanation += String(parishFormData[expFields[i]]);
+    }
+  }
+  if (!commentField) {
+    commentField = fieldName + "_comment";
+  }
+  return row(line, description, "",
+    shared.getNumericField(shared.FOR_YEAR-3, fieldName, parishReviewData, parishFormData) || "",
+    shared.getNumericField(shared.FOR_YEAR-2, fieldName, parishReviewData, parishFormData) || "",
+    explanation, "",
+    parishReviewData ? parishReviewData[commentField] : null);
+}
+
+function exportSpreadsheetWithData($scope, reviewData) {
+  // We're going to sort the parishes by code.
+  var parishesInOrder = [];
+  angular.forEach($scope.parishIds, function(parishData, parishId) {
+    if (parishData.excused) return;
+    parishesInOrder.push({
+      id: parishId,
+      code: parishData.parish_code,
+    });
+  });
+  parishesInOrder.sort(function (a, b) {
+    if (a.code < b.code) {
+      return -1;
+    } else if (b.code < a.code) {
+      return 1;
+    }
+    return 0;
+  });
+  var spreadsheet = {
+    properties: {
+      title: "Test Spreadsheet",
+    }
+  };
+  var overviewSheet = {
+    properties: {
+      sheetId: 0,
+      title: "Recap Data Allocation",
+    },
+    data: [
+      {
+        startRow: 0,
+        startColumn: 0,
+        rowData: [
+          row("", "", "", "", "", "Total Parish", "", "Total Parish", "", "Total", "", "Total Net", "", "", "Average Net"),
+          row("", "", "", "", "", "Income", "", "Expenditures", "", "Deductions", "", "Operating Expense", "", "", "Expenses"),
+          row("Sheet", "ID#", "Parish", "City, State", "", shared.FOR_YEAR-3, shared.FOR_YEAR-2,
+              shared.FOR_YEAR-3, shared.FOR_YEAR-2, shared.FOR_YEAR-3, shared.FOR_YEAR-2, shared.FOR_YEAR-3, 
+              shared.FOR_YEAR-2, "", "for " + String(shared.FOR_YEAR)),
+        ],
+      },
+    ],
+    merges: [
+      // Merges in header for overview sheet.
+      // Income.
+      {
+        sheetId: 0,
+        startRowIndex: 0,
+        endRowIndex: 1,
+        startColumnIndex: 5,
+        endColumnIndex: 7,
+      },
+      {
+        sheetId: 0,
+        startRowIndex: 1,
+        endRowIndex: 2,
+        startColumnIndex: 5,
+        endColumnIndex: 7,
+      },
+      // Expenses.
+      {
+        sheetId: 0,
+        startRowIndex: 0,
+        endRowIndex: 1,
+        startColumnIndex: 7,
+        endColumnIndex: 9,
+      },
+      {
+        sheetId: 0,
+        startRowIndex: 1,
+        endRowIndex: 2,
+        startColumnIndex: 7,
+        endColumnIndex: 9,
+      },
+      // Deductions.
+      {
+        sheetId: 0,
+        startRowIndex: 0,
+        endRowIndex: 1,
+        startColumnIndex: 9,
+        endColumnIndex: 11,
+      },
+      {
+        sheetId: 0,
+        startRowIndex: 1,
+        endRowIndex: 2,
+        startColumnIndex: 9,
+        endColumnIndex: 11,
+      },
+      // Net operating expenses.
+      {
+        sheetId: 0,
+        startRowIndex: 0,
+        endRowIndex: 1,
+        startColumnIndex: 11,
+        endColumnIndex: 13,
+      },
+      {
+        sheetId: 0,
+        startRowIndex: 1,
+        endRowIndex: 2,
+        startColumnIndex: 11,
+        endColumnIndex: 13,
+      },
+    ],
+  };
+  var sheets = [overviewSheet];
+  for (i = 0; i < parishesInOrder.length; i++) {
+    var parishId = parishesInOrder[i].id;
+    var parishData = $scope.parishIds[parishId];
+    var parishFormData = $scope.formData.parish[parishId];
+    var parishReviewData = reviewData[parishId];
+    var sheet = {
+      properties: {
+        sheetId: i + 1,
+        title: String(i + 1),
+      },
+      data: [
+        {
+          startRow: 0,
+          startColumn: 0,
+          rowData: [
+            row("DATA FOR 2017 ARCHDIOCESE ALLOCATION"),
+            row("Metropolis of San Francisco"),
+            row("Parish Code", "", "", "", "", "", "", "", parishData.parish_code),
+            row(),
+            row("Parish", parishData.name, "", parishData.city, "", parishData.state),
+            contactRow("Preparer", "preparer", parishFormData),
+            contactRow("Treasurer", "treas", parishFormData),
+            contactRow("President", "pres", parishFormData),
+            contactRow("Priest", "priest", parishFormData),
+            row(),
+            row("Line", "Description", "", String(shared.FOR_YEAR-3), String(shared.FOR_YEAR-2),
+              "Parish Notes", "", "Reviewer Comments"),
+            dataRow("A", "Gross Income", "income", parishReviewData, parishFormData,
+              "income_explanation"),
+            dataRow("B", "Gross Expenses", "expenses", parishReviewData, parishFormData,
+              "expense_explanation", "expense_comment"),
+            dataRow("C1", "National Ministries Commitment", "nmc", parishReviewData, parishFormData),
+            dataRow("C2", "Donations to Archdiocese", "arch", parishReviewData, parishFormData, 
+              "arch_don_lines", "arch_don_comment"),
+            dataRow("C3", "Assembly of Bishops Ministries", "auth_min", parishReviewData, parishFormData),
+            dataRow("C4", "Donations to Metropolis", "metro", parishReviewData, parishFormData),
+            dataRow("C5", "Donations to Patriarchate", "patriarch", parishReviewData, parishFormData),
+            dataRow("C6", "Capital Improvement", "cap", parishReviewData, parishFormData,
+              ["cap_lines", "cap_projects"], "cap_comment"),
+            dataRow("C7", "Construction Loan", "const_loan", parishReviewData, parishFormData),
+            dataRow("C8", "Mortgage", "mort", parishReviewData, parishFormData),
+            dataRow("C9", "Fundraising Expenses", "fundraising", parishReviewData, parishFormData),
+            dataRow("C10", "Greek/Day School Expenses", "school", parishReviewData, parishFormData),
+            dataRow("C11", "Religious Ed.", "religious_ed", parishReviewData, parishFormData),
+            dataRow("C12", "Catastrophic Risk Insurance", "catastrophic", parishReviewData, parishFormData),
+            dataRow("C13", "Clergy Moving Expenses", "moving", parishReviewData, parishFormData),
+            dataRow("C14", "Outreach and Evangelism", "outreach", parishReviewData, parishFormData),
+            dataRow("C15", "Clergy Laity Congress", "clergy_laity", parishReviewData, parishFormData),
+            dataRow("C16", "Other Deductions", "other_hier", parishReviewData, parishFormData,
+              ["other_hier_lines", "other_hier_explanation"], "other_hier_comment"),
+            row("C", "Total Deductions", "", formulaCell("=SUM(D14:D29)"), formulaCell("=SUM(E14:E29)")),
+            row("B-C", "Net Expenses", "", formulaCell("=D13-D30"), formulaCell("=E13-E30")),
+          ],
+        },
+      ],
+      merges: [
+        // Header 
+        {
+          sheetId: i+1,
+          startRowIndex: 0,
+          endRowIndex: 1,
+          startColumnIndex: 0,
+          endColumnIndex: 9,
+        },
+        // Metropolis
+        {
+          sheetId: i+1,
+          startRowIndex: 1,
+          endRowIndex: 2,
+          startColumnIndex: 0,
+          endColumnIndex: 9,
+        },
+        // Parish Code
+        {
+          sheetId: i+1,
+          startRowIndex: 2,
+          endRowIndex: 3,
+          startColumnIndex: 0,
+          endColumnIndex: 8,
+        },
+        // Parish
+        {
+          sheetId: i+1,
+          startRowIndex: 4,
+          endRowIndex: 5,
+          startColumnIndex: 1,
+          endColumnIndex: 3,
+        },
+        {
+          sheetId: i+1,
+          startRowIndex: 4,
+          endRowIndex: 5,
+          startColumnIndex: 3,
+          endColumnIndex: 5,
+        },
+      ],
+    };
+    for (var j = 0; j < 4; j++) {
+      sheet.merges.push([
+        // Contact Row
+        {
+          sheetId: i+1,
+          startRowIndex: 5 + j,
+          endRowIndex: 6 + j,
+          startColumnIndex: 1,
+          endColumnIndex: 3,
+        },
+        {
+          sheetId: i+1,
+          startRowIndex: 5 + j,
+          endRowIndex: 6 + j,
+          startColumnIndex: 3,
+          endColumnIndex: 5,
+        },
+        {
+          sheetId: i+1,
+          startRowIndex: 5 + j,
+          endRowIndex: 6 + j,
+          startColumnIndex: 5,
+          endColumnIndex: 7,
+        },
+      ]);
+    }
+    for (j = 0; j < 21; j++) {
+      sheet.merges.push([
+        // Data Row
+        {
+          sheetId: i+1,
+          startRowIndex: 10 + j,
+          endRowIndex: 11 + j,
+          startColumnIndex: 1,
+          endColumnIndex: 3,
+        },
+        {
+          sheetId: i+1,
+          startRowIndex: 10 + j,
+          endRowIndex: 11 + j,
+          startColumnIndex: 5,
+          endColumnIndex: 7,
+        },
+        {
+          sheetId: i+1,
+          startRowIndex: 10 + j,
+          endRowIndex: 11 + j,
+          startColumnIndex: 7,
+          endColumnIndex: 9,
+        },
+      ]);
+    }
+    sheets.push(sheet);
+    overviewSheet.data[0].rowData.push(
+      row(i+1, parishData.parish_code, parishData.name, parishData.city + ", " + parishData.state, "", 
+        // Income.
+        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D12\"))"),
+        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E12\"))"),
+        // Expenses.
+        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D13\"))"),
+        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E13\"))"),
+        // Deductions.
+        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D30\"))"),
+        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E30\"))"),
+        // Net operating expenses.
+        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D31\"))"),
+        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E31\"))"),
+        "",
+        // Average net expenses.
+        formulaCell("=(L" + String(i+4) + "+M" + String(i+4) + ")/2")
+        ));
+  }
+  spreadsheet.sheets = sheets;
+  gapi.client.sheets.spreadsheets.create(spreadsheet).then(function(response) {
+    console.log("response: ", response);
+    window.open("https://docs.google.com/spreadsheets/d/" + response.result.spreadsheetId + "/edit");
+  }, function(response) {
+    console.log("error from create spreadsheet: ", response);
+  });
+}
+
 function setupScope($scope, $firebaseObject) {
   var ref = new Firebase(shared.firebaseBackend);
   $scope.FOR_YEAR = shared.FOR_YEAR;
@@ -107,6 +468,12 @@ function setupScope($scope, $firebaseObject) {
   };
   $scope.refreshDriveData = function() {
     shared.initDriveApi(function () {refreshDriveDataHelper($scope);});
+  };
+  $scope.exportSpreadsheet = function() {
+    shared.initGoogleApi(
+      'https://www.googleapis.com/auth/spreadsheets', 
+      'https://sheets.googleapis.com/$discovery/rest?version=v4', 
+      function () { exportSpreadsheetHelper($scope); });
   };
   $scope.saveExtension = function() {
     console.log("saving extension ", $scope.parishIds);
