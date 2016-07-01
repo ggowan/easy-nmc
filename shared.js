@@ -109,6 +109,20 @@ shared.getQueryParams = function(search) {
   return queryParams;
 };
 
+shared.initGoogleApi = function (scopes, discoveryUrl, callback) {
+  var CLIENT_ID = '540806466980-i5mifkaf6utq2g8k3p3opbj6gd4jv9oj.apps.googleusercontent.com';
+  gapi.auth.authorize(
+      {'client_id': CLIENT_ID, 'scope': scopes},
+      function handleAuthResult(authResult) {
+        if (authResult && !authResult.error) {
+          // We're authorized, now load the API.
+          gapi.client.load(discoveryUrl).then(callback);
+        } else {
+          console.log("Google API authorization failed: ", authResult.error);
+        }
+      });
+}
+
 // Authorizes and loads the Google Drive API, and then executes the specified function.
 shared.initDriveApi = function (callback) {
   var CLIENT_ID = '540806466980-i5mifkaf6utq2g8k3p3opbj6gd4jv9oj.apps.googleusercontent.com';
@@ -123,7 +137,6 @@ shared.initDriveApi = function (callback) {
           });
         } else {
           console.log("Google API authorization failed: ", authResult.error);
-          $scope.error = authResult.error;
         }
       });
 };
@@ -170,6 +183,19 @@ shared.yearToYearField = function (year) {
   }
   return 'Y' + (4 + year - shared.FOR_YEAR);
 }
+
+shared.getNumericField = function(year, field, primary, fallback) {
+  var yearField = shared.yearToYearField(year);
+  if (primary && primary[yearField] && 
+      angular.isNumber(primary[yearField][field])) {
+    return primary[yearField][field];
+  }
+  if (fallback && fallback[yearField] && 
+      angular.isNumber(fallback[yearField][field])) {
+    return fallback[yearField][field];
+  }
+  return null;
+};
 
 function setupSession($scope, ref, auth, callback) {
   var url_parser = document.createElement('a');

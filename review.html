@@ -150,7 +150,7 @@ Review any adjustments that were made to the parish's report in the prior year a
   <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'arch') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'arch') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'arch') | currency : $ : 0 }}</td>
   <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'arch') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'arch') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'arch') | currency : $ : 0 }}</td>
   <td class=money>{{ (get(FOR_YEAR-2, 'arch') - get(FOR_YEAR-3, 'arch') || 0) | currency : $ : 0 }}</td>
-  <td class="small explanation">{{ formData.arch_don_lines }} {{ formData.other_arch_don_breakdown }}</td>
+  <td class="small explanation">{{ formData.arch_don_lines }}</td>
   <td class="small explanation">{{ reviewData.arch_don_comment }}</td>
 </tr>
 <tr>
