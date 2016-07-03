@@ -63,12 +63,78 @@ function cell(value) {
   };
 }
 
-function formulaCell(formula) {
-  return {
-      userEnteredValue: {
-        formulaValue: formula,
-      },
+function headerCell(value) {
+  var c = cell(value);
+  if (!c.userEnteredFormat) c.userEnteredFormat = {};
+  if (!c.userEnteredFormat.horizontalAlignment) {
+    c.userEnteredFormat.horizontalAlignment = "CENTER";
+  }
+  if (!c.userEnteredFormat.textFormat) {
+    c.userEnteredFormat.textFormat = {
+      bold: true,
+    };
+  }
+  return c;
+}
+
+function footerCell(value) {
+  var c = cell(value);
+  if (!c.userEnteredFormat) c.userEnteredFormat = {};
+  c.userEnteredFormat.textFormat = {
+    bold: true,
   };
+  return c;
+}
+
+function rightAlignedBoldCell(value) {
+  var c = cell(value);
+  if (!c.userEnteredFormat) c.userEnteredFormat = {};
+  c.userEnteredFormat.textFormat = {
+    bold: true,
+  };
+  c.userEnteredFormat.horizontalAlignment = "RIGHT";
+  return c;
+}
+
+function boldCell(value) {
+  var c = cell(value);
+  if (!c.userEnteredFormat) c.userEnteredFormat = {};
+  c.userEnteredFormat.textFormat = {
+    bold: true,
+  };
+  return c;
+}
+
+function centeredCell(value) {
+  var c = cell(value);
+  if (!c.userEnteredFormat) c.userEnteredFormat = {};
+  c.userEnteredFormat.horizontalAlignment = "CENTER";
+  return c;
+}
+
+function numberFormatCell(value) {
+  var c = cell(value);
+  if (!c.userEnteredFormat) c.userEnteredFormat = {};
+  c.userEnteredFormat.numberFormat = {
+    type: "NUMBER",
+    pattern: "#,##0",
+  };
+  return c;
+}
+
+function wrappedCell(value) {
+  var c = cell(value);
+  if (!c.userEnteredFormat) c.userEnteredFormat = {};
+  c.userEnteredFormat.wrapStrategy = "WRAP";
+  return c;
+}
+
+function formulaCell(formula) {
+  return numberFormatCell({
+    userEnteredValue: {
+      formulaValue: formula,
+    }
+  });
 }
 
 // Returns a Google Sheets API RowData JSON object.
@@ -78,6 +144,22 @@ function row() {
   var v = [];
   for (var i = 0; i < arguments.length; i++) {
     v.push(cell(arguments[i]));
+  }
+  return {values: v};
+}
+
+function headerRow() {
+  var v = [];
+  for (var i = 0; i < arguments.length; i++) {
+    v.push(headerCell(arguments[i]));
+  }
+  return {values: v};
+}
+
+function footerRow() {
+  var v = [];
+  for (var i = 0; i < arguments.length; i++) {
+    v.push(footerCell(arguments[i]));
   }
   return {values: v};
 }
@@ -104,10 +186,10 @@ function dataRow(line, description, fieldName, parishReviewData, parishFormData,
     commentField = fieldName + "_comment";
   }
   return row(line, description, "",
-    shared.getNumericField(shared.FOR_YEAR-3, fieldName, parishReviewData, parishFormData) || "",
-    shared.getNumericField(shared.FOR_YEAR-2, fieldName, parishReviewData, parishFormData) || "",
-    explanation, "",
-    parishReviewData ? parishReviewData[commentField] : null);
+    numberFormatCell(shared.getNumericField(shared.FOR_YEAR-3, fieldName, parishReviewData, parishFormData) || ""),
+    numberFormatCell(shared.getNumericField(shared.FOR_YEAR-2, fieldName, parishReviewData, parishFormData) || ""),
+    wrappedCell(explanation), "",
+    wrappedCell(parishReviewData ? parishReviewData[commentField] : ""));
 }
 
 function exportSpreadsheetWithData($scope, reviewData) {
@@ -121,9 +203,9 @@ function exportSpreadsheetWithData($scope, reviewData) {
     });
   });
   parishesInOrder.sort(function (a, b) {
-    if (a.code < b.code) {
+    if (Number(a.code) < Number(b.code)) {
       return -1;
-    } else if (b.code < a.code) {
+    } else if (Number(b.code) < Number(a.code)) {
       return 1;
     }
     return 0;
@@ -131,21 +213,28 @@ function exportSpreadsheetWithData($scope, reviewData) {
   var spreadsheet = {
     properties: {
       title: "Test Spreadsheet",
+      defaultFormat: {
+        wrapStrategy: "WRAP",
+      },
     }
   };
   var overviewSheet = {
     properties: {
       sheetId: 0,
       title: "Recap Data Allocation",
+      gridProperties: {
+        frozenRowCount: 3,
+        frozenColumnCount: 4,
+      },
     },
     data: [
       {
         startRow: 0,
         startColumn: 0,
         rowData: [
-          row("", "", "", "", "", "Total Parish", "", "Total Parish", "", "Total", "", "Total Net", "", "", "Average Net"),
-          row("", "", "", "", "", "Income", "", "Expenditures", "", "Deductions", "", "Operating Expense", "", "", "Expenses"),
-          row("Sheet", "ID#", "Parish", "City, State", "", shared.FOR_YEAR-3, shared.FOR_YEAR-2,
+          headerRow("", "", "", "", "", "Total Parish", "", "Total Parish", "", "Total", "", "Total Net", "", "", "Average Net"),
+          headerRow("", "", "", "", "", "Income", "", "Expenditures", "", "Deductions", "", "Operating Expense", "", "", "Expenses"),
+          headerRow("Sheet", "ID#", "Parish", "City, State", "", shared.FOR_YEAR-3, shared.FOR_YEAR-2,
               shared.FOR_YEAR-3, shared.FOR_YEAR-2, shared.FOR_YEAR-3, shared.FOR_YEAR-2, shared.FOR_YEAR-3, 
               shared.FOR_YEAR-2, "", "for " + String(shared.FOR_YEAR)),
         ],
@@ -231,43 +320,43 @@ function exportSpreadsheetWithData($scope, reviewData) {
           startRow: 0,
           startColumn: 0,
           rowData: [
-            row("DATA FOR 2017 ARCHDIOCESE ALLOCATION"),
-            row("Metropolis of San Francisco"),
-            row("Parish Code", "", "", "", "", "", "", "", parishData.parish_code),
+            headerRow("DATA FOR 2017 ARCHDIOCESE ALLOCATION"),
+            headerRow("Metropolis of San Francisco"),
+            headerRow(rightAlignedBoldCell("Parish Code"), "", "", "", "", "", "", "", parishData.parish_code),
             row(),
-            row("Parish", parishData.name, "", parishData.city, "", parishData.state),
-            contactRow("Preparer", "preparer", parishFormData),
-            contactRow("Treasurer", "treas", parishFormData),
-            contactRow("President", "pres", parishFormData),
-            contactRow("Priest", "priest", parishFormData),
+            row(boldCell("Parish"), parishData.name, "", parishData.city, "", parishData.state),
+            contactRow(boldCell("Preparer"), "preparer", parishFormData),
+            contactRow(boldCell("Treasurer"), "treas", parishFormData),
+            contactRow(boldCell("President"), "pres", parishFormData),
+            contactRow(boldCell("Priest"), "priest", parishFormData),
             row(),
-            row("Line", "Description", "", String(shared.FOR_YEAR-3), String(shared.FOR_YEAR-2),
+            headerRow("Line", "Description", "", String(shared.FOR_YEAR-3), String(shared.FOR_YEAR-2),
               "Parish Notes", "", "Reviewer Comments"),
-            dataRow("A", "Gross Income", "income", parishReviewData, parishFormData,
+            dataRow(centeredCell("A"), "Gross Income", "income", parishReviewData, parishFormData,
               "income_explanation"),
-            dataRow("B", "Gross Expenses", "expenses", parishReviewData, parishFormData,
+            dataRow(centeredCell("B"), "Gross Expenses", "expenses", parishReviewData, parishFormData,
               "expense_explanation", "expense_comment"),
-            dataRow("C1", "National Ministries Commitment", "nmc", parishReviewData, parishFormData),
-            dataRow("C2", "Donations to Archdiocese", "arch", parishReviewData, parishFormData, 
+            dataRow(centeredCell("C1"), "National Ministries Commitment", "nmc", parishReviewData, parishFormData),
+            dataRow(centeredCell("C2"), "Donations to Archdiocese", "arch", parishReviewData, parishFormData, 
               "arch_don_lines", "arch_don_comment"),
-            dataRow("C3", "Assembly of Bishops Ministries", "auth_min", parishReviewData, parishFormData),
-            dataRow("C4", "Donations to Metropolis", "metro", parishReviewData, parishFormData),
-            dataRow("C5", "Donations to Patriarchate", "patriarch", parishReviewData, parishFormData),
-            dataRow("C6", "Capital Improvement", "cap", parishReviewData, parishFormData,
+            dataRow(centeredCell("C3"), "Assembly of Bishops Ministries", "auth_min", parishReviewData, parishFormData),
+            dataRow(centeredCell("C4"), "Donations to Metropolis", "metro", parishReviewData, parishFormData),
+            dataRow(centeredCell("C5"), "Donations to Patriarchate", "patriarch", parishReviewData, parishFormData),
+            dataRow(centeredCell("C6"), "Capital Improvement", "cap", parishReviewData, parishFormData,
               ["cap_lines", "cap_projects"], "cap_comment"),
-            dataRow("C7", "Construction Loan", "const_loan", parishReviewData, parishFormData),
-            dataRow("C8", "Mortgage", "mort", parishReviewData, parishFormData),
-            dataRow("C9", "Fundraising Expenses", "fundraising", parishReviewData, parishFormData),
-            dataRow("C10", "Greek/Day School Expenses", "school", parishReviewData, parishFormData),
-            dataRow("C11", "Religious Ed.", "religious_ed", parishReviewData, parishFormData),
-            dataRow("C12", "Catastrophic Risk Insurance", "catastrophic", parishReviewData, parishFormData),
-            dataRow("C13", "Clergy Moving Expenses", "moving", parishReviewData, parishFormData),
-            dataRow("C14", "Outreach and Evangelism", "outreach", parishReviewData, parishFormData),
-            dataRow("C15", "Clergy Laity Congress", "clergy_laity", parishReviewData, parishFormData),
-            dataRow("C16", "Other Deductions", "other_hier", parishReviewData, parishFormData,
+            dataRow(centeredCell("C7"), "Construction Loan", "const_loan", parishReviewData, parishFormData),
+            dataRow(centeredCell("C8"), "Mortgage", "mort", parishReviewData, parishFormData),
+            dataRow(centeredCell("C9"), "Fundraising Expenses", "fundraising", parishReviewData, parishFormData),
+            dataRow(centeredCell("C10"), "Greek/Day School Expenses", "school", parishReviewData, parishFormData),
+            dataRow(centeredCell("C11"), "Religious Ed.", "religious_ed", parishReviewData, parishFormData),
+            dataRow(centeredCell("C12"), "Catastrophic Risk Insurance", "catastrophic", parishReviewData, parishFormData),
+            dataRow(centeredCell("C13"), "Clergy Moving Expenses", "moving", parishReviewData, parishFormData),
+            dataRow(centeredCell("C14"), "Outreach and Evangelism", "outreach", parishReviewData, parishFormData),
+            dataRow(centeredCell("C15"), "Clergy Laity Congress", "clergy_laity", parishReviewData, parishFormData),
+            dataRow(centeredCell("C16"), "Other Deductions", "other_hier", parishReviewData, parishFormData,
               ["other_hier_lines", "other_hier_explanation"], "other_hier_comment"),
-            row("C", "Total Deductions", "", formulaCell("=SUM(D14:D29)"), formulaCell("=SUM(E14:E29)")),
-            row("B-C", "Net Expenses", "", formulaCell("=D13-D30"), formulaCell("=E13-E30")),
+            row(centeredCell("C"), "Total Deductions", "", formulaCell("=SUM(D14:D29)"), formulaCell("=SUM(E14:E29)")),
+            row(centeredCell("B-C"), "Net Expenses", "", formulaCell("=D13-D30"), formulaCell("=E13-E30")),
           ],
         },
       ],
@@ -385,6 +474,24 @@ function exportSpreadsheetWithData($scope, reviewData) {
         formulaCell("=(L" + String(i+4) + "+M" + String(i+4) + ")/2")
         ));
   }
+  overviewSheet.data[0].rowData.push(
+    footerRow("", "", "", "", "", 
+      // Income.
+      formulaCell("=SUM(F4:F" + String(parishesInOrder.length + 3) + ")"),
+      formulaCell("=SUM(G4:G" + String(parishesInOrder.length + 3) + ")"),
+      // Expenses.
+      formulaCell("=SUM(H4:H" + String(parishesInOrder.length + 3) + ")"),
+      formulaCell("=SUM(I4:I" + String(parishesInOrder.length + 3) + ")"),
+      // Deductions.
+      formulaCell("=SUM(J4:J" + String(parishesInOrder.length + 3) + ")"),
+      formulaCell("=SUM(K4:K" + String(parishesInOrder.length + 3) + ")"),
+      // Net operating expenses.
+      formulaCell("=SUM(L4:L" + String(parishesInOrder.length + 3) + ")"),
+      formulaCell("=SUM(M4:M" + String(parishesInOrder.length + 3) + ")"),
+      "",
+      // Average net expenses.
+      formulaCell("=SUM(O4:O" + String(parishesInOrder.length + 3) + ")")
+      ));
   spreadsheet.sheets = sheets;
   gapi.client.sheets.spreadsheets.create(spreadsheet).then(function(response) {
     console.log("response: ", response);
