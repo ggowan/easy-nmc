@@ -125,7 +125,7 @@ function numberFormatCell(value) {
 }
 
 function adjustableNumberCell($filter, effectiveNumber, originalNumber) {
-  c = numberFormatCell(effectiveNumber || "");
+  c = numberFormatCell(effectiveNumber != null ? effectiveNumber : "");
   if (effectiveNumber != null && (originalNumber == null || Math.abs(effectiveNumber - originalNumber) > 0.5)) {
     if (originalNumber != null) {
       c.note = "Originally reported as " + $filter('currency')(originalNumber, '$', 0);
@@ -332,6 +332,7 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
     var parishData = $scope.parishIds[parishId];
     var parishFormData = $scope.formData.parish[parishId];
     var parishReviewData = reviewData[parishId];
+    var parishReviewStatus = $scope.reviewStatus.parish[parishId];
     var sheet = {
       properties: {
         sheetId: i + 1,
@@ -351,6 +352,7 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
             contactRow(boldCell("Treasurer"), "treas", parishFormData),
             contactRow(boldCell("President"), "pres", parishFormData),
             contactRow(boldCell("Priest"), "priest", parishFormData),
+            row(boldCell("Reviewer"), parishReviewStatus.reviewer_name),
             row(),
             headerRow("Line", "Description", "", String(shared.FOR_YEAR-3), String(shared.FOR_YEAR-2),
               "Parish Notes", "", "Reviewer Comments"),
@@ -377,8 +379,10 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
             dataRow($filter, centeredCell("C15"), "Clergy Laity Congress", "clergy_laity", parishReviewData, parishFormData),
             dataRow($filter, centeredCell("C16"), "Other Deductions", "other_hier", parishReviewData, parishFormData,
               ["other_hier_lines", "other_hier_explanation"], "other_hier_comment"),
-            row(centeredCell("C"), "Total Deductions", "", formulaCell("=SUM(D14:D29)"), formulaCell("=SUM(E14:E29)")),
-            row(centeredCell("B-C"), "Net Expenses", "", formulaCell("=D13-D30"), formulaCell("=E13-E30")),
+            row(centeredCell("C"), "Total Deductions", "", formulaCell("=SUM(D15:D30)"), formulaCell("=SUM(E15:E30)")),
+            row(centeredCell("B-C"), "Net Expenses", "", formulaCell("=D14-D31"), formulaCell("=E14-E31")),
+            row(),
+            dataRow($filter, "", "Property Insurance", "prop_liab", parishReviewData, parishFormData),
           ],
         },
       ],
@@ -424,7 +428,7 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
         },
       ],
     };
-    for (var j = 0; j < 4; j++) {
+    for (var j = 0; j < 5; j++) {
       sheet.merges.push([
         // Contact Row
         {
@@ -450,27 +454,27 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
         },
       ]);
     }
-    for (j = 0; j < 21; j++) {
+    for (j = 0; j < 23; j++) {
       sheet.merges.push([
         // Data Row
         {
           sheetId: i+1,
-          startRowIndex: 10 + j,
-          endRowIndex: 11 + j,
+          startRowIndex: 11 + j,
+          endRowIndex: 12 + j,
           startColumnIndex: 1,
           endColumnIndex: 3,
         },
         {
           sheetId: i+1,
-          startRowIndex: 10 + j,
-          endRowIndex: 11 + j,
+          startRowIndex: 11 + j,
+          endRowIndex: 12 + j,
           startColumnIndex: 5,
           endColumnIndex: 7,
         },
         {
           sheetId: i+1,
-          startRowIndex: 10 + j,
-          endRowIndex: 11 + j,
+          startRowIndex: 11 + j,
+          endRowIndex: 12 + j,
           startColumnIndex: 7,
           endColumnIndex: 9,
         },
@@ -480,17 +484,17 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
     overviewSheet.data[0].rowData.push(
       row(i+1, parishData.parish_code, parishData.name, parishData.city + ", " + parishData.state, "", 
         // Income.
-        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D12\"))"),
-        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E12\"))"),
-        // Expenses.
         formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D13\"))"),
         formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E13\"))"),
+        // Expenses.
+        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D14\"))"),
+        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E14\"))"),
         // Deductions.
-        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D30\"))"),
-        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E30\"))"),
-        // Net operating expenses.
         formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D31\"))"),
         formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E31\"))"),
+        // Net operating expenses.
+        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D32\"))"),
+        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E32\"))"),
         "",
         // Average net expenses.
         formulaCell("=(L" + String(i+4) + "+M" + String(i+4) + ")/2")
