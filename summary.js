@@ -33,10 +33,10 @@ function refreshDriveDataHelper($scope) {
   });
 }
 
-function exportSpreadsheetHelper($scope) {
+function exportSpreadsheetHelper($scope, $filter) {
   var reviewDataRef = $scope.metroRef.child("/review-data/" + shared.FOR_YEAR + "/parish");
   reviewDataRef.once("value", function(snap) {
-    exportSpreadsheetWithData($scope, snap.val());
+    exportSpreadsheetWithData($scope, $filter, snap.val());
   }, function(error) {
     console.log("loading state failed: ", error);
     $scope.error = error;
@@ -58,6 +58,8 @@ function cell(value) {
         numberValue: value,
       },
     };
+  } else if (value == null) {
+    return {};
   } else {
     return value;
   };
@@ -122,6 +124,23 @@ function numberFormatCell(value) {
   return c;
 }
 
+function adjustableNumberCell($filter, effectiveNumber, originalNumber) {
+  c = numberFormatCell(effectiveNumber || "");
+  if (effectiveNumber != null && (originalNumber == null || Math.abs(effectiveNumber - originalNumber) > 0.5)) {
+    if (originalNumber != null) {
+      c.note = "Originally reported as " + $filter('currency')(originalNumber, '$', 0);
+    } else {
+      c.note = "Blank in original report";
+    }
+    c.userEnteredFormat.backgroundColor = {
+      red: 0xF8 / 255,
+      green: 1.0,
+      blue: 0x6A / 255,
+    };
+  }
+  return c;
+}
+
 function wrappedCell(value) {
   var c = cell(value);
   if (!c.userEnteredFormat) c.userEnteredFormat = {};
@@ -169,7 +188,13 @@ function contactRow(contactType, prefix, parishFormData) {
     parishFormData[prefix + "_phone"], "", parishFormData[prefix + "_email"]);
 }
 
-function dataRow(line, description, fieldName, parishReviewData, parishFormData, expFields, commentField) {
+function dataCell($filter, year, fieldName, parishReviewData, parishFormData) {
+  return adjustableNumberCell($filter, 
+    shared.getNumericField(year, fieldName, parishReviewData, parishFormData),
+    shared.getNumericField(year, fieldName, parishFormData));
+}
+
+function dataRow($filter, line, description, fieldName, parishReviewData, parishFormData, expFields, commentField) {
   var explanation = "";
   if (angular.isString(expFields)) {
     expFields = [expFields];
@@ -186,13 +211,13 @@ function dataRow(line, description, fieldName, parishReviewData, parishFormData,
     commentField = fieldName + "_comment";
   }
   return row(line, description, "",
-    numberFormatCell(shared.getNumericField(shared.FOR_YEAR-3, fieldName, parishReviewData, parishFormData) || ""),
-    numberFormatCell(shared.getNumericField(shared.FOR_YEAR-2, fieldName, parishReviewData, parishFormData) || ""),
+    dataCell($filter, shared.FOR_YEAR-3, fieldName, parishReviewData, parishFormData),
+    dataCell($filter, shared.FOR_YEAR-2, fieldName, parishReviewData, parishFormData),
     wrappedCell(explanation), "",
     wrappedCell(parishReviewData ? parishReviewData[commentField] : ""));
 }
 
-function exportSpreadsheetWithData($scope, reviewData) {
+function exportSpreadsheetWithData($scope, $filter, reviewData) {
   // We're going to sort the parishes by code.
   var parishesInOrder = [];
   angular.forEach($scope.parishIds, function(parishData, parishId) {
@@ -213,9 +238,6 @@ function exportSpreadsheetWithData($scope, reviewData) {
   var spreadsheet = {
     properties: {
       title: "Test Spreadsheet",
-      defaultFormat: {
-        wrapStrategy: "WRAP",
-      },
     }
   };
   var overviewSheet = {
@@ -332,28 +354,28 @@ function exportSpreadsheetWithData($scope, reviewData) {
             row(),
             headerRow("Line", "Description", "", String(shared.FOR_YEAR-3), String(shared.FOR_YEAR-2),
               "Parish Notes", "", "Reviewer Comments"),
-            dataRow(centeredCell("A"), "Gross Income", "income", parishReviewData, parishFormData,
+            dataRow($filter, centeredCell("A"), "Gross Income", "income", parishReviewData, parishFormData,
               "income_explanation"),
-            dataRow(centeredCell("B"), "Gross Expenses", "expenses", parishReviewData, parishFormData,
+            dataRow($filter, centeredCell("B"), "Gross Expenses", "expenses", parishReviewData, parishFormData,
               "expense_explanation", "expense_comment"),
-            dataRow(centeredCell("C1"), "National Ministries Commitment", "nmc", parishReviewData, parishFormData),
-            dataRow(centeredCell("C2"), "Donations to Archdiocese", "arch", parishReviewData, parishFormData, 
+            dataRow($filter, centeredCell("C1"), "National Ministries Commitment", "nmc", parishReviewData, parishFormData),
+            dataRow($filter, centeredCell("C2"), "Donations to Archdiocese", "arch", parishReviewData, parishFormData, 
               "arch_don_lines", "arch_don_comment"),
-            dataRow(centeredCell("C3"), "Assembly of Bishops Ministries", "auth_min", parishReviewData, parishFormData),
-            dataRow(centeredCell("C4"), "Donations to Metropolis", "metro", parishReviewData, parishFormData),
-            dataRow(centeredCell("C5"), "Donations to Patriarchate", "patriarch", parishReviewData, parishFormData),
-            dataRow(centeredCell("C6"), "Capital Improvement", "cap", parishReviewData, parishFormData,
+            dataRow($filter, centeredCell("C3"), "Assembly of Bishops Ministries", "auth_min", parishReviewData, parishFormData),
+            dataRow($filter, centeredCell("C4"), "Donations to Metropolis", "metro", parishReviewData, parishFormData),
+            dataRow($filter, centeredCell("C5"), "Donations to Patriarchate", "patriarch", parishReviewData, parishFormData),
+            dataRow($filter, centeredCell("C6"), "Capital Improvement", "cap", parishReviewData, parishFormData,
               ["cap_lines", "cap_projects"], "cap_comment"),
-            dataRow(centeredCell("C7"), "Construction Loan", "const_loan", parishReviewData, parishFormData),
-            dataRow(centeredCell("C8"), "Mortgage", "mort", parishReviewData, parishFormData),
-            dataRow(centeredCell("C9"), "Fundraising Expenses", "fundraising", parishReviewData, parishFormData),
-            dataRow(centeredCell("C10"), "Greek/Day School Expenses", "school", parishReviewData, parishFormData),
-            dataRow(centeredCell("C11"), "Religious Ed.", "religious_ed", parishReviewData, parishFormData),
-            dataRow(centeredCell("C12"), "Catastrophic Risk Insurance", "catastrophic", parishReviewData, parishFormData),
-            dataRow(centeredCell("C13"), "Clergy Moving Expenses", "moving", parishReviewData, parishFormData),
-            dataRow(centeredCell("C14"), "Outreach and Evangelism", "outreach", parishReviewData, parishFormData),
-            dataRow(centeredCell("C15"), "Clergy Laity Congress", "clergy_laity", parishReviewData, parishFormData),
-            dataRow(centeredCell("C16"), "Other Deductions", "other_hier", parishReviewData, parishFormData,
+            dataRow($filter, centeredCell("C7"), "Construction Loan", "const_loan", parishReviewData, parishFormData),
+            dataRow($filter, centeredCell("C8"), "Mortgage", "mort", parishReviewData, parishFormData),
+            dataRow($filter, centeredCell("C9"), "Fundraising Expenses", "fundraising", parishReviewData, parishFormData),
+            dataRow($filter, centeredCell("C10"), "Greek/Day School Expenses", "school", parishReviewData, parishFormData),
+            dataRow($filter, centeredCell("C11"), "Religious Ed.", "religious_ed", parishReviewData, parishFormData),
+            dataRow($filter, centeredCell("C12"), "Catastrophic Risk Insurance", "catastrophic", parishReviewData, parishFormData),
+            dataRow($filter, centeredCell("C13"), "Clergy Moving Expenses", "moving", parishReviewData, parishFormData),
+            dataRow($filter, centeredCell("C14"), "Outreach and Evangelism", "outreach", parishReviewData, parishFormData),
+            dataRow($filter, centeredCell("C15"), "Clergy Laity Congress", "clergy_laity", parishReviewData, parishFormData),
+            dataRow($filter, centeredCell("C16"), "Other Deductions", "other_hier", parishReviewData, parishFormData,
               ["other_hier_lines", "other_hier_explanation"], "other_hier_comment"),
             row(centeredCell("C"), "Total Deductions", "", formulaCell("=SUM(D14:D29)"), formulaCell("=SUM(E14:E29)")),
             row(centeredCell("B-C"), "Net Expenses", "", formulaCell("=D13-D30"), formulaCell("=E13-E30")),
@@ -501,7 +523,7 @@ function exportSpreadsheetWithData($scope, reviewData) {
   });
 }
 
-function setupScope($scope, $firebaseObject) {
+function setupScope($scope, $firebaseObject, $filter) {
   var ref = new Firebase(shared.firebaseBackend);
   $scope.FOR_YEAR = shared.FOR_YEAR;
   $scope.metroRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id);
@@ -580,7 +602,7 @@ function setupScope($scope, $firebaseObject) {
     shared.initGoogleApi(
       'https://www.googleapis.com/auth/spreadsheets', 
       'https://sheets.googleapis.com/$discovery/rest?version=v4', 
-      function () { exportSpreadsheetHelper($scope); });
+      function () { exportSpreadsheetHelper($scope, $filter); });
   };
   $scope.saveExtension = function() {
     console.log("saving extension ", $scope.parishIds);
@@ -634,9 +656,9 @@ function setupScope($scope, $firebaseObject) {
   }, true);
 }
 
-app.controller("Ctrl", function($scope, $firebaseObject) {
+app.controller("Ctrl", function($scope, $firebaseObject, $filter) {
   shared.handleMetroLogin($scope, function() {
-    setupScope($scope, $firebaseObject);
+    setupScope($scope, $firebaseObject, $filter);
   });
 });
 
