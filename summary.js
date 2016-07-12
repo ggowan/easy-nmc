@@ -254,11 +254,11 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
         startRow: 0,
         startColumn: 0,
         rowData: [
-          headerRow("", "", "", "", "", "Total Parish", "", "Total Parish", "", "Total", "", "Total Net", "", "", "Average Net"),
-          headerRow("", "", "", "", "", "Income", "", "Expenditures", "", "Deductions", "", "Operating Expense", "", "", "Expenses"),
+          headerRow("", "", "", "", "", "Total Parish", "", "Total Parish", "", "Total", "", "Total Net", "", "", "Average Net", "# Households"),
+          headerRow("", "", "", "", "", "Income", "", "Expenditures", "", "Deductions", "", "Operating Expense", "", "", "Expenses", "Over"),
           headerRow("Sheet", "ID#", "Parish", "City, State", "", shared.FOR_YEAR-3, shared.FOR_YEAR-2,
               shared.FOR_YEAR-3, shared.FOR_YEAR-2, shared.FOR_YEAR-3, shared.FOR_YEAR-2, shared.FOR_YEAR-3, 
-              shared.FOR_YEAR-2, "", "for " + String(shared.FOR_YEAR)),
+              shared.FOR_YEAR-2, "", "for " + String(shared.FOR_YEAR), "$300"),
         ],
       },
     ],
@@ -383,6 +383,19 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
             row(centeredCell("B-C"), "Net Expenses", "", formulaCell("=D14-D31"), formulaCell("=E14-E31")),
             row(),
             dataRow($filter, "", "Property Insurance", "prop_liab", parishReviewData, parishFormData),
+            dataRow($filter, "", "Total Stewardship", "stew_income", parishReviewData, parishFormData),
+            row("", "Number of Members", "", Number(parishFormData.Y1.num_members), Number(parishFormData.Y2.num_members)),
+            row(),
+            row(boldCell("Number of stewards")),
+            row("$5,000+", Number(parishFormData.num_stew_over_5000)),
+            row("$3,000-$4,999", Number(parishFormData.num_stew_3000_4999)),
+            row("$2,000-$2,999", Number(parishFormData.num_stew_2000_2999)),
+            row("$1,000-$1,999", Number(parishFormData.num_stew_1000_1999)),
+            row("$800-$999", Number(parishFormData.num_stew_800_999)),
+            row("$500-$799", Number(parishFormData.num_stew_500_799)),
+            row("$300-$499", Number(parishFormData.num_stew_300_499)),
+            row("<$300", Number(parishFormData.num_stew_under_300)),
+            row("300+", formulaCell("=SUM(B39:B45)")),
           ],
         },
       ],
@@ -454,7 +467,7 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
         },
       ]);
     }
-    for (j = 0; j < 23; j++) {
+    for (j = 0; j < 25; j++) {
       sheet.merges.push([
         // Data Row
         {
@@ -497,7 +510,9 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
         formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E32\"))"),
         "",
         // Average net expenses.
-        formulaCell("=(L" + String(i+4) + "+M" + String(i+4) + ")/2")
+        formulaCell("=(L" + String(i+4) + "+M" + String(i+4) + ")/2"),
+        // # Stewards >= $300.
+        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!B47\"))")
         ));
   }
   overviewSheet.data[0].rowData.push(
