@@ -7,12 +7,12 @@ threadsafe: yes
 handlers:
 
 - url: /metropolis/[A-Z]+/admin
-  static_files: 2017/admin.html
+  static_files: 2018/admin.html
   upload: admin.html
   secure: always
 
 - url: /metropolis/[A-Z]+/summary
-  static_files: 2017/summary.html
+  static_files: 2018/summary.html
   upload: summary.html
   secure: always
 
@@ -37,8 +37,8 @@ handlers:
   secure: always
 
 - url: /2018/(.*\.(gif|png|jpg|html|css|js))$
-  static_files: \1
-  upload: .*\.(gif|png|jpg|html|css|js)$
+  static_files: 2018/\1
+  upload: 2018/.*\.(gif|png|jpg|html|css|js)$
   secure: always
 
 - url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/data-form/2017
