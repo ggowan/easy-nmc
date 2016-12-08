@@ -384,7 +384,7 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
             row(),
             dataRow($filter, "", "Property Insurance", "prop_liab", parishReviewData, parishFormData),
             dataRow($filter, "", "Total Stewardship", "stew_income", parishReviewData, parishFormData),
-            row("", "Number of Members", "", Number(parishFormData.Y1.num_members), Number(parishFormData.Y2.num_members)),
+            dataRow($filter, "", "Number of Members", "num_members", parishReviewData, parishFormData),
             row(),
             row(boldCell("Number of stewards")),
             row("$5,000+", Number(parishFormData.num_stew_over_5000)),
