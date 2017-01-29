@@ -6,7 +6,7 @@
 
   <!-- AngularJS -->
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
-  <script src="//unpkg.com/angular-ui-router@0.3.2/release/angular-ui-router.js"></script>
+  <script src="//unpkg.com/angular-ui-router@0.4.2/release/angular-ui-router.js"></script>
 
   <!-- Firebase -->
   <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
@@ -14,14 +14,8 @@
   <script src="/2018/shared.js"></script>
   <script src="/2018/index.js"></script>
 </head>
-<body ng-controller="Ctrl" ng-cloak ng-show="ready">
-<p>Please choose your metropolis:
-<ul>
-  <li ng-repeat="metro in metro_list | orderBy:'name'">
-    <button ng-click="selectMetro(metro.key)">{{metro.name}}</button>
-  </li>
-</ul>
-
-<ui-view></ui-view>
+<body ng-controller="Ctrl" ng-cloak>
+<div ng-if="!ready">Loading...</div>
+<ui-view ng-if="ready"></ui-view>
 </body>
 </html>

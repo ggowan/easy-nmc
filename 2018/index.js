@@ -1,15 +1,18 @@
 var app = angular.module("easyNmc", ['ui.router']);
 
-function setupSession($scope, $location, ref, auth) {
+function setupSession($scope, $state, ref, auth, $location, $urlRouter) {
   $scope.auth = auth;
   ref.child("easy-nmc/public/metropolis-summary").on("value", function(snap) {
     $scope.metro_summary = snap.val();
-    console.log("metro_summary", $scope.metro_summary);
     $scope.metro_list = [];
+    $scope.parish_list = {};  // Keyed by metro, then list of parishes.
     angular.forEach($scope.metro_summary, function(v, k) {
       $scope.metro_list.push({'key': k, 'name': v.name});
+      $scope.parish_list[k] = []
+      angular.forEach(v.parishes, function(pv, pk) {
+	$scope.parish_list[k].push({'key': pk, 'name': pv.name, 'city': pv.city, 'state': pv.state});
+      });
     });
-    console.log("metro_list", $scope.metro_list);
     $scope.ready = true;
     $scope.$apply();
   }, function(error) {
@@ -18,12 +21,66 @@ function setupSession($scope, $location, ref, auth) {
   });
 
   $scope.selectMetro = function(metroId) {
-    console.log('selectMetro', metroId);
-    $location.path('/metropolis/' + metroId);
+    $state.go('select-parish', {metroId: metroId});
+  };
+
+  $scope.metroId = function() {
+    return $state.params['metroId'];
+  }
+
+  $scope.getParishList = function() {
+    return $scope.parish_list[$scope.metroId()];
+  };
+  
+  $scope.selectParish = function(parishId) {
+    $state.go('enter-access-key', {metroId: $scope.metroId(), parishId: parishId});
+  };
+
+  $scope.metroSummary = function() {
+    return $scope.metro_summary[$scope.metroId()];
+  };
+
+  $scope.parishId = function() {
+    return $state.params['parishId'];
+  }
+
+  $scope.parish = function() {
+    return $scope.metroSummary().parishes[$scope.parishId()];
+  };
+
+  $scope.pendingKeyCheck = -1;
+  $scope.submitKey = function(accessKey) {
+    console.log('submitKey', accessKey);
+    $scope.pendingKeyCheck++;
+    shared.storeAccessKey(ref, accessKey, auth, function(error) {
+      console.log('finished store', error);
+      $scope.error = error;
+      if (error) {
+        $scope.pendingKeyCheck--;
+        return;
+      }
+      // Test to see if the access key is working by reading small piece of
+      // data from protected area.
+      var metroRef = ref.child("easy-nmc/metropolis/" + $scope.metroId());
+      var parishIdRef = metroRef.child("/parish-id/" + $scope.parishId());
+      parishIdRef.child("city").on("value", function(snap) {
+        console.log("access successful, redirecting to form.");
+        $scope.failedKeyCheck = false;
+        $scope.pendingKeyCheck--;
+        var dest = '/metropolis/' + $scope.metroId() + '/parish/' + $scope.parishId() + '/data-form/' + shared.FOR_YEAR + '?key=' + accessKey;
+        console.log("redirecting to", dest);
+        window.location.href = dest;
+      }, function(error) {
+        console.log("loading test data failed: ", error);
+        $scope.failedKeyCheck = true;
+        $scope.pendingKeyCheck--;
+      });
+    });
   };
 }
 
-app.controller("Ctrl", function($scope, $location) {
+app.controller("Ctrl", function($scope, $state, $location, $urlRouter) {
+  console.log("app.conroller call");
   var ref = new Firebase(shared.firebaseBackend);
 
   var auth = ref.getAuth();
@@ -33,29 +90,30 @@ app.controller("Ctrl", function($scope, $location) {
         console.log("Login Failed!", error);
       } else {
         console.log("Authenticated successfully with payload:", authData);
-        setupSession($scope, $location, ref, authData);
+        setupSession($scope, $state, ref, authData, $location, $urlRouter);
       }
     });
   } else {
     console.log("Already authenticated: ", auth);
-    setupSession($scope, $location, ref, auth);
+    setupSession($scope, $state, ref, auth, $location, $urlRouter);
   }
 });
 
-app.config(function($stateProvider) {
+app.config(function($stateProvider, $urlRouterProvider) {
   console.log('app.config call');
-  var selectMetroState = {
+  $stateProvider.state({
     name: 'select-metro',
     url: '/',
-    template: '<h3>select metro!</h3>'
-  }
-
-  var selectParishState = {
+    templateUrl: '/2018/select-metro.html'
+  }).state({
     name: 'select-parish',
-    url: '/metropolis/SF',
-    template: '<h3>select parish!</h3>'
-  }
-
-  $stateProvider.state(selectMetroState);
-  $stateProvider.state(selectParishState);
+    url: '/metropolis/:metroId',
+    templateUrl: '/2018/select-parish.html'
+  }).state({
+    name: 'enter-access-key',
+    url: '/metropolis/:metroId/parish/:parishId',
+    templateUrl: '/2018/enter-access-key.html'
+  });
+  $urlRouterProvider.otherwise("/");
 });
+

@@ -291,4 +291,23 @@ shared.handleMetroLogin = function($scope, callback) {
   });  
 };
 
+// Stores a parish access key in the specified user's directory.
+//   ref: A Firebase pointing at the root of the tree.
+//   accessKey: The key to store.
+//   auth: The logged-in user's auth object.
+//   callback: A function taking an error parameter which is called when the
+//       operation completes. If the parameter is a non-empty string then
+//       the operation failed; otherwise it succeeded.
+shared.storeAccessKey = function(ref, accessKey, auth, callback) {
+  var userProfile = ref.child("easy-nmc/user").child(auth.uid);
+  var keys = userProfile.child("access-key");
+  keys.child(accessKey).set(true, function(error) {
+    if (error) {
+      console.log('Failed to store key in profile: ', error);
+    } else {
+      console.log('Stored key in profile: ', accessKey);
+    }
+    callback(error);
+  });
+}
 

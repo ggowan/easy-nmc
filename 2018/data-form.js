@@ -110,14 +110,7 @@ function setupSession($scope, $firebaseObject, ref, auth) {
   $scope.auth = auth;
   console.log("metropolis_id: ", $scope.metropolis_id, " parish_id: ", $scope.parish_id, " year: ", $scope.year);
   if ("key" in queryParams) {
-    var userProfile = ref.child("easy-nmc/user").child(auth.uid);
-    var keys = userProfile.child("access-key");
-    keys.child(queryParams.key).set(true, function(error) {
-      if (error) {
-        console.log('Failed to store key in profile: ', error);
-      } else {
-        console.log('Stored key in profile: ', queryParams.key);
-      }
+    shared.storeAccessKey(ref, queryParams.key, auth, function(error) {
       bindFirebase($scope, $firebaseObject, ref);
     });
   } else {
