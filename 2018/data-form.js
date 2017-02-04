@@ -34,10 +34,10 @@ function bindFirebase($scope, $firebaseObject, ref) {
     console.log("loading state failed: ", error);
     $scope.error = error;
   });
-  parishIdRef.child("upload_folder").on("value", function(snap) {
-    $scope.upload_folder = snap.val();
+  parishIdRef.child("upload_link").on("value", function(snap) {
+    $scope.upload_link = snap.val();
   }, function(error) {
-    console.log("loading upload_folder failed: ", error);
+    console.log("loading upload_link failed: ", error);
     $scope.error = error;
   });
   var reviewStatusRef = metroRef.child("/review-status/" + $scope.year + "/parish/" + $scope.parish_id);

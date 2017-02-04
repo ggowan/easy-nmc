@@ -3,7 +3,7 @@ var app = angular.module("easyNmcMetro", ["firebase"]);
 function generateKey() {
   var possibleCharacters = "abcdefghjkmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ23456789";
   var key = "";
-  for (var i = 0; i < 20; i++) {
+  for (var i = 0; i < 8; i++) {
     key = key + possibleCharacters.charAt(Math.random() * possibleCharacters.length);
   }
   return key;

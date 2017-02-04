@@ -26,15 +26,16 @@
 <button ng-click="generateKeys()">Generate Keys</button>
 <table class="bordered-table">
 <thead>
-<tr><th>Parish ID</th><th>Parish Code</th><th>Parish Name</th><th>City</th><th>State</th><th>Required to Report</th><th>Data Forms</th><th>Upload Folder</th></tr>
+<tr><th>Parish ID</th><th>Parish Code</th><th>Parish Name</th><th>City</th><th>State</th><th>Upload Link</th><th>Required</th><th>Data Form</th></tr>
 </thead>
 <tbody>
 <tr ng-repeat="(parish_id, parish_data) in parishInfos">
 <td>{{ parish_id }}</td>
 <td><input type="text" class=number ng-model=parish_data.parish_code size=6></td>
-<td><input type="text" ng-model=parish_data.name size=25></td>
+<td><input type="text" ng-model=parish_data.name size=20></td>
 <td><input type="text" ng-model=parish_data.city size=15></td>
 <td><input type="text" ng-model=parish_data.state size=2></td>
+<td><input type="text" ng-model=parish_data.upload_link size=20></td>
 <td>
   <select ng-model=parish_data.excused>
     <option value="">Yes</option>
@@ -42,7 +43,6 @@
   </select>
 </td>
 <td><a target="data-form" ng-href="parish/{{parish_id}}/data-form/{{forYear}}?key={{parish_data.access_key}}">form</a></td>
-<td><a target="upload_folder" ng-href="https://drive.google.com/drive/#folders/{{parish_data.upload_folder}}" ng-show="parish_data.upload_folder">Drive</a></td>
 </tr>
 </tbody>
 </table>
