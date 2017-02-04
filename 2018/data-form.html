@@ -76,9 +76,8 @@ report any issues you have with the form using the
 <a target="issues" href="https://github.com/ggowan/easy-nmc/issues">issues tracker</a> 
 of the GitHub repository for this form.
 
-<p>You may share this form by sending the complete URL to another person. Please note that the URL 
-contains a randomized key that allows the recipient to view the form and modify its contents. Only 
-one person will be able to edit the form at a time.
+<p>Only one person will be able to edit the form at a time. If a second person starts editing the form, the first person
+will automatically return to read-only mode.
 
 <h3>General Reporting Guidelines</h3>
 <ol type="1">
@@ -454,7 +453,9 @@ the United States
 <p><strong>Internal Audit Committee Chair</strong>: <input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.audit_approval_name placeholder="Name">
 <h3>Final Steps</h3>
 <ol>
-  <li>Submit profit &amp; loss statements and balance sheets for {{ year - 2 }} <a target="upload-site" ng-href="{{upload_link}}">at this link</a>.
+  <li>Submit profit &amp; loss statements and balance sheets for {{ year - 2 }} 
+    <span ng-if="upload_link"><a target="upload-site" ng-href="{{upload_link}}">at this link</a>.</span>
+    <span ng-if="!upload_link">by emailing them to your metropolis.</span>
   <li>Print a copy of this form for your records.
 </ol>
 <p>Your form data is automatically saved to an online database. Once all approvals have been entered, your form is complete.

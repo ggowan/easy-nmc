@@ -32,9 +32,37 @@ function setupSession($scope, $state, ref, auth, $location, $urlRouter) {
   $scope.getParishList = function() {
     return $scope.parish_list[$scope.metroId()];
   };
+
+  // Checks to see if the user has access to the form for the specified
+  // parish. If so, invokes successCallback; otherwise, failureCallback.
+  $scope.checkAccess = function(parishId, successCallback, failureCallback) {
+    // Test to see if the access key is working by reading small piece of
+    // data from protected area.
+    var metroRef = ref.child("easy-nmc/metropolis/" + $scope.metroId());
+    var parishIdRef = metroRef.child("/parish-id/" + parishId);
+    parishIdRef.child("city").on("value", function(snap) {
+      $scope.$apply(successCallback);
+    }, function(error) {
+      console.log("loading test data failed: ", error);
+      $scope.$apply(failureCallback);
+    });
+  }
+
+  // Redirects the browser to the data form for the specified parish.
+  $scope.redirectToForm = function(parishId) {
+    var dest = '/metropolis/' + $scope.metroId() + '/parish/' + parishId + '/data-form/' + shared.FOR_YEAR;
+    console.log("redirecting to", dest);
+    window.location.href = dest;
+  }
   
   $scope.selectParish = function(parishId) {
-    $state.go('enter-access-key', {metroId: $scope.metroId(), parishId: parishId});
+    $scope.checkAccess(parishId, function() {
+      // Already have access to this parish; go straight to the form.
+      $scope.redirectToForm(parishId);
+    }, function() {
+      // Don't have access yet; need access key.
+      $state.go('enter-access-key', {metroId: $scope.metroId(), parishId: parishId});
+    });
   };
 
   $scope.metroSummary = function() {
@@ -60,19 +88,12 @@ function setupSession($scope, $state, ref, auth, $location, $urlRouter) {
         $scope.pendingKeyCheck--;
         return;
       }
-      // Test to see if the access key is working by reading small piece of
-      // data from protected area.
-      var metroRef = ref.child("easy-nmc/metropolis/" + $scope.metroId());
-      var parishIdRef = metroRef.child("/parish-id/" + $scope.parishId());
-      parishIdRef.child("city").on("value", function(snap) {
+      $scope.checkAccess($scope.parishId(), function() {
         console.log("access successful, redirecting to form.");
         $scope.failedKeyCheck = false;
         $scope.pendingKeyCheck--;
-        var dest = '/metropolis/' + $scope.metroId() + '/parish/' + $scope.parishId() + '/data-form/' + shared.FOR_YEAR + '?key=' + accessKey;
-        console.log("redirecting to", dest);
-        window.location.href = dest;
-      }, function(error) {
-        console.log("loading test data failed: ", error);
+        $scope.redirectToForm($scope.parishId());
+      }, function() {
         $scope.failedKeyCheck = true;
         $scope.pendingKeyCheck--;
       });

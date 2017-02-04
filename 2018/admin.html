@@ -26,7 +26,7 @@
 <button ng-click="generateKeys()">Generate Keys</button>
 <table class="bordered-table">
 <thead>
-<tr><th>Parish ID</th><th>Parish Code</th><th>Parish Name</th><th>City</th><th>State</th><th>Upload Link</th><th>Required</th><th>Data Form</th></tr>
+<tr><th>Parish ID</th><th>Parish Code</th><th>Parish Name</th><th>City</th><th>State</th><th>Upload Link</th><th>Required</th><th>Access Key</th></tr>
 </thead>
 <tbody>
 <tr ng-repeat="(parish_id, parish_data) in parishInfos">
@@ -42,7 +42,7 @@
     <option value="true">No</option>
   </select>
 </td>
-<td><a target="data-form" ng-href="parish/{{parish_id}}/data-form/{{forYear}}?key={{parish_data.access_key}}">form</a></td>
+<td>{{parish_data.access_key}}</td>
 </tr>
 </tbody>
 </table>
