@@ -2,6 +2,7 @@ var app = angular.module("easyNmc", ['ui.router']);
 
 function setupSession($scope, $state, ref, auth, $location, $urlRouter) {
   $scope.auth = auth;
+  $scope.year = shared.FOR_YEAR;
   ref.child("easy-nmc/public/metropolis-summary").on("value", function(snap) {
     $scope.metro_summary = snap.val();
     $scope.metro_list = [];

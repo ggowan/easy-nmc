@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="easyNmc">
 <head>
-  <title>National Ministries Commitment App</title>
+  <title>National Ministries Commitment Form - Login Page</title>
   <link rel="stylesheet" href="/2018/style.css" type="text/css">
 
   <!-- AngularJS -->
@@ -15,6 +15,7 @@
   <script src="/2018/index.js"></script>
 </head>
 <body ng-controller="Ctrl" ng-cloak>
+<h1 align="center">National Ministries Allocation Data Form for {{year}}</h1>
 <div ng-if="!ready">Loading...</div>
 <ui-view ng-if="ready"></ui-view>
 </body>
