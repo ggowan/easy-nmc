@@ -21,8 +21,7 @@
 </head>
 <body class="wide" ng-controller="Ctrl" ng-cloak ng-show="parishInfosFinishedLoading && infoFinishedLoading">
 <p><label>Metropolis Name: <input type="text" ng-model="metaData.name" size=40 ng-show="metaDataFinishedLoading"></label>
-<button ng-click="createFolders(metaData.upload_folder)">Create Folders</button>
-<!-- <button ng-click="autoFillForms()">Copy Last Year's Data</button> -->
+<button ng-click="autoFillForms()">Copy Last Year's Data</button>
 <button ng-click="generateKeys()">Generate Keys</button>
 <button ng-click="updateLandingPage()">Update Landing Page</button>
 <table class="bordered-table">

@@ -126,28 +126,6 @@ function copyDataIfReady(parishId, parishInfo, previousFormVal, previousReviewVa
       'preparer_name',
       'preparer_phone',
       'preparer_email',
-      'income_explanation',
-      'expense_explanation',
-      'nmc_lines',
-      'arch_don_lines',
-      'auth_min_lines',
-      'metro_lines',
-      'metro_desc',
-      'patriarch_lines',
-      'patriarch_desc',
-      'cap_lines',
-      'cap_projects',
-      'const_loan_lines',
-      'mort_lines',
-      'fundraising_lines',
-      'school_lines',
-      'religious_ed_lines',
-      'catastrophic_lines',
-      'moving_lines',
-      'outreach_lines',
-      'clergy_laity_lines',
-      'other_hier_lines',
-      'other_hier_explanation',
       'dues_family',
       'dues_single',
       'dues_senior',
@@ -185,9 +163,9 @@ function copyDataIfReady(parishId, parishInfo, previousFormVal, previousReviewVa
       'clergy_laity_comment',
       'other_hier_comment',
     ]);
-    if (!previousFormVal.Y2015) {
+    if (!previousFormVal.Y2) {
       // Need this so we can copy from the adjustment if the parish never submitted a report.
-      previousFormVal.Y2015 = {};
+      previousFormVal.Y2 = {};
     }
     if (!currentFormVal.Y1) {
       currentFormVal.Y1 = {
@@ -195,12 +173,14 @@ function copyDataIfReady(parishId, parishInfo, previousFormVal, previousReviewVa
         adjusted: {}
       };
     }
-    copyPropertiesIfPresent(previousFormVal.Y2015, previousReviewVal.Y2015, currentFormVal.Y1, [
+    copyPropertiesIfPresent(previousFormVal.Y2, previousReviewVal.Y2, currentFormVal.Y1, [
       'income',
       'expenses',
       'nmc',
       'metro',
+      'arch',
       'patriarch',
+      'auth_min',
       'cap',
       'const_loan',
       'mort',
@@ -210,39 +190,22 @@ function copyDataIfReady(parishId, parishInfo, previousFormVal, previousReviewVa
       'moving',
       'outreach',
       'clergy_laity',
+      'catastrophic',
       'other_hier',
       'prop_liab'
     ]);
-    copyPropertyIfPresent(previousFormVal.Y2015, previousReviewVal.Y2015,
-        currentFormVal.Y1, 'unusual', 'catastrophic');
-    var archOriginal = shared.sumFields(shared.ARCH_MIN_FIELDS, previousFormVal.Y2015);
-    var archAdjusted = shared.sumFields(shared.ARCH_MIN_FIELDS, previousReviewVal.Y2015,
-        previousFormVal.Y2015);
-    if (archOriginal || archAdjusted) {
-      currentFormVal.Y1.arch = archAdjusted;
-      currentFormVal.Y1.original.arch = archOriginal;
-      currentFormVal.Y1.adjusted.arch = archAdjusted;
-    }
-    var authMinOriginal = shared.sumFields(shared.AUTH_MIN_FIELDS, previousFormVal.Y2015);
-    var authMinAdjusted = shared.sumFields(shared.AUTH_MIN_FIELDS, previousReviewVal.Y2015,
-        previousFormVal.Y2015);
-    if (authMinOriginal || authMinAdjusted) {
-      currentFormVal.Y1.auth_min = authMinAdjusted;
-      currentFormVal.Y1.original.auth_min = authMinOriginal;
-      currentFormVal.Y1.adjusted.auth_min = authMinAdjusted;
-    }
-    copyPropertiesIfPresent(previousFormVal.Y2015, null,
+    copyPropertiesIfPresent(previousFormVal.Y2, null,
         currentFormVal.Y1, shared.STEWARDSHIP_FIELDS_PER_YEAR);
     if (!currentFormVal.Y2) {
       currentFormVal.Y2 = {};
     }
     copyPropertiesIfPresent(currentFormVal.Y1, null, currentFormVal.Y2, 
         ['stew_or_dues', 'how_counted']);
-    if (previousFormVal.Y2013) {
+    if (previousFormVal.Y1) {
       if (!currentFormVal.Y0) {
         currentFormVal.Y0 = {};
       }
-      copyPropertiesIfPresent(previousFormVal.Y2013, null, currentFormVal.Y0,
+      copyPropertiesIfPresent(previousFormVal.Y1, null, currentFormVal.Y0,
           shared.STEWARDSHIP_FIELDS_PER_YEAR);
     }
     return currentFormVal;
@@ -272,9 +235,9 @@ function setupScope($scope, $firebaseObject) {
     for (var parishId in $scope.parishInfos) {
       if ($scope.parishInfos.hasOwnProperty(parishId) && parishId.charAt(0) !== '$') {
         console.log("parishId: ", parishId);
-        if (!$scope.parishInfos[parishId].access_key) {
+        //if (!$scope.parishInfos[parishId].access_key) {
           $scope.parishInfos[parishId].access_key = generateKey();
-        }
+        //}
       }
     }
   };
