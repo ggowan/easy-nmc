@@ -278,6 +278,33 @@ function setupScope($scope, $firebaseObject) {
       }
     }
   };
+  $scope.updateLandingPage = function() {
+    console.log("updateLandingPage", $scope.parishInfos, Object.keys($scope.parishInfos));
+    let obj = {
+      name: $scope.metaData['name'],
+      parishes: {},
+    };
+    let parishes = obj['parishes'];
+    angular.forEach($scope.parishInfos, function(parishInfo, parishId) {
+      if (parishId.charAt(0) === '$' || parishInfo.excused) {
+        return;
+      }
+      console.log("parishId: ", parishId, "parishInfo", parishInfo);
+      parishes[parishId] = {
+        name: parishInfo.name,
+        city: parishInfo.city,
+        state: parishInfo.state,
+      };
+    });
+    console.log(obj);
+    ref.child("easy-nmc/public/metropolis-summary/" + $scope.metropolis_id).set(obj, function(error) {
+      if (error) {
+        console.log("Failed to update landing page", error);
+      } else {
+        console.log("Updated landing page");
+      }
+    });
+  };
   $scope.createFolders = function() { createParishFolders($scope); };
   // Setup synchronization between AngularJS and Firebase using AngularFire.
   $firebaseObject($scope.metroRef.child("parish-id")).$bindTo($scope, "parishInfos").then(function() {

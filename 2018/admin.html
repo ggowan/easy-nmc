@@ -20,10 +20,11 @@
   <script src="/2018/admin.js"></script>
 </head>
 <body class="wide" ng-controller="Ctrl" ng-cloak ng-show="parishInfosFinishedLoading && infoFinishedLoading">
-<p><label>Metropolis Upload Folder ID: <input type="text" ng-model="metaData.upload_folder" size=40 ng-show="metaDataFinishedLoading"></label>
+<p><label>Metropolis Name: <input type="text" ng-model="metaData.name" size=40 ng-show="metaDataFinishedLoading"></label>
 <button ng-click="createFolders(metaData.upload_folder)">Create Folders</button>
 <!-- <button ng-click="autoFillForms()">Copy Last Year's Data</button> -->
 <button ng-click="generateKeys()">Generate Keys</button>
+<button ng-click="updateLandingPage()">Update Landing Page</button>
 <table class="bordered-table">
 <thead>
 <tr><th>Parish ID</th><th>Parish Code</th><th>Parish Name</th><th>City</th><th>State</th><th>Upload Link</th><th>Required</th><th>Access Key</th></tr>
