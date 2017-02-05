@@ -2,7 +2,7 @@
 <html lang="en" ng-app="easyNmcReview">
 <head>
   <title>Easy NMC Review Form</title>
-  <link rel="stylesheet" href="/style.css" type="text/css">
+  <link rel="stylesheet" href="/2017/style.css" type="text/css">
 
   <!-- AngularJS -->
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
@@ -13,14 +13,14 @@
   <!-- AngularFire -->
   <script src="https://cdn.firebase.com/libs/angularfire/1.1.1/angularfire.min.js"></script>
 
-  <script src="/shared.js"></script>
-  <script src="/review.js"></script>
+  <script src="/2017/shared.js"></script>
+  <script src="/2017/review.js"></script>
 </head>
 <body class="wide" ng-controller="Ctrl" ng-cloak>
 <div class="fixed-panel">
 <div style="text-align: right">
 <button class="image-button" ng-show="formDataFinishedLoading" ng-style="editing() ? {'background-color': '#93FA86', 'border-color': '#93FA86'} : {}" ng-click="toggleEditing()">
-<img alt="pencil icon" src="/pencil-icon.png" width=36 height=36></button>
+<img alt="pencil icon" src="/2017/pencil-icon.png" width=36 height=36></button>
 </div>
 <div ng-show="error" class="error-message">
 Error: {{ error.code }}<br>

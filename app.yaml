@@ -1,14 +1,67 @@
-application: easy-nmc
-version: prod-013
 runtime: python27
 api_version: 1
 threadsafe: yes
 
 handlers:
 
+- url: /metropolis/[A-Z]+/admin
+  static_files: 2018/admin.html
+  upload: 2018/admin.html
+  secure: always
+
+- url: /metropolis/[A-Z]+/summary
+  static_files: 2018/summary.html
+  upload: 2018/summary.html
+  secure: always
+
+- url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/data-form/2018
+  static_files: 2018/data-form.html
+  upload: 2018/data-form.html
+  secure: always
+
+- url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/review/2018
+  static_files: 2018/review.html
+  upload: 2018/review.html
+  secure: always
+
+- url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/report/2018
+  static_files: 2018/report.html
+  upload: 2018/report.html
+  secure: always
+
+- url: /metropolis/[A-Z]+/stewardship/2018
+  static_files: 2018/stewardship.html
+  upload: 2018/stewardship.html
+  secure: always
+
+- url: /2018/(.*\.(gif|png|jpg|html|css|js))$
+  static_files: 2018/\1
+  upload: 2018/.*\.(gif|png|jpg|html|css|js)$
+  secure: always
+
 - url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/data-form/2017
-  static_files: data-form.html
+  static_files: 2017/data-form.html
   upload: data-form.html
+  secure: always
+
+- url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/review/2017
+  static_files: 2017/review.html
+  upload: 2017/review.html
+  secure: always
+
+- url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/report/2017
+  static_files: 2017/report.html
+  upload: 2017/report.html
+  secure: always
+
+- url: /metropolis/[A-Z]+/stewardship/2017
+  static_files: 2017/stewardship.html
+  upload: 2017/stewardship.html
+  secure: always
+
+- url: /2017/(.*\.(gif|png|jpg|html|css|js))$
+  static_files: 2017/\1
+  upload: 2017/.*\.(gif|png|jpg|html|css|js)$
   secure: always
 
 - url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/data-form/2016
@@ -16,19 +69,9 @@ handlers:
   upload: 2016/data-form.html
   secure: always
 
-- url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/review/2017
-  static_files: review.html
-  upload: review.html
-  secure: always
-
 - url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/review/2016
   static_files: 2016/review.html
   upload: 2016/review.html
-  secure: always
-
-- url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/report/2017
-  static_files: report.html
-  upload: report.html
   secure: always
 
 - url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/report/2016
@@ -36,32 +79,17 @@ handlers:
   upload: 2016/report.html
   secure: always
 
-- url: /metropolis/[A-Z]+/admin
-  static_files: admin.html
-  upload: admin.html
-  secure: always
-
-- url: /metropolis/[A-Z]+/summary
-  static_files: summary.html
-  upload: summary.html
-  secure: always
-
-- url: /metropolis/[A-Z]+/stewardship/2017
-  static_files: stewardship.html
-  upload: stewardship.html
-  secure: always
-
 - url: /metropolis/[A-Z]+/stewardship/2016
   static_files: 2016/stewardship.html
-  upload: stewardship.html
-  secure: always
-
-- url: /(.*\.(gif|png|jpg|html|css|js))$
-  static_files: \1
-  upload: .*\.(gif|png|jpg|html|css|js)$
+  upload: 2016/stewardship.html
   secure: always
 
 - url: /2016/(.*\.(gif|png|jpg|html|css|js))$
-  static_files: \1
+  static_files: 2016/\1
   upload: 2016/.*\.(gif|png|jpg|html|css|js)$
+  secure: always
+
+- url: /.*
+  static_files: 2018/index.html
+  upload: 2018/index.html
   secure: always
