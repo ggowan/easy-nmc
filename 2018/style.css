@@ -7,6 +7,12 @@ body {
 
 body.wide {
   width: 10in;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+body.letter {
+  width: 6.5in;
   margin-left: auto;
   margin-right: auto;
   text-align: justify;

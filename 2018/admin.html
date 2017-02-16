@@ -26,15 +26,20 @@
 <button ng-click="updateLandingPage()">Update Landing Page</button>
 <table class="bordered-table">
 <thead>
-<tr><th>Parish ID</th><th>Parish Code</th><th>Parish Name</th><th>City</th><th>State</th><th>Upload Link</th><th>Required</th><th>Access Key</th></tr>
+<tr><th>Parish IDs</th><th>Parish Names</th><th>Address</th><th>Rector</th><th>Upload Link</th><th>Required</th><th>Access Key</th></tr>
 </thead>
 <tbody>
 <tr ng-repeat="(parish_id, parish_data) in parishInfos">
-<td>{{ parish_id }}</td>
-<td><input type="text" class=number ng-model=parish_data.parish_code size=6></td>
-<td><input type="text" ng-model=parish_data.name size=20></td>
-<td><input type="text" ng-model=parish_data.city size=15></td>
-<td><input type="text" ng-model=parish_data.state size=2></td>
+<td>{{ parish_id }}
+    <input placeholder="Code" type="text" class=number ng-model=parish_data.parish_code size=6></td>
+<td><input placeholder="Short Parish Name" type="text" ng-model=parish_data.name size=15>
+    <input placeholder="Long Parish Name" type="text" ng-model=parish_data.long_name size=20></td>
+<td><input placeholder="Address" type="text" ng-model=parish_data.address size=25>
+    <input placeholder="City" type="text" ng-model=parish_data.city size=15>
+    <input placeholder="State" type="text" ng-model=parish_data.state size=3>
+    <input placeholder="ZIP" type="text" ng-model=parish_data.zip size=5></td>
+<td><input placeholder="Rector Short Name" type="text" ng-model=parish_data.short_rector size=15>
+    <input placeholder="Rector Long Name" type="text" ng-model=parish_data.long_rector size=20></td>
 <td><input type="text" ng-model=parish_data.upload_link size=20></td>
 <td>
   <select ng-model=parish_data.excused>

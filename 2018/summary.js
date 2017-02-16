@@ -681,19 +681,7 @@ app.controller("Ctrl", function($scope, $firebaseObject, $filter) {
   });
 });
 
-// Filters for properties that do not have the specified sub-property value.
-// From http://stackoverflow.com/a/19850450 (with tweaks).
-app.filter('objectByKeyValFilter', function () {
-  return function (input, subPropertyName, subPropertyValue) {
-    var filteredInput ={};
-    angular.forEach(input, function(value, key) {
-      if (value[subPropertyName] !== subPropertyValue) {
-        filteredInput[key] = value;
-      }
-    });
-    return filteredInput;
-  }
-});
+app.filter('objectByKeyValFilter', shared.objectByKeyValFilter);
 
 app.filter('shortReviewStatus', function() {
   return function(status) {
