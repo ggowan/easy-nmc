@@ -9,6 +9,11 @@ handlers:
   upload: 2018/admin.html
   secure: always
 
+- url: /metropolis/[A-Z]+/request-letter
+  static_files: 2018/request-letter.html
+  upload: 2018/request-letter.html
+  secure: always
+
 - url: /metropolis/[A-Z]+/summary
   static_files: 2018/summary.html
   upload: 2018/summary.html

@@ -309,5 +309,19 @@ shared.storeAccessKey = function(ref, accessKey, auth, callback) {
     }
     callback(error);
   });
-}
+};
+
+// Filters for properties that do not have the specified sub-property value.
+// From http://stackoverflow.com/a/19850450 (with tweaks).
+shared.objectByKeyValFilter = function() {
+  return function (input, subPropertyName, subPropertyValue) {
+    var filteredInput ={};
+    angular.forEach(input, function(value, key) {
+      if (value[subPropertyName] !== subPropertyValue) {
+        filteredInput[key] = value;
+      }
+    });
+    return filteredInput;
+  }
+};
 
