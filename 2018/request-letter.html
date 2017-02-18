@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="easyNmc">
 <head>
+  <meta charset="UTF-8"> 
   <title>NMC Request Letter</title>
   <link rel="stylesheet" href="/2018/style.css" type="text/css">
 
@@ -13,7 +14,7 @@
   <script src="/2018/shared.js"></script>
   <script src="/2018/request-letter.js"></script>
 </head>
-<body ng-controller="Ctrl" ng-cloak>
+<body class="letter" ng-controller="Ctrl" ng-cloak>
 <div ng-if="ready">
   <div ng-repeat="(parish_id, parish_data) in parishes | objectByKeyValFilter : 'excused' : 'true'" style="page-break-after:always;">
     <p>February 23, 2017<br>
@@ -24,11 +25,11 @@
        {{parish_data.address}}<br>
        {{parish_data.city}}, {{parish_data.state}} {{parish_data.zip}}
 
-    <p>Beloved {{parish_data.short_rector || "Father"}} and Esteemed Parish Council Members of {{parish_data.name}}, {{parish_data.city}},
+    <p>Beloved {{parish_data.short_rector || "Father"}} and Esteemed Parish Council Members,
 
     <p>Blessed Triodion! At the instruction of His Eminence, I am sending you the below email.
 
-    <p>I’m pleased to announce that the Metropolis once again contributed over 100% of its
+    <p>I'm pleased to announce that the Metropolis once again contributed over 100% of its
        National Ministries Allocation to the Archdiocese last year. Thank you for the contribution
        that your parish made to this important accomplishment.
         
@@ -52,7 +53,7 @@
        assistance, or to request a paper version of the form, at geoffrey.gowan@gmail.com, or
        (510) 230-7650.
       
-    <p>Once you have completed the form, please submit your parish’s {{year-3}} &amp; {{year-2}} income statements
+    <p>Once you have completed the form, please submit your parish's {{year-3}} &amp; {{year-2}} income statements
        (profit and loss) and balance sheets as indicated at the bottom of the form. Please note that 
        the deadline for submitting forms and financial statements is May 15, {{year-1}}.
       
