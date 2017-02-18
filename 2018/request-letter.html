@@ -16,17 +16,17 @@
 <body ng-controller="Ctrl" ng-cloak>
 <div ng-if="ready">
   <div ng-repeat="(parish_id, parish_data) in parishes | objectByKeyValFilter : 'excused' : 'true'" style="page-break-after:always;">
-    <p>February 8, 2017<br>
-       ✠Saint Theodore the General
+    <p>February 23, 2017<br>
+       ✠St. Polycarp, Bishop of Smyrna
 
-    <p>Priest<br>
-       Full Parish Name<br>
-       Parish Address<br>
-       City, State ZIP
+    <p>{{parish_data.long_rector}}<br>
+       {{parish_data.long_name}}<br>
+       {{parish_data.address}}<br>
+       {{parish_data.city}}, {{parish_data.state}} {{parish_data.zip}}
 
-    <p>Beloved Father and Esteemed Parish Council Members of {{parish_data.name}}, {{parish_data.city}},
+    <p>Beloved {{parish_data.short_rector || "Father"}} and Esteemed Parish Council Members of {{parish_data.name}}, {{parish_data.city}},
 
-    <p>(seasonal greeting).  At the instruction of His Eminence, I am sending you the below email.
+    <p>Blessed Triodion! At the instruction of His Eminence, I am sending you the below email.
 
     <p>I’m pleased to announce that the Metropolis once again contributed over 100% of its
        National Ministries Allocation to the Archdiocese last year. Thank you for the contribution
