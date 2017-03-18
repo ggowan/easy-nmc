@@ -3,7 +3,8 @@ var app = angular.module("easyNmc", ['ui.router']);
 function setupSession($scope, $state, ref, auth, $location, $urlRouter) {
   $scope.auth = auth;
   $scope.year = shared.FOR_YEAR;
-  ref.child("easy-nmc/public/metropolis-summary").on("value", function(snap) {
+  ref.child("easy-nmc/public/metropolis-summary").once("value", function(snap) {
+    $scope.error = null;
     $scope.metro_summary = snap.val();
     $scope.metro_list = [];
     $scope.parish_list = {};  // Keyed by metro, then list of parishes.
@@ -11,7 +12,7 @@ function setupSession($scope, $state, ref, auth, $location, $urlRouter) {
       $scope.metro_list.push({'key': k, 'name': v.name});
       $scope.parish_list[k] = []
       angular.forEach(v.parishes, function(pv, pk) {
-	$scope.parish_list[k].push({'key': pk, 'name': pv.name, 'city': pv.city, 'state': pv.state});
+        $scope.parish_list[k].push({'key': pk, 'name': pv.name, 'city': pv.city, 'state': pv.state});
       });
     });
     $scope.ready = true;
@@ -40,7 +41,7 @@ function setupSession($scope, $state, ref, auth, $location, $urlRouter) {
     // data from protected area.
     var metroRef = ref.child("easy-nmc/metropolis/" + $scope.metroId());
     var parishIdRef = metroRef.child("/parish-id/" + parishId);
-    parishIdRef.child("city").on("value", function(snap) {
+    parishIdRef.child("city").once("value", function(snap) {
       $scope.$apply(successCallback);
     }, function(error) {
       console.log("loading test data failed: ", error);
