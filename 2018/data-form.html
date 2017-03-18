@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="easyNmc">
 <head>
+  <meta charset="utf-8">
   <title>National Ministries Allocation Data Form</title>
   <link rel="stylesheet" href="/2018/style.css" type="text/css">
 
@@ -92,20 +93,20 @@ and deductions to the financial statements. Refer to Appendix A of the manual fo
 
 <h3>General Information</h3>
 <p><strong>Parish:</strong> {{ parish_name }} in {{ parish_city }}, {{ parish_state }}<br>
-<p><strong>Priest:</strong> <input size=20 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.priest_name placeholder="Priest's Name">
-<input size=12 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.priest_phone type=tel placeholder="Phone">
-<input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.priest_email type=email placeholder="Email Address"><br>
-<p><strong>President:</strong> <input size=20 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.pres_name placeholder="President's Name">
-<input size=12 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.pres_phone type=tel placeholder="Phone">
-<input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.pres_email type=email placeholder="Email Address"><br>
-<p><strong>Treasurer:</strong> <input size=20 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.treas_name placeholder="Treasurer's Name">
-<input size=12 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.treas_phone type=tel placeholder="Phone">
-<input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.treas_email type=email placeholder="Email Address"><br>
+<p><strong>Priest:</strong> <input style="width: 15em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.priest_name placeholder="Priest's Name">
+<input style="width: 9em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.priest_phone type=tel placeholder="Phone">
+<input style="width: 18em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.priest_email type=email placeholder="Email Address"><br>
+<p><strong>President:</strong> <input style="width: 15em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.pres_name placeholder="President's Name">
+<input style="width: 9em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.pres_phone type=tel placeholder="Phone">
+<input style="width: 18em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.pres_email type=email placeholder="Email Address"><br>
+<p><strong>Treasurer:</strong> <input style="width: 15em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.treas_name placeholder="Treasurer's Name">
+<input style="width: 9em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.treas_phone type=tel placeholder="Phone">
+<input style="width: 18em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.treas_email type=email placeholder="Email Address"><br>
 
 <p>If the person preparing this form is not the treasurer, please provide the following:<br>
-<strong>Preparer:</strong> <input size=20 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.preparer_name placeholder="Preparer's Name">
-<input size=12 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.preparer_phone type=tel placeholder="Phone">
-<input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.preparer_email type=email placeholder="Email Address">
+<strong>Preparer:</strong> <input style="width: 15em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.preparer_name placeholder="Preparer's Name">
+<input style="width: 9em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.preparer_phone type=tel placeholder="Phone">
+<input style="width: 18em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.preparer_email type=email placeholder="Email Address">
 </section>
 
 <section ng-show="firebaseData.Y1.wasAdjusted">
@@ -161,7 +162,7 @@ trays, restricted and unrestricted funds.
     <tr><th>{{ year - 2 }}</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.income" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.income" type="text" style="width: 7em"></tr>
   </tbody>
 </table>
 <p>If the above does not appear exactly as in your P&amp;L, please explain the calculation here:<br>
@@ -179,7 +180,7 @@ endowment fund.
     <tr><th>{{ year - 2 }}</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.expenses" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.expenses" type="text" style="width: 7em"></tr>
   </tbody>
 </table>
 <p>If the above does not appear exactly as in your P&amp;L, please explain the calculation here:<br>
@@ -203,7 +204,7 @@ expenses on Line B and then deduct the expenses.
     <tr><th>{{ year - 2 }}</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.nmc" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.nmc" type="text" style="width: 7em"></tr>
   </tbody>
 </table>
 <p>Line(s) on P&amp;L containing the deducted expenses:<br>
@@ -227,7 +228,7 @@ employees may not be applied to this item. Capital expenditures include the foll
     <tr><th>{{ year - 2 }}</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.cap" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.cap" type="text" style="width: 7em"></tr>
   </tbody>
 </table>
 <p>Line(s) on P&amp;L containing the deducted expenses:<br>
@@ -246,7 +247,7 @@ employees may not be applied to this item. Capital expenditures include the foll
     <tr><th>{{ year - 2 }}</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.mort" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.mort" type="text" style="width: 7em"></tr>
   </tbody>
 </table>
 <p>Line(s) on P&amp;L containing the deducted expenses:<br>
@@ -265,7 +266,7 @@ employees may not be applied to this item. Capital expenditures include the foll
     <tr><th>{{ year - 2 }}</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.fundraising" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.fundraising" type="text" style="width: 7em"></tr>
   </tbody>
 </table>
 <p>Please list the lines on the P&amp;L containing the deducted expenses:<br>
@@ -309,7 +310,7 @@ employees may not be applied to this item. Capital expenditures include the foll
     <tr><th>{{ year - 2 }}</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.school" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.school" type="text" style="width: 7em"></tr>
   </tbody>
 </table>
 <p>Line(s) on P&amp;L containing the deducted expenses:<br>
@@ -331,7 +332,7 @@ the United States
     <tr><th>{{ year - 2 }}</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.outreach" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.outreach" type="text" style="width: 7em"></tr>
   </tbody>
 </table>
 <p>Line(s) on P&amp;L containing the deducted expenses:<br>
@@ -346,31 +347,31 @@ the United States
   <tbody>
     <tr>
     <th scope="row">Stewardship or dues?
-    <td><select ng-disabled="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y0.stew_or_dues"><option value="stew">Stewardship</option><option value="dues">Dues</option></select>
-    <td><select ng-disabled="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y1.stew_or_dues"><option value="stew">Stewardship</option><option value="dues">Dues</option></select>
-    <td><select ng-disabled="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.stew_or_dues"><option value="stew">Stewardship</option><option value="dues">Dues</option></select>
+    <td class="number"><select ng-disabled="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y0.stew_or_dues"><option value="stew">Stewardship</option><option value="dues">Dues</option></select>
+    <td class="number"><select ng-disabled="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y1.stew_or_dues"><option value="stew">Stewardship</option><option value="dues">Dues</option></select>
+    <td class="number"><select ng-disabled="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.stew_or_dues"><option value="stew">Stewardship</option><option value="dues">Dues</option></select>
     </tr>
     <tr>
     <th scope="row">Total # of paid members
-    <td class="number"><input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y0.num_members" type="text" size=10>
-    <td class="number"><input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y1.num_members" type="text" size=10>
-    <td class="number"><input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.num_members" type="text" size=10>
+    <td class="number"><input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y0.num_members" type="text" style="width: 7em">
+    <td class="number"><input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y1.num_members" type="text" style="width: 7em">
+    <td class="number"><input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.num_members" type="text" style="width: 7em">
     </tr>
     <tr>
     <th scope="row">How are members counted?
-    <td><select ng-disabled="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y0.how_counted"><option value="family">Per Family</option><option value="individual">Individual</option></select>
-    <td><select ng-disabled="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y1.how_counted"><option value="family">Per Family</option><option value="individual">Individual</option></select>
-    <td><select ng-disabled="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.how_counted"><option value="family">Per Family</option><option value="individual">Individual</option></select>
+    <td class="number"><select ng-disabled="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y0.how_counted"><option value="family">Per Family</option><option value="individual">Individual</option></select>
+    <td class="number"><select ng-disabled="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y1.how_counted"><option value="family">Per Family</option><option value="individual">Individual</option></select>
+    <td class="number"><select ng-disabled="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.how_counted"><option value="family">Per Family</option><option value="individual">Individual</option></select>
     </tr>
     <tr>
     <th scope="row">Total stewardship or dues income
-    <td class="money"><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y0.stew_income" type="text" size=10>
-    <td class="money"><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y1.stew_income" type="text" size=10>
-    <td class="money"><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.stew_income" type="text" size=10>
+    <td class="money"><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y0.stew_income" type="text" style="width: 7em">
+    <td class="money"><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y1.stew_income" type="text" style="width: 7em">
+    <td class="money"><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.stew_income" type="text" style="width: 7em">
     </tr>
     <tr>
     <th scope="row">Total parish income (all sources)
-    <td class="money"><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y0.income" type="text" size=10>
+    <td class="money"><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y0.income" type="text" style="width: 7em">
     <td class="money">{{ (firebaseData.Y1.income || 0) | currency : $ : 0 }}
     <td class="money">{{ (firebaseData.Y2.income || 0) | currency : $ : 0 }}
     </tr>
@@ -388,33 +389,33 @@ the United States
     </tr>
   </tbody>
 </table>
-<p><label>Number of new families who became members in {{ year - 2 }}: <input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.num_new_families" type="text" size=7></label>
-<p>Number of members giving for year {{ year - 2 }}:
-<label>$5,000 &amp; over: <input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.num_stew_over_5000" type="text" size=7></label>
-<label>Between $3,000 - $4,999: <input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.num_stew_3000_4999" type="text" size=7></label>
-<label>Between $2,000 - $2,999: <input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.num_stew_2000_2999" type="text" size=7></label>
-<label>Between $1,000 - $1,999: <input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.num_stew_1000_1999" type="text" size=7></label>
-<label>Between $800 - $999: <input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.num_stew_800_999" type="text" size=7></label>
-<label>Between $500 - $799: <input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.num_stew_500_799" type="text" size=7></label>
-<label>Between $300 - $499: <input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.num_stew_300_499" type="text" size=7></label>
-<label>Less than $300: <input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.num_stew_under_300" type="text" size=7></label>
+<p><label>Number of new families who became members in {{ year - 2 }}: <input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.num_new_families" type="text" style="width: 5em"></label>
+<p>Number of members giving for year {{ year - 2 }}:<br>
+<label>$5,000 &amp; over: <input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.num_stew_over_5000" type="text" style="width: 5em"></label>
+<label>Between $3,000 - $4,999: <input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.num_stew_3000_4999" type="text" style="width: 5em"></label>
+<label>Between $2,000 - $2,999: <input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.num_stew_2000_2999" type="text" style="width: 5em"></label>
+<label>Between $1,000 - $1,999: <input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.num_stew_1000_1999" type="text" style="width: 5em"></label>
+<label>Between $800 - $999: <input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.num_stew_800_999" type="text" style="width: 5em"></label>
+<label>Between $500 - $799: <input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.num_stew_500_799" type="text" style="width: 5em"></label>
+<label>Between $300 - $499: <input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.num_stew_300_499" type="text" style="width: 5em"></label>
+<label>Less than $300: <input class="number" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.num_stew_under_300" type="text" style="width: 5em"></label>
 <p ng-show="firebaseData.Y2.stew_or_dues === 'dues'">
-<label>Dues for Families: <input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.dues_family" type="text" size=7></label>
-<label>Dues for Singles: <input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.dues_single" type="text" size=7></label>
-<label>Dues for Seniors: <input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.dues_senior" type="text" size=7></label>
+<label>Dues for Families: <input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.dues_family" type="text" style="width: 5em"></label>
+<label>Dues for Singles: <input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.dues_single" type="text" style="width: 5em"></label>
+<label>Dues for Seniors: <input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.dues_senior" type="text" style="width: 5em"></label>
 <p>Stewardship and/or membership chairperson(s):<br>
-<input size=20 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_name1 placeholder="Name">
-<input size=12 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_phone1 type=tel placeholder="Phone">
-<input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_email1 type=email placeholder="Email Address"><br>
-<input size=20 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_name2 placeholder="Name">
-<input size=12 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_phone2 type=tel placeholder="Phone">
-<input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_email2 type=email placeholder="Email Address"><br>
-<input size=20 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_name3 placeholder="Name">
-<input size=12 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_phone3 type=tel placeholder="Phone">
-<input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_email3 type=email placeholder="Email Address"><br>
-<input size=20 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_name4 placeholder="Name">
-<input size=12 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_phone4 type=tel placeholder="Phone">
-<input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_email4 type=email placeholder="Email Address"><br>
+<input style="width: 15em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_name1 placeholder="Name">
+<input style="width: 9em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_phone1 type=tel placeholder="Phone">
+<input style="width: 18em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_email1 type=email placeholder="Email Address"><br>
+<input style="width: 15em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_name2 placeholder="Name">
+<input style="width: 9em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_phone2 type=tel placeholder="Phone">
+<input style="width: 18em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_email2 type=email placeholder="Email Address"><br>
+<input style="width: 15em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_name3 placeholder="Name">
+<input style="width: 9em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_phone3 type=tel placeholder="Phone">
+<input style="width: 18em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_email3 type=email placeholder="Email Address"><br>
+<input style="width: 15em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_name4 placeholder="Name">
+<input style="width: 9em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_phone4 type=tel placeholder="Phone">
+<input style="width: 18em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.stew_email4 type=email placeholder="Email Address"><br>
 </section>
 <section>
 
@@ -446,10 +447,10 @@ the United States
 
 <h3>Approvals</h3>
 <p>Please enter your name below if you approve this report.
-<p><strong>Priest:</strong> <input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.priest_approval_name placeholder="Name">
-<p><strong>President:</strong> <input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.pres_approval_name placeholder="Name">
-<p><strong>Treasurer:</strong> <input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.treas_approval_name placeholder="Name">
-<p><strong>Internal Audit Committee Chair</strong>: <input size=25 ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.audit_approval_name placeholder="Name">
+<p><strong>Priest:</strong> <input style="width: 18em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.priest_approval_name placeholder="Name">
+<p><strong>President:</strong> <input style="width: 18em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.pres_approval_name placeholder="Name">
+<p><strong>Treasurer:</strong> <input style="width: 18em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.treas_approval_name placeholder="Name">
+<p><strong>Internal Audit Committee Chair</strong>: <input style="width: 18em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.audit_approval_name placeholder="Name">
 <h3>Final Steps</h3>
 <ol>
   <li>Submit profit &amp; loss statements and balance sheets for {{ year - 2 }} 
