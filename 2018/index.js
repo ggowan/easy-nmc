@@ -1,8 +1,26 @@
 var app = angular.module("easyNmc", ['ui.router']);
 
-function setupSession($scope, $state, ref, auth, $location, $urlRouter) {
-  $scope.auth = auth;
+function getAuth(ref, successCallback, errorCallback) {
+  var auth = ref.getAuth();
+  if (!auth) {
+    ref.authAnonymously(function(error, authData) {
+      if (error) {
+        console.log("Login Failed!", error);
+        errorCallback(error);
+      } else {
+        console.log("Authenticated successfully with payload:", authData);
+        successCallback(authData);
+      }
+    });
+  } else {
+    console.log("Already authenticated: ", auth);
+    successCallback(auth);
+  }
+}
+
+app.controller("Ctrl", function($scope, $state, $location, $urlRouter) {
   $scope.year = shared.FOR_YEAR;
+  var ref = new Firebase(shared.firebaseBackend);
   ref.child("easy-nmc/public/metropolis-summary").once("value", function(snap) {
     $scope.error = null;
     $scope.metro_summary = snap.val();
@@ -37,14 +55,20 @@ function setupSession($scope, $state, ref, auth, $location, $urlRouter) {
   // Checks to see if the user has access to the form for the specified
   // parish. If so, invokes successCallback; otherwise, failureCallback.
   $scope.checkAccess = function(parishId, successCallback, failureCallback) {
-    // Test to see if the access key is working by reading small piece of
-    // data from protected area.
-    var metroRef = ref.child("easy-nmc/metropolis/" + $scope.metroId());
-    var parishIdRef = metroRef.child("/parish-id/" + parishId);
-    parishIdRef.child("city").once("value", function(snap) {
-      $scope.$apply(successCallback);
+    getAuth(ref, function(auth) {
+      $scope.error = null;
+      // Test to see if the access key is working by reading small piece of
+      // data from protected area.
+      var metroRef = ref.child("easy-nmc/metropolis/" + $scope.metroId());
+      var parishIdRef = metroRef.child("/parish-id/" + parishId);
+      parishIdRef.child("city").once("value", function(snap) {
+        $scope.$apply(successCallback);
+      }, function(error) {
+        console.log("loading test data failed: ", error);
+        $scope.$apply(failureCallback);
+      });
     }, function(error) {
-      console.log("loading test data failed: ", error);
+      $scope.error = error;
       $scope.$apply(failureCallback);
     });
   }
@@ -82,44 +106,29 @@ function setupSession($scope, $state, ref, auth, $location, $urlRouter) {
   $scope.submitKey = function(accessKey) {
     console.log('submitKey', accessKey);
     $scope.pendingKeyCheck++;
-    shared.storeAccessKey(ref, accessKey, auth, function(error) {
-      console.log('finished store', error);
-      $scope.error = error;
-      if (error) {
-        $scope.pendingKeyCheck--;
-        return;
-      }
-      $scope.checkAccess($scope.parishId(), function() {
-        console.log("access successful, redirecting to form.");
-        $scope.failedKeyCheck = false;
-        $scope.pendingKeyCheck--;
-        $scope.redirectToForm($scope.parishId());
-      }, function() {
-        $scope.failedKeyCheck = true;
-        $scope.pendingKeyCheck--;
+    getAuth(ref, function(auth) {
+      $scope.error = null;
+      shared.storeAccessKey(ref, accessKey, auth, function(error) {
+        console.log('finished store', error);
+        $scope.error = error;
+        if (error) {
+          $scope.pendingKeyCheck--;
+          return;
+        }
+        $scope.checkAccess($scope.parishId(), function() {
+          console.log("access successful, redirecting to form.");
+          $scope.failedKeyCheck = false;
+          $scope.pendingKeyCheck--;
+          $scope.redirectToForm($scope.parishId());
+        }, function() {
+          $scope.failedKeyCheck = true;
+          $scope.pendingKeyCheck--;
+        });
       });
+    }, function(error) {
+      $scope.error = error;
     });
   };
-}
-
-app.controller("Ctrl", function($scope, $state, $location, $urlRouter) {
-  console.log("app.conroller call");
-  var ref = new Firebase(shared.firebaseBackend);
-
-  var auth = ref.getAuth();
-  if (!auth) {
-    ref.authAnonymously(function(error, authData) {
-      if (error) {
-        console.log("Login Failed!", error);
-      } else {
-        console.log("Authenticated successfully with payload:", authData);
-        setupSession($scope, $state, ref, authData, $location, $urlRouter);
-      }
-    });
-  } else {
-    console.log("Already authenticated: ", auth);
-    setupSession($scope, $state, ref, auth, $location, $urlRouter);
-  }
 });
 
 app.config(function($stateProvider, $urlRouterProvider) {
