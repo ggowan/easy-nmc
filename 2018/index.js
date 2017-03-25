@@ -55,14 +55,20 @@ app.controller("Ctrl", function($scope, $state, $location, $urlRouter) {
   // Checks to see if the user has access to the form for the specified
   // parish. If so, invokes successCallback; otherwise, failureCallback.
   $scope.checkAccess = function(parishId, successCallback, failureCallback) {
-    // Test to see if the access key is working by reading small piece of
-    // data from protected area.
-    var metroRef = ref.child("easy-nmc/metropolis/" + $scope.metroId());
-    var parishIdRef = metroRef.child("/parish-id/" + parishId);
-    parishIdRef.child("city").once("value", function(snap) {
-      $scope.$apply(successCallback);
+    getAuth(ref, function(auth) {
+      $scope.error = null;
+      // Test to see if the access key is working by reading small piece of
+      // data from protected area.
+      var metroRef = ref.child("easy-nmc/metropolis/" + $scope.metroId());
+      var parishIdRef = metroRef.child("/parish-id/" + parishId);
+      parishIdRef.child("city").once("value", function(snap) {
+        $scope.$apply(successCallback);
+      }, function(error) {
+        console.log("loading test data failed: ", error);
+        $scope.$apply(failureCallback);
+      });
     }, function(error) {
-      console.log("loading test data failed: ", error);
+      $scope.error = error;
       $scope.$apply(failureCallback);
     });
   }
