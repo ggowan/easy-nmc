@@ -1,8 +1,26 @@
 var app = angular.module("easyNmc", ['ui.router']);
 
-function setupSession($scope, $state, ref, auth, $location, $urlRouter) {
-  $scope.auth = auth;
+function getAuth(ref, successCallback, errorCallback) {
+  var auth = ref.getAuth();
+  if (!auth) {
+    ref.authAnonymously(function(error, authData) {
+      if (error) {
+        console.log("Login Failed!", error);
+        errorCallback(error);
+      } else {
+        console.log("Authenticated successfully with payload:", authData);
+        successCallback(authData);
+      }
+    });
+  } else {
+    console.log("Already authenticated: ", auth);
+    successCallback(auth);
+  }
+}
+
+app.controller("Ctrl", function($scope, $state, $location, $urlRouter) {
   $scope.year = shared.FOR_YEAR;
+  var ref = new Firebase(shared.firebaseBackend);
   ref.child("easy-nmc/public/metropolis-summary").once("value", function(snap) {
     $scope.error = null;
     $scope.metro_summary = snap.val();
@@ -82,44 +100,29 @@ function setupSession($scope, $state, ref, auth, $location, $urlRouter) {
   $scope.submitKey = function(accessKey) {
     console.log('submitKey', accessKey);
     $scope.pendingKeyCheck++;
-    shared.storeAccessKey(ref, accessKey, auth, function(error) {
-      console.log('finished store', error);
-      $scope.error = error;
-      if (error) {
-        $scope.pendingKeyCheck--;
-        return;
-      }
-      $scope.checkAccess($scope.parishId(), function() {
-        console.log("access successful, redirecting to form.");
-        $scope.failedKeyCheck = false;
-        $scope.pendingKeyCheck--;
-        $scope.redirectToForm($scope.parishId());
-      }, function() {
-        $scope.failedKeyCheck = true;
-        $scope.pendingKeyCheck--;
+    getAuth(ref, function(auth) {
+      $scope.error = null;
+      shared.storeAccessKey(ref, accessKey, auth, function(error) {
+        console.log('finished store', error);
+        $scope.error = error;
+        if (error) {
+          $scope.pendingKeyCheck--;
+          return;
+        }
+        $scope.checkAccess($scope.parishId(), function() {
+          console.log("access successful, redirecting to form.");
+          $scope.failedKeyCheck = false;
+          $scope.pendingKeyCheck--;
+          $scope.redirectToForm($scope.parishId());
+        }, function() {
+          $scope.failedKeyCheck = true;
+          $scope.pendingKeyCheck--;
+        });
       });
+    }, function(error) {
+      $scope.error = error;
     });
   };
-}
-
-app.controller("Ctrl", function($scope, $state, $location, $urlRouter) {
-  console.log("app.conroller call");
-  var ref = new Firebase(shared.firebaseBackend);
-
-  var auth = ref.getAuth();
-  if (!auth) {
-    ref.authAnonymously(function(error, authData) {
-      if (error) {
-        console.log("Login Failed!", error);
-      } else {
-        console.log("Authenticated successfully with payload:", authData);
-        setupSession($scope, $state, ref, authData, $location, $urlRouter);
-      }
-    });
-  } else {
-    console.log("Already authenticated: ", auth);
-    setupSession($scope, $state, ref, auth, $location, $urlRouter);
-  }
 });
 
 app.config(function($stateProvider, $urlRouterProvider) {
