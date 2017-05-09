@@ -54,6 +54,14 @@ You are offline<br>
 <strong>Lock the data form to prevent changes before you review the form.</strong></span>
 <p>Things to look for in your review:
 <div ng-class="reviewData.all_expenses ? 'good' : 'attention'">
+<input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.have_pl_y2>
+Did the parish submit a P&amp;L for {{FOR_YEAR-2}}?
+</div>
+<div ng-class="reviewData.all_expenses ? 'good' : 'attention'">
+<input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.have_bs_y2>
+Did the parish submit a balance sheet for {{FOR_YEAR-2}}?
+</div>
+<div ng-class="reviewData.all_expenses ? 'good' : 'attention'">
 <input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.all_expenses>
 Do the gross expenses appear to include all non-deductible expenses listed in the financial reports? Check for additional expenses reported as negative income, or in an "Other Expenses" section, or in separate P&Ls.
 </div>
@@ -79,11 +87,7 @@ Does the change in the net assets (aka equity or fund balances) on the balance s
 </div>
 <div ng-class="reviewData.yoy_change ? 'good' : 'attention'">
 <input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.yoy_change>
-If there was a significant change in net expenses between {{ FOR_YEAR - 2 }} and {{ FOR_YEAR - 3}}, can you explain the source of the change?
-</div>
-<div ng-class="reviewData.prior_year_report ? 'good' : 'attention'">
-<input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.prior_year_report>
-Do the values for {{ FOR_YEAR -3 }} match what was reported on <a target="last-year-review" ng-href="/metropolis/{{metropolis_id}}/parish/{{parish_id}}/review/{{FOR_YEAR-1}}">last year's form</a>? If not, do the changes make sense?
+If there was a significant change in net expenses between {{ FOR_YEAR - 2 }} and {{ FOR_YEAR - 3}} (see <a target="last-year-review" ng-href="/metropolis/{{metropolis_id}}/parish/{{parish_id}}/review/{{FOR_YEAR-1}}">last year's review</a>), can you explain the source of the change?
 </div>
 <div ng-class="reviewData.prior_year_adjustments ? 'good' : 'attention'">
 <input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.prior_year_adjustments>
@@ -92,7 +96,6 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p><strong>Review notes:</strong>
 <br><textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.notes placeholder="Notes" cols=70 rows=10></textarea>
 
-<p>Supporting documentation is located in the <a target="drive-folder" ng-href="https://drive.google.com/drive/#folders/{{upload_folder}}">parish's Google Drive folder for {{ FOR_YEAR }}</a>.
 <p>When communicating with the parish, you may want to provide a link to the 
 <a target="data-form" ng-href="/metropolis/{{metropolis_id}}/parish/{{parish_id}}/data-form/{{FOR_YEAR}}?key={{access_key}}">data form</a> for their convenience.
 
@@ -111,9 +114,7 @@ Review any adjustments that were made to the parish's report in the prior year a
 <tr>
   <th>Line</th>
   <th>Description</th>
-  <th>{{FOR_YEAR-3}}</th>
   <th>{{FOR_YEAR-2}}</th>
-  <th>Change</th>
   <th class=small>Parish Notes</th>
   <th class=small>Reviewer Comments</th></tr>
 </thead>
@@ -121,214 +122,107 @@ Review any adjustments that were made to the parish's report in the prior year a
 <tr>
   <td><strong>A</strong></td>
   <th scope=row><strong>Total Income</strong></th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'income') ? 'attention' : ''"><strong><del>{{ originalIfChanged(FOR_YEAR-3, 'income') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'income') | currency : $ : 0 }}</strong></td>
   <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'income') ? 'attention' : ''"><strong><del>{{ originalIfChanged(FOR_YEAR-2, 'income') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'income') | currency : $ : 0 }}</strong></td>
-  <td class=money><strong>{{ (get(FOR_YEAR-2, 'income') - get(FOR_YEAR-3, 'income') || 0) | currency : $ : 0 }}</strong></td>
   <td class="small explanation">{{ formData.income_explanation }}</td>
   <td class="small explanation">{{ reviewData.income_comment }}</td>
 </tr>
 <tr>
   <td><strong>B</strong></td>
   <th scope=row><strong>Total Expenses</strong></th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'expenses') ? 'attention' : ''"><strong><del>{{ originalIfChanged(FOR_YEAR-3, 'expenses') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'expenses') | currency : $ : 0 }}</strong></td>
   <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'expenses') ? 'attention' : ''"><strong><del>{{ originalIfChanged(FOR_YEAR-2, 'expenses') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'expenses') | currency : $ : 0 }}</strong></td>
-  <td class=money><strong>{{ (get(FOR_YEAR-2, 'expenses') - get(FOR_YEAR-3, 'expenses') || 0) | currency : $ : 0 }}</strong></td>
   <td class="small explanation">{{ formData.expense_explanation }}</td>
   <td class="small explanation">{{ reviewData.expense_comment }}</td>
 </tr>
 <tr>
   <td>C1</td>
   <th scope=row class="small indent">National Ministries Commitment</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'nmc') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'nmc') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'nmc') | currency : $ : 0 }}</td>
   <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'nmc') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'nmc') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'nmc') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'nmc') - get(FOR_YEAR-3, 'nmc') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.nmc_lines }}</td>
   <td class="small explanation">{{ reviewData.nmc_comment }}</td>
 </tr>
 <tr>
   <td>C2</td>
-  <th scope=row class="small indent">Donations to Archdiocese</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'arch') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'arch') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'arch') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'arch') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'arch') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'arch') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'arch') - get(FOR_YEAR-3, 'arch') || 0) | currency : $ : 0 }}</td>
-  <td class="small explanation">{{ formData.arch_don_lines }}</td>
-  <td class="small explanation">{{ reviewData.arch_don_comment }}</td>
-</tr>
-<tr>
-  <td>C3</td>
-  <th scope=row class="small indent">Assembly of Bishops Ministries</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'auth_min') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'auth_min') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'auth_min') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'auth_min') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'auth_min') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'auth_min') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'auth_min') - get(FOR_YEAR-3, 'auth_min') || 0) | currency : $ : 0 }}</td>
-  <td class="small explanation">{{ formData.auth_min_lines }}</td>
-  <td class="small explanation">{{ reviewData.auth_min_comment }}</td>
-</tr>
-<tr>
-  <td>C4</td>
-  <th scope=row class="small indent">Donations to Metropolis </th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'metro') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'metro') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'metro') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'metro') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'metro') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'metro') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'metro') - get(FOR_YEAR-3, 'metro')|| 0) | currency : $ : 0 }}</td>
-  <td class="small explanation">{{ formData.metro_lines }}</td>
-  <td class="small explanation">{{ reviewData.metro_comment }}</td>
-</tr>
-<tr>
-  <td>C5</td>
-  <th scope=row class="small indent">Donations to Patriarchate </th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'patriarch') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'patriarch') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'patriarch') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'patriarch') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'patriarch') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'patriarch') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'patriarch') - get(FOR_YEAR-3, 'patriarch') || 0) | currency : $ : 0 }}</td>
-  <td class="small explanation">{{ formData.patriarch_lines }}</td>
-  <td class="small explanation">{{ reviewData.patriarch_comment }}</td>
-</tr>
-<tr>
-  <td>C6</td>
   <th scope=row class="small indent">Capital Improvement</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'cap') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'cap') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'cap') | currency : $ : 0 }}</td>
   <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'cap') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'cap') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'cap') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'cap') - get(FOR_YEAR-3, 'cap') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.cap_lines }} {{ formData.cap_projects }} </td>
   <td class="small explanation">{{ reviewData.cap_comment }}</td>
 </tr>
 <tr>
-  <td>C7</td>
-  <th scope=row class="small indent">Construction Loan</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'const_loan') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'const_loan') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'const_loan') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'const_loan') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'const_loan') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'const_loan') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'const_loan') - get(FOR_YEAR-3, 'const_loan') || 0) | currency : $ : 0 }}</td>
-  <td class="small explanation">{{ formData.const_loan_lines }}</td>
-  <td class="small explanation">{{ reviewData.const_loan_comment }}</td>
-</tr>
-<tr>
-  <td>C8</td>
-  <th scope=row class="small indent">Mortgage</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'mort') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'mort') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'mort') | currency : $ : 0 }}</td>
+  <td>C3</td>
+  <th scope=row class="small indent">Mortgage/Construction Loans</th>
   <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'mort') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'mort') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'mort') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'mort') - get(FOR_YEAR-3, 'mort') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.mort_lines }}</td>
   <td class="small explanation">{{ reviewData.mort_comment }}</td>
 </tr>
 <tr>
-  <td>C9</td>
+  <td>C4</td>
   <th scope=row class="small indent">Fundraising Expenses</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'fundraising') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'fundraising') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'fundraising') | currency : $ : 0 }}</td>
   <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'fundraising') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'fundraising') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'fundraising') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'fundraising') - get(FOR_YEAR-3, 'fundraising') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.fundraising_lines }}</td>
   <td class="small explanation">{{ reviewData.fundraising_comment }}</td>
 </tr>
 <tr>
-  <td>C10</td>
-  <th scope=row class="small indent">Greek/Day School Expenses</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'school') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'school') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'school') | currency : $ : 0 }}</td>
+  <td>C5</td>
+  <th scope=row class="small indent">School Expenses</th>
   <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'school') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'school') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'school') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'school') - get(FOR_YEAR-3, 'school') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.school_lines }}</td>
   <td class="small explanation">{{ reviewData.school_comment }}</td>
 </tr>
 <tr>
-  <td>C11</td>
-  <th scope=row class="small indent">Religious Ed.</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'religious_ed') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'religious_ed') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'religious_ed') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'religious_ed') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'religious_ed') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'religious_ed') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'religious_ed') - get(FOR_YEAR-3, 'religious_ed') || 0) | currency : $ : 0 }}</td>
-  <td class="small explanation">{{ formData.religious_ed_lines }}</td>
-  <td class="small explanation">{{ reviewData.religious_ed_comment }}</td>
-</tr>
-<tr>
-  <td>C12</td>
-  <th scope=row class="small indent">Catastrophic Risk Insurance</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'catastrophic') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'catastrophic') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'catastrophic') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'catastrophic') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'catastrophic') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'catastrophic') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'catastrophic') - get(FOR_YEAR-3, 'catastrophic') || 0) | currency : $ : 0 }}</td>
-  <td class="small explanation">{{ formData.catastrophic_lines }}</td>
-  <td class="small explanation">{{ reviewData.catastrophic_comment }}</td>
-</tr>
-<tr>
-  <td>C13</td>
-  <th scope=row class="small indent">Clergy Moving Expenses</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'moving') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'moving') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'moving') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'moving') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'moving') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'moving') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'moving') - get(FOR_YEAR-3, 'moving') || 0) | currency : $ : 0 }}</td>
-  <td class="small explanation">{{ formData.moving_lines }}</td>
-  <td class="small explanation">{{ reviewData.moving_comment }}</td>
-</tr>
-<tr>
-  <td>C14</td>
-  <th scope=row class="small indent">Outreach and Evangelism</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'outreach') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'outreach') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'outreach') | currency : $ : 0 }}</td>
+  <td>C6</td>
+  <th scope=row class="small indent">Charitable Giving</th>
   <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'outreach') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'outreach') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'outreach') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'outreach') - get(FOR_YEAR-3, 'outreach') || 0) | currency : $ : 0 }}</td>
   <td class="small explanation">{{ formData.outreach_lines }}</td>
   <td class="small explanation">{{ reviewData.outreach_comment }}</td>
 </tr>
 <tr>
-  <td>C15</td>
-  <th scope=row class="small indent">Clergy Laity Congress</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'clergy_laity') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'clergy_laity') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'clergy_laity') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'clergy_laity') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'clergy_laity') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'clergy_laity') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'clergy_laity') - get(FOR_YEAR-3, 'clergy_laity') || 0) | currency : $ : 0 }}</td>
-  <td class="small explanation">{{ formData.clergy_laity_lines }}</td>
-  <td class="small explanation">{{ reviewData.clergy_laity_comment }}</td>
-</tr>
-<tr>
-  <td>C16</td>
-  <th scope=row class="small indent">Other Deductions</th>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-3, 'other_hier') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-3, 'other_hier') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-3, 'other_hier') | currency : $ : 0 }}</td>
-  <td class=money ng-class="isAdjusted(FOR_YEAR-2, 'other_hier') ? 'attention' : ''"><del>{{ originalIfChanged(FOR_YEAR-2, 'other_hier') | currency : $ : 0 }}</del> {{ get(FOR_YEAR-2, 'other_hier') | currency : $ : 0 }}</td>
-  <td class=money>{{ (get(FOR_YEAR-2, 'other_hier') - get(FOR_YEAR-3, 'other_hier') || 0) | currency : $ : 0 }}</td>
-  <td class="small explanation">{{ formData.other_hier_lines }} {{ formData.other_hier_explanation }}</td>
-  <td class="small explanation">{{ reviewData.other_hier_comment }}</td>
-</tr>
-<tr>
   <td><strong>C</strong></td>
   <th scope=row><strong>Total Deductions</strong></th>
-  <td class=money ng-class="totalOriginalDeductionsIfChanged(FOR_YEAR-3) != null ? 'attention' : ''"><strong><del>{{ totalOriginalDeductionsIfChanged(FOR_YEAR-3) | currency : $ : 0 }}</del> {{ totalDeductions(FOR_YEAR-3) | currency : $ : 0 }}</strong></td>
   <td class=money ng-class="totalOriginalDeductionsIfChanged(FOR_YEAR-2) != null ? 'attention' : ''"><strong><del>{{ totalOriginalDeductionsIfChanged(FOR_YEAR-2) | currency : $ : 0 }}</del> {{ totalDeductions(FOR_YEAR-2) | currency : $ : 0 }}</strong></td>
-  <td class=money><strong>{{ totalDeductions(FOR_YEAR-2) - totalDeductions(FOR_YEAR-3) | currency : $ : 0 }}</strong></td>
 </tr>
 <tr>
   <td><strong>B-C</strong></td>
   <th scope=row><strong>Net Expenses</strong></th>
-  <td class=money ng-class="originalNetIfChanged(FOR_YEAR-3) != null ? 'attention' : ''"><strong><del>{{ originalNetIfChanged(FOR_YEAR-3) | currency : $ : 0 }}</del> {{ netExpenses(FOR_YEAR-3) | currency : $ : 0 }}</strong></td>
   <td class=money ng-class="originalNetIfChanged(FOR_YEAR-2) != null ? 'attention' : ''"><strong><del>{{ originalNetIfChanged(FOR_YEAR-2) | currency : $ : 0 }}</del> {{ netExpenses(FOR_YEAR-2) | currency : $ : 0 }}</strong></td>
-  <td class=money><strong>{{ netExpenses(FOR_YEAR-2) - netExpenses(FOR_YEAR-3) | currency : $ : 0 }}</strong></td>
 </tr>
 <tr style="height: 1em"></tr>
 <tr>
   <td style="border:none"></td>
   <th scope=row>Property and Liability Insurance</th>
-  <td class=money>{{ (formData.Y1.prop_liab || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2.prop_liab || 0) | currency : $ : 0 }}</td>
-  <td class=money>{{ (formData.Y2.prop_liab - formData.Y1.prop_liab || 0) | currency : $ : 0 }}</td>
 </tr>
 <tr>
   <td style="border:none"></td>
   <th scope=row>Stewardship/Dues Income</th>
-  <td class=money>{{ (formData.Y1.stew_income || 0) | currency : $ : 0 }}</td>
   <td class=money>{{ (formData.Y2.stew_income || 0) | currency : $ : 0 }}</td>
-  <td class=money>{{ (formData.Y2.stew_income - formData.Y1.stew_income || 0) | currency : $ : 0 }}</td>
 </tr>
 </tbody>
 </table>
 </section>
 <section>
 <h3>Details</h3>
-<h4>A. Gross Income</h4>
-<p>Please report gross income for your parish below. Include all income from all sources and for all purposes, including income imputed to the parish from indirect support.
+<h4>A. Total Parish Income</h4>
+<p>All funds from all sources including all fund raisers, etc. excluding any 	
+donations from all sources to any parish endowment/foundation but including any funds	
+transferred from any such endowment/foundation to the parish for any purpose. Include:
+<ol type="1">
+  <li>Stewardship, candles, all parish fundraising events, trays, holiday offerings, special
+trays, restricted and unrestricted funds.
+  <li>Rental Income, interest income, income from parish endowment.
+  <li>School income.
+  <li>Any other income not listed above.
+</ol>
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th>Source</th><th>{{FOR_YEAR-2}}</tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.income | currency : $ : 0 }}
       <td class=money>{{ formData.Y2.income | currency : $ : 0 }}
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.income" type="text" size=10>
       <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.income" type="text" size=10>
     </tr>
   </tbody>
@@ -339,21 +233,24 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>Reviewer comments:<br>
 <textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.income_comment placeholder="Comments on gross income" cols=70 rows=3></textarea>
 
-<h4>B. Gross Expenses</h4>
-<p>Please report gross expenses for your parish below. Include expenses for all purposes from all funds, including expenses imputed to the parish from indirect support. Do not include depreciation.
+<h4>B. Total Parish Expenses</h4>
+<ol type="1">
+  <li>All expenses paid by the parish or on behalf of the parish for any purpose. Refer to
+Appendix B of the manual for guidance regarding parish expenses paid by a related foundation or
+endowment fund.
+  <li>Asset depreciation should not be included.
+</ol>
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th>Source</th><th>{{FOR_YEAR-2}}</tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.expenses | currency : $ : 0 }}
       <td class=money>{{ formData.Y2.expenses | currency : $ : 0 }}
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.expenses" type="text" size=10>
       <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.expenses" type="text" size=10>
     </tr>
   </tbody>
@@ -365,27 +262,29 @@ Review any adjustments that were made to the parish's report in the prior year a
 <textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.expense_comment placeholder="Comments on gross expenses" cols=70 rows=3></textarea>
 
 <h4>C. Deductions</h4>
-<p>Please report deductible expenses in the sections below. For all sections, please bear in mind the following:
-<ul>
-  <li><strong>An expense can only be deducted if it was included in gross parish expenses above.</strong>
+<ol type="1">
+  <li>Expenses in the following expense categories are deductible to the extent they are
+included in the Total Parish Expense on Line B of the Allocation Form and are fully
+supported by the attached parish financial statements. For example, if you show a
+fundraiser as a net in your "Total Parish Income" on Line A you cannot deduct the
+expenses. You would have to show the gross income on Line A and the gross
+expenses on Line B and then deduct the expenses.
   <li>Each expense can only be deducted once, even if it fits multiple deductible categories.
   <li>No part of the parish priest's salary is ever deductible, even if the priest is engaged in an activity that would otherwise be considered deductible, such as fundraising or religious education.
-</ul>
-<h4>C1. Archdiocese National Ministries Commitment</h4>
-<p>Please report your parish's payments to the Archdiocese for the National Ministries Commitment. Do not include payments for clergy pension or other benefits.
+</ol>
+<h4>C1. Funds paid to the archdiocese for parish National Ministries Allocation</h4>
+<p>Actual amount paid during the calendar year toward the National Ministries Allocation. Do not include payments for clergy pension or other benefits.
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th>Source</th><th>{{FOR_YEAR-2}}</tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.nmc | currency : $ : 0 }}
       <td class=money>{{ formData.Y2.nmc | currency : $ : 0 }}
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.nmc" type="text" size=10>
       <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.nmc" type="text" size=10>
     </tr>
   </tbody>
@@ -396,138 +295,29 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>Reviewer comments:<br>
 <textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.nmc_comment placeholder="Comments on National Ministries Commitment deduction" cols=70 rows=3></textarea>
 
-<h4>C2. Donations to the Archdiocese or National Ministries</h4>
-<p>If your parish made additional donations to the Archdiocese or to its ministries, please report those here. The ministries of the Archdiocese include Hellenic College/Holy Cross, St. Basil Academy, St. Michael Home, St. Photios Shrine, Ionian Village, the Order of St. Andrew, and others.
+<h4>C2. Capital Expenditures - Funds paid for facility construction and renovation</h4>
+<p>All claimed deductions must be supported by an itemized list of projects, including the start date, estimated completion, 
+estimated total cost, and date approved by the Metropolis (for projects requiring approval). Payment for work by church
+employees may not be applied to this item. Capital expenditures include the following:
+<ol type="A">
+  <li>Land purchase
+  <li>Building construction
+  <li>Iconography, Interior decor (pews, iconostasion, proskinitaria,  etc.)
+  <li>Capital improvements &ndash; improvements made to extend the useful life of a property or add to its value, such as roof replacement, kitchen equipment replacement, HVAC unit replacement, parking lot resurfacing, and window replacement
+  <li>Major repairs &ndash; Repairs exceeding $2,500 for each repair or event, such as roof repairs, and damage from fires and storms that exceed insurance reimbursement 
+</ol>
+<p>As a reminder, only amounts that were included in parish gross expenses (section B, above) are deductible.
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th>Source</th><th>{{FOR_YEAR-2}}</tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.arch | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.arch | currency : $ : 0 }}
-    </tr>
-    <tr>
-      <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.arch" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.arch" type="text" size=10>
-    </tr>
-  </tbody>
-</table>
-<p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="true" ng-model=formData.arch_don_lines cols=70 rows=3></textarea>
-
-<p>Reviewer comments:<br>
-<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.arch_don_comment placeholder="Comments on Archdiocese donations" cols=70 rows=3></textarea>
-
-<h4>C3. Donations to Assembly of Bishops Authorized Ministries</h4>
-<p>If your parish made donations to any of the following organizations, please report the total below:
-<ul>
-  <li>IOCC (International Orthodox Christian Charities)
-  <li>OCMC (Orthodox Christian Mission Center)
-  <li>OCF (Orthodox Christian Fellowship)
-  <li>Orthodox Christian Prison Ministries
-  <li>EOCS (Eastern Orthodox Committee on Scouting)
-  <li>OCN (Orthodox Christian Network)
-  <li>OCEC (Orthodox Christian Education Commission)
-  <li>OCAMPR (Orthodox Christian Association of Medicine, Psychology and Religion)
-  <li>Orthodox Christian Education Commission
-</ul>
-<table class="bordered-table">
-  <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.auth_min | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.auth_min | currency : $ : 0 }}
-    </tr>
-    <tr>
-      <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.auth_min" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.auth_min" type="text" size=10>
-    </tr>
-  </tbody>
-</table>
-<p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="true" ng-model=formData.auth_min_lines cols=70 rows=3></textarea>
-
-<p>Reviewer comments:<br>
-<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.auth_min_comment placeholder="Comments on Assembly of Bishops Authorized Ministries deductions" cols=70 rows=3></textarea>
-
-<h4>C4. Donations to the Metropolis</h4>
-<p>If your parish made payments or donations to support the Metropolis or any of its ministries, please report the total below.
-<table class="bordered-table">
-  <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.metro | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.metro | currency : $ : 0 }}
-    </tr>
-    <tr>
-      <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.metro" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.metro" type="text" size=10>
-    </tr>
-  </tbody>
-</table>
-<p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="true" ng-model=formData.metro_lines cols=70 rows=3></textarea>
-
-<p>Reviewer comments:<br>
-<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.metro_comment placeholder="Comments on Metropolis donations deduction" cols=70 rows=3></textarea>
-
-<h4>C5. Donations to the Ecumenical Patriarchate</h4>
-<p>If your parish made donations to support the Ecumenical Patriarchate or any of its Patriarchal Institutions, please report the total below.
-<table class="bordered-table">
-  <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.patriarch | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.patriarch | currency : $ : 0 }}
-    </tr>
-    <tr>
-      <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.patriarch" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.patriarch" type="text" size=10>
-    </tr>
-  </tbody>
-</table>
-<p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="true" ng-model=formData.patriarch_lines cols=70 rows=3></textarea>
-
-<p>Reviewer comments:<br>
-<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.patriarch_comment placeholder="Comments on Patriarchate deductions" cols=70 rows=3></textarea>
-
-<h4>C6. Capital Improvement Projects</h4>
-<p>Please report deductible capital improvement expenses below in accordance with the following guidelines:
-<ul>
-  <li>The expenses must have been for projects of significant cost and lasting value, such as land purchases, facility construction, iconography, or interior decor (<i>e.g.</i> pews, iconostasion, proskinitaria, <i>etc.</i>).
-  <li>As with all deductions, this deduction only applies for amounts that were included in parish gross expenses (section B, above). If you did not report the capital improvement as an expense, do not take the deduction.
-  <li>For loan payments, see sections C7 and C8 below.
-  <li>Do not deduct an aggregation of small maintenance expenses that do not significantly extend the life of the facility or its major components, or that can be expected to occur on a regular basis every year.
-</ul>
-<table class="bordered-table">
-  <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.cap | currency : $ : 0 }}
       <td class=money>{{ formData.Y2.cap | currency : $ : 0 }}
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.cap" type="text" size=10>
       <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.cap" type="text" size=10>
     </tr>
   </tbody>
@@ -540,51 +330,23 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>Reviewer comments:<br>
 <textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.cap_comment placeholder="Comments on capital improvement deductions" cols=70 rows=3></textarea>
 
-<h4>C7. Construction Loan Interest</h4>
-<p>Please report interest paid on construction loans below.
-<p>Construction loans are short-term, interest-only loans in which the balance increases as payments are made on an ongoing construction project. If your parish's loan requires fixed monthly payments over a period of years and the balance is going down, not up, it is a mortgage and should be reported in section C8 below.
+<h4>C3. Interest on Loans for Property and Improvements to Real Property</h4>
+<ol type="A">
+  <li>Funds to pay the interest and/or principle of construction loans.
+  <li>Funds to pay the interest and/or principle of mortgages held by the parish.
+</ol>
+<p>As a reminder, only amounts that were included in parish gross expenses (section B, above) are deductible.
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th>Source</th><th>{{FOR_YEAR-2}}</tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.const_loan | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.const_loan | currency : $ : 0 }}
-    </tr>
-    <tr>
-      <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.const_loan" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.const_loan" type="text" size=10>
-    </tr>
-  </tbody>
-</table>
-<p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="true" ng-model=formData.const_loan_lines cols=70 rows=3></textarea>
-
-<p>Reviewer comments:<br>
-<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.const_loan_comment placeholder="Comments on construction loan deduction" cols=70 rows=3></textarea>
-
-<h4>C8. Mortgage Payments</h4>
-<p>Please report the deductible portion of your parish's mortgage payments below. Payments on a mortgage are deductible to the extent they are included in the gross expenses reported in section B, above. For example,
-<ul>
-  <li>If you reported only the interest portion of your mortgage payments as an expense in section B, then only the interest portion is deductible.
-  <li>If you included both interest and principal in section B, both are deductible.
-</ul>
-<table class="bordered-table">
-  <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.mort | currency : $ : 0 }}
       <td class=money>{{ formData.Y2.mort | currency : $ : 0 }}
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.mort" type="text" size=10>
       <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.mort" type="text" size=10>
     </tr>
   </tbody>
@@ -595,28 +357,25 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>Reviewer comments:<br>
 <textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.mort_comment placeholder="Comments on mortgage deduction" cols=70 rows=3></textarea>
 
-<h4>C9. Fundraising Expenses</h4>
-<p>Please report deductible fundraising expenses below, in accordance with the following guidelines:
-<ul>
-  <li>Expenses for fundraising events such as festivals, dinner dances, community dinners, and golf outings are deductible. However, fundraising events to benefit a Greek Dance program are specifically excluded from being deductible.
-  <li>Only expenses that are directly attributable to the fundraising activity are deductible. Do not allocate a portion of other parish expenses to the fundraising activity, such as the priest's salary or facility expenses.
-  <li>Expenses associated with ongoing parish ministries or activities are not deductible, such as facility rental, catering, stewardship, fellowship, bookstore, candle, or koliva expenses.
-  <li>Utility expenses for fundraising events may be deducted only if they were actually measured apart from regular parish usage.
-  <li>As with all deductions, this deduction only applies for amounts that were included in parish gross expenses (section B, above)
-</ul>
+<h4>C4. Fundraising Expenses</h4>
+<ol type="A">
+  <li>Funds paid exclusively to hold fundraising events and directly caused by the fundraising event such as festivals, raffles, fundraising dinners, golf tournaments etc.
+  <li>Customary Stewardship program expenses are not deductible.
+  <li>Bookstore expenses are not deductible because the primary function of the bookstore is to provide religious items to the parishioners.
+  <li>Any funds paid to parish clergy or employees are not deductible fundraising expenses.
+  <li>Allocated Church expenses such as utilities, security and insurance which are not separately measured and tracked are not allowable deductions.
+</ol>
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th>Source</th><th>{{FOR_YEAR-2}}</tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.fundraising | currency : $ : 0 }}
       <td class=money>{{ formData.Y2.fundraising | currency : $ : 0 }}
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.fundraising" type="text" size=10>
       <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.fundraising" type="text" size=10>
     </tr>
   </tbody>
@@ -627,27 +386,50 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>Reviewer comments:<br>
 <textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.fundraising_comment placeholder="Comments on fundraising deductions" cols=70 rows=3></textarea>
 
-<h4>C10. Greek School and Day School Expenses</h4>
-<p>Please report deductible Greek School and Day School expenses below, in accordance with the following guidelines:
-<ul>
-  <li>Expenses must be directly attributable to the operation of the school.
-  <li>Expenses that are typically deducted include teacher salaries, payroll taxes, insurance, equipment, supplies, and books. Other expenses may be deductible if they are directly attributable to the program.
-  <li>Day School expenses are deductible only if the school operates 5 days a week for at least 3 hours each day.
-  <li>As with all deductions, this deduction only applies for amounts that were included in parish gross expenses (section B, above).
-</ul>
+<h4>C5. Day/Parochial School and Greek and Catechetical (Sunday School)</h4>
+<ol type="A">
+  <li>Day School
+    <ol type="1">
+      <li>To be deductible expenses, the Day/Parochial School must operate at least 8
+          months per year, 5 days per week and at least 3 hours per day.
+      <li>Expenses must be paid from the General Fund.
+      <li>Allowable expenses include teachers’ salaries and associated payroll taxes,
+          insurance, supplies, books and any expense that is directly attributable to the
+          operation of the school.
+      <li>Allocated Church expenses such as utilities, security and insurance which
+          are not separately measured are deductible to the extent that the method and
+          rationale of the allocation method are clearly documented and quantified by the 
+          parish.
+      <li>Priest allocated expenses are not allowable deductions.
+    </ol>
+  </li>
+  <li>Greek Afternoon/Catechetical (Sunday School)
+    <ol type="1">
+      <li>Expenses must be paid from the General Fund.
+      <li>Allowable expenses include teacher’s salaries and associated payroll taxes,
+          insurance, supplies, books and any expense that is directly attributable to the
+          operation of the school.
+      <li>Allocated Church expenses such as utilities, security and insurance which
+          are not separately measured are deductible to the extent that the method and
+          rationale of the allocation method are clearly documented and quantified by the
+          parish.
+      <li>GOYA, HOPE, JOY, etc. and Dance Expenses are not allowable deductions.
+      <li>Priest, Pastoral Assistant and Youth Director allocated salaries and expenses
+          are not allowable deductions.
+    </ol>
+  </li>
+</ol>
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th>Source</th><th>{{FOR_YEAR-2}}</tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.school | currency : $ : 0 }}
       <td class=money>{{ formData.Y2.school | currency : $ : 0 }}
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.school" type="text" size=10>
       <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.school" type="text" size=10>
     </tr>
   </tbody>
@@ -658,109 +440,28 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>Reviewer comments:<br>
 <textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.school_comment placeholder="Comments on greek/day school deductions" cols=70 rows=3></textarea>
 
-<h4>C11. Religious Education Expenses</h4>
-<p>Please report deductible expenses for religious education below, in accordance with the following guidelines:
-<ul>
-  <li>Sunday School, catechism classes, lectures and seminars are all examples of religious education programs that may have deductible expenses.
-  <li>The parish priest's salary is never a deductible expense.
-  <li>Payments to other teachers or visiting speakers may be deducted.
-  <li>Any other expense directly attributable to the program may be deducted, such as payroll taxes, insurance, equipment, supplies, books, <i>etc.</i>
-</ul>
+<h4>C6. Charitable Giving</h4>
+<p>A gift made by the parish from General Funds to a non-profit organization, charity,
+individual or private foundation. To include
+<ol type="1">
+  <li>Gifts to Metropolis, Archdiocese or Patriarchate or any of their related
+ministries.
+  <li>Gifts to Organizations under the Assembly of Canonical Orthodox Bishops in
+the United States
+  <li>Other 501(c)(3) organizations.
+</ol>
+<p>Gifts to parish controlled foundations or trusts are not allowable deductions.
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th>Source</th><th>{{FOR_YEAR-2}}</tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.religious_ed | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.religious_ed | currency : $ : 0 }}
-    </tr>
-    <tr>
-      <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.religious_ed" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.religious_ed" type="text" size=10>
-    </tr>
-  </tbody>
-</table>
-<p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="true" ng-model=formData.religious_ed_lines cols=70 rows=3></textarea>
-
-<p>Reviewer comments:<br>
-<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.religious_ed_comment placeholder="Comments on religious education deductions" cols=70 rows=3></textarea>
-
-<h4>C12. Funds paid for catastrophic risk insurance</h4>
-<p>Please report expenses for catastrophic risk insurance such as earthquake or flood insurance below. Please note that typical fire and liability insurance should not be included.
-<table class="bordered-table">
-  <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.catastrophic | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.catastrophic | currency : $ : 0 }}
-    </tr>
-    <tr>
-      <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.catastrophic" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.catastrophic" type="text" size=10>
-    </tr>
-  </tbody>
-</table>
-<p>Please explain the above expenses.
-<p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="true" ng-model=formData.catastrophic_lines cols=70 rows=3></textarea>
-
-<p>Reviewer comments:<br>
-<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.catastrophic_comment placeholder="Comments on catastrophic risk insurance deduction" cols=70 rows=3></textarea>
-
-<h4>C13. Funds paid for moving expenses of Clergy</h4>
-<p>Please report expenses for relocating clergymen to your parish.
-<table class="bordered-table">
-  <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.moving | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.moving | currency : $ : 0 }}
-    </tr>
-    <tr>
-      <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.moving" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.moving" type="text" size=10>
-    </tr>
-  </tbody>
-</table>
-<p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="true" ng-model=formData.moving_lines cols=70 rows=3></textarea>
-
-<p>Reviewer comments:<br>
-<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.moving_comment placeholder="Comments on moving expenses deduction" cols=70 rows=3></textarea>
-
-<h4>C14. Outreach and Evangelism</h4>
-<p>Please report deductible outreach and evangelism expenses below, in accordance with the following guidelines:
-<ul>
-  <li>Expenses for charitable outreach or evangelism programs to the larger community are deductible.
-  <li>Charitable donations to other 501c3 organizations are deductible.
-  <li>Scholarships are deductible.
-  <li>Athletic programs such as basketball, soccer, or volleyball are <em>not</em> deductible.
-</ul>
-<table class="bordered-table">
-  <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.outreach | currency : $ : 0 }}
       <td class=money>{{ formData.Y2.outreach | currency : $ : 0 }}
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.outreach" type="text" size=10>
       <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.outreach" type="text" size=10>
     </tr>
   </tbody>
@@ -771,66 +472,14 @@ Review any adjustments that were made to the parish's report in the prior year a
 <p>Reviewer comments:<br>
 <textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.outreach_comment placeholder="Comments on outreach and evangelism deduction" cols=70 rows=3></textarea>
 
-<h4>C15. National Clergy Laity Congress</h4>
-<p>Please report expenses for sending delegates to the Archdiocese Clergy Laity Congress below. Do not include expenses associated with metropolis assembly meetings or other organizations. Note that the Clergy Laity Congress happens only once every two years, so you should only have expenses for it on even years.
-<table class="bordered-table">
-  <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.clergy_laity | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.clergy_laity | currency : $ : 0 }}
-    </tr>
-    <tr>
-      <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.clergy_laity" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.clergy_laity" type="text" size=10>
-    </tr>
-  </tbody>
-</table>
-<p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="true" ng-model=formData.clergy_laity_lines cols=70 rows=3></textarea>
-
-<p>Reviewer comments:<br>
-<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.clergy_laity_comment placeholder="Comments on Clergy Laity Congress deductions" cols=70 rows=3></textarea>
-
-<h4>C16. Other Deductions Approved by Hierarch</h4>
-<p>Please report any special deductions that have been approved by your hierarch below.
-<table class="bordered-table">
-  <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y1.other_hier | currency : $ : 0 }}
-      <td class=money>{{ formData.Y2.other_hier | currency : $ : 0 }}
-    </tr>
-    <tr>
-      <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y1.other_hier" type="text" size=10>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.other_hier" type="text" size=10>
-    </tr>
-  </tbody>
-</table>
-<p>Line(s) or account number(s) on P&amp;L containing these amounts:<br>
-<textarea ng-readonly="true" ng-model=formData.other_hier_lines cols=70 rows=3></textarea>
-<p>Please explain the special deductions.<br>
-<textarea ng-readonly="true" ng-model=formData.other_hier_explanation placeholder="Explanation of special deductions" cols=70 rows=3></textarea>
-
-<p>Reviewer comments:<br>
-<textarea ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.other_hier_comment placeholder="Comments on deductions approved by hierarch" cols=70 rows=3></textarea>
-
 <h4>Property and Liability Insurance</h4>
 <p>Please report the total amount paid for property and liability insurance for your parish. This is collected for informational purposes but is not a deductible expense.
 <table>
   <thead>
-    <tr><th>{{FOR_YEAR-3}}<th>{{FOR_YEAR-2}}</tr>
+    <tr><th>{{FOR_YEAR-2}}</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="true" ng-model="formData.Y1.prop_liab" type="text" size=10><td><input class="money" dollars ng-readonly="true" ng-model="formData.Y2.prop_liab" type="text" size=10></tr>
+    <tr><td><input class="money" dollars ng-readonly="true" ng-model="formData.Y2.prop_liab" type="text" size=10></tr>
   </tbody>
 </table>
 
