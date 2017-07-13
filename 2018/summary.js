@@ -339,7 +339,7 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
             dataRow($filter, centeredCell("C6"), "Charitable Giving", "outreach", parishReviewData, parishFormData),
             row(centeredCell("C"), "Total Deductions", "", formulaCell("=SUM(D15:D20)")/*, formulaCell("=SUM(E15:E20)")*/),
             row(centeredCell("B-C"), "Net Expenses", "", formulaCell("=D14-D21")/*, formulaCell("=E14-E21")*/),
-            row(),
+            /*row(),
             dataRow($filter, "", "Property Insurance", "prop_liab", parishReviewData, parishFormData),
             dataRow($filter, "", "Total Stewardship", "stew_income", parishReviewData, parishFormData),
             dataRow($filter, "", "Number of Members", "num_members", parishReviewData, parishFormData),
@@ -353,7 +353,7 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
             row("$500-$799", parishFormData ? Number(parishFormData.num_stew_500_799) : ""),
             row("$300-$499", parishFormData ? Number(parishFormData.num_stew_300_499) : ""),
             row("<$300", parishFormData ? Number(parishFormData.num_stew_under_300) : ""),
-            row("300+", formulaCell("=SUM(B39:B45)")),
+            row("300+", formulaCell("=SUM(B39:B45)")),*/
           ],
         },
       ],
