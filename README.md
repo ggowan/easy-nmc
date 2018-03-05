@@ -8,7 +8,7 @@ Easy NMC is written entirely in HTML & JavaScript. It uses [Firebase Realtime Da
 
 If you want to make changes to Easy NMC, you should first install the Google Cloud SDK for Python on App Engine following the instructions here: https://cloud.google.com/appengine/docs/standard/python/download. Then clone the `dev` branch of this repository to your computer. If you're looking for a good editor, try [Visual Studio Code](https://code.visualstudio.com/).
 
-Once you've made your changes and want to try them out, you can start the a local development appserver using this command:
+Once you've made your changes and want to try them out, you can start a local development appserver using this command:
 
 ```
 dev_appserver.py app.yaml
@@ -25,3 +25,23 @@ The development deployment can be accessed at https://friendly-aurora-855.appspo
 In order to push your changes to production, you need to checkout the `prod` branch in Git and merge changes from the `dev` branch into it. You can try out the app with the production data using the same command to start the dev server (`dev_appserver.py app.yaml`). Once the changes have been committed and pushed, you can also deploy to production using the same command as above (`gcloud app deploy app.yaml`).
 
 Don't forget to checkout the `dev` branch again after you are done doing the deployment so you'll be ready to make and test your next change.
+
+## Updating the Form for a New Year
+This is a summary of the steps needed to update the form for a new year.
+
+1. Create a new directory for the next year.
+2. Copy all files from the current year to the next year.
+3. Update app.yaml. For URLs that don't have the year in the URL itself, but refer to a file within a directory having a year, just increment the year of the directory. For URLs that actually have the year in the URL itself, you'll want to make a copy of the URL entry for the new year rather than changing the existing one. That way existing links continue to work.
+4. Within the directory for next year, make the following changes:
+
+     a. Do a find-and-replace-in-files within the new directory of the current year with the next year. Visual Studio Code has a convenient way of doing this if you right-click on the directory. This should hit a bunch of href paths containing the year as well as the shared.FOR_YEAR variable in shared.js.
+
+     b. Update the "Changes Since Last Year" section in data-form.html with whatever changes have occurred.
+
+5. We can automatically copy a lot of data from the prior year. The way to do this is to click "Copy Last Year's Data" on the admin screen, but if field names changed last year you likely need to update the code. Test changes on the dev branch before executing it on the prod branch. Copying data from last year is supposed to provide the following:
+
+     a. Contact info of priest, president, treasurer and preparer are copied over.
+     
+     b. The most recent year from last year's report is copied over as the first of two years being reported this year. If adjustments were made by the reviewer, the adjusted values are copied over. This is helpful even if we aren't allowing people to change the values for the first year because they are available for inclusion in the spreadsheet export and can potentially be displayed in the UI for review.
+     
+     c. We can also display the adjustments that were made last year to give guidance on what to watch out for this year.

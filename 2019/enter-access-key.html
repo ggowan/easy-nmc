@@ -1,0 +1,7 @@
+<h2 align="center">Enter Access Key for {{parish().name}}, {{parish().city}}, {{parish().state}}</h2>
+<div align="center" >
+  <input ng-model="accessKey" type="text" style="font-size:1.2em"></input>
+  <button ng-click="submitKey(accessKey)" type="button" ng-enable="!pendingKeyCheck" style="font-size:1.2em">Submit</button>
+</div>
+<div ng-if="failedKeyCheck" class="error-message">Access key check failed; please verify key is entered correctly.</div>
+<div ng-if="error" class="error-message">{{error}}</div>

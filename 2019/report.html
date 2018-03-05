@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="easyNmcReport">
+<head>
+  <title>Easy NMC Parish Report</title>
+  <link rel="stylesheet" href="/2019/style.css" type="text/css">
+
+  <!-- AngularJS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+
+  <!-- Firebase -->
+  <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+
+  <!-- AngularFire -->
+  <script src="https://cdn.firebase.com/libs/angularfire/1.1.1/angularfire.min.js"></script>
+
+  <script src="/2019/shared.js"></script>
+  <script src="/2019/report.js"></script>
+</head>
+<body class="wide" ng-controller="Ctrl" ng-cloak ng-show="formDataFinishedLoading && reviewDataFinishedLoading && parish_name && parish_city && parish_state">
+<div class="fixed-panel">
+<div ng-show="error" class="error-message">
+Error: {{ error.code }}<br>
+<small>Do you have the correct URL?</small>
+</div>
+<div ng-show="formDataFinishedLoading && infoFinishedLoading && !firebaseInfo.connected" class="offline-warning">
+You are offline<br>
+</div> <!-- offline-warning -->
+</div> <!-- error-container -->
+<section>
+<table class=unbordered-table>
+<tbody>
+<tr class=title>
+  <td colspan=9><strong>DATA FOR 2016 ARCHDIOCESE ALLOCATION</strong></td>
+</tr>
+<tr class=title>
+  <td colspan=9><strong>Metropolis of San Francisco</strong></td>
+</tr>
+<tr class=title>
+  <td colspan=8 style="text-align:right"><strong>Parish Code:</strong></td>
+  <td style="text-align:left"><strong>{{ parish_code }}</strong></td>
+</tr>
+<tr class=nontabular><td></td></tr>
+<tr class=nontabular>
+  <td><strong>Parish:</strong></td>
+  <td colspan=2>{{ parish_name }}</td>
+  <td colspan=2>{{ parish_city }}</td>
+  <td>{{ parish_state }}</td>
+</tr>
+<tr class=nontabular>
+  <td><strong>Preparer:</strong></td>
+  <td colspan=2>{{ formData.preparer_name ? formData.preparer_name : formData.treas_name }}</td>
+  <td colspan=2>{{ formData.preparer_name ? formData.preparer_phone : formData.treas_phone }}</td>
+  <td colspan=2>{{ formData.preparer_name ? formData.preparer_email : formData.treas_email }}</td>
+</tr>
+<tr class=nontabular>
+  <td><strong>Treasurer:</strong></td>
+  <td colspan=2>{{ formData.treas_name }}</td>
+  <td colspan=2>{{ formData.treas_phone }}</td>
+  <td colspan=2>{{ formData.treas_email }}</td>
+</tr>
+<tr class=nontabular>
+  <td><strong>President:</strong></td>
+  <td colspan=2>{{ formData.pres_name }}</td>
+  <td colspan=2>{{ formData.pres_phone }}</td>
+  <td colspan=2>{{ formData.pres_email }}</td>
+</tr>
+<tr class=nontabular>
+  <td><strong>Priest:</strong></td>
+  <td colspan=2>{{ formData.priest_name }}</td>
+  <td colspan=2>{{ formData.priest_phone }}</td>
+  <td colspan=2>{{ formData.priest_email }}</td>
+</tr>
+<tr class=nontabular><td></td></tr>
+<tr>
+  <th>Line</th>
+  <th colspan=2>Description</th>
+  <th>2013</th>
+  <th>2014</th>
+  <th colspan=2>Parish Notes</th>
+  <th colspan=2>Reviewer Comments</th>
+</tr>
+<tr>
+  <td><strong>A</strong></td>
+  <th scope=row colspan=2><strong>Total Income</strong></th>
+  <td class=money ng-class="isAdjusted(2013, 'income') ? 'attention' : ''"><strong>{{ get(2013, 'income') | currency : $ : 0 }}</strong></td>
+  <td class=money ng-class="isAdjusted(2014, 'income') ? 'attention' : ''"><strong>{{ get(2014, 'income') | currency : $ : 0 }}</strong></td>
+  <td class="small explanation" colspan=2>{{ formData.income_explanation }}</td>
+  <td class="small explanation" colspan=2>{{ reviewData.income_comment }}</td>
+</tr>
+<tr>
+  <td><strong>B</strong></td>
+  <th scope=row colspan=2><strong>Total Expenses</strong></th>
+  <td class=money ng-class="isAdjusted(2013, 'expenses') ? 'attention' : ''"><strong>{{ get(2013, 'expenses') | currency : $ : 0 }}</strong></td>
+  <td class=money ng-class="isAdjusted(2014, 'expenses') ? 'attention' : ''"><strong>{{ get(2014, 'expenses') | currency : $ : 0 }}</strong></td>
+  <td class="small explanation" colspan=2>{{ formData.expense_explanation }}</td>
+  <td class="small explanation" colspan=2>{{ reviewData.expense_comment }}</td>
+</tr>
+<tr><td></td></tr>
+<tr>
+  <td>C1</td>
+  <th scope=row colspan=2 class="small indent">National Ministries Commitment</th>
+  <td class=money ng-class="isAdjusted(2013, 'nmc') ? 'attention' : ''">{{ get(2013, 'nmc') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'nmc') ? 'attention' : ''">{{ get(2014, 'nmc') | currency : $ : 0 }}</td>
+  <td class="small explanation" colspan=2>{{ formData.nmc_lines }}</td>
+  <td class="small explanation" colspan=2>{{ reviewData.nmc_comment }}</td>
+</tr>
+<tr>
+  <td>C2</td>
+  <th scope=row colspan=2 class="small indent">Donations to Archdiocese</th>
+  <td class=money ng-class="isArchMinAdjusted(2013) ? 'attention' : ''">{{ archMinTotal(reviewData.Y2013, formData.Y2013) | currency : $ : 0 }}</td>
+  <td class=money ng-class="isArchMinAdjusted(2014) ? 'attention' : ''">{{ archMinTotal(reviewData.Y2014, formData.Y2014) | currency : $ : 0 }}</td>
+  <td class="small explanation" colspan=2>{{ formData.arch_don_lines }} {{ formData.other_arch_don_breakdown }}</td>
+  <td class="small explanation" colspan=2>{{ reviewData.arch_don_comment }}</td>
+</tr>
+<tr>
+  <td>C3</td>
+  <th scope=row colspan=2 class="small indent">Assembly of Bishops Ministries</th>
+  <td class=money ng-class="isAuthMinAdjusted(2013) ? 'attention' : ''">{{ authMinTotal(reviewData.Y2013, formData.Y2013) | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAuthMinAdjusted(2014) ? 'attention' : ''">{{ authMinTotal(reviewData.Y2014, formData.Y2014) | currency : $ : 0 }}</td>
+  <td class="small explanation" colspan=2>{{ formData.auth_min_lines }}</td>
+  <td class="small explanation" colspan=2>{{ reviewData.auth_min_comment }}</td>
+</tr>
+<tr>
+  <td>C4</td>
+  <th scope=row colspan=2 class="small indent">Donations to Metropolis </th>
+  <td class=money ng-class="isAdjusted(2013, 'metro') ? 'attention' : ''">{{ get(2013, 'metro') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'metro') ? 'attention' : ''">{{ get(2014, 'metro') | currency : $ : 0 }}</td>
+  <td class="small explanation" colspan=2>{{ formData.metro_lines }}</td>
+  <td class="small explanation" colspan=2>{{ reviewData.metro_comment }}</td>
+</tr>
+<tr>
+  <td>C5</td>
+  <th scope=row colspan=2 class="small indent">Donations to Patriarchate </th>
+  <td class=money ng-class="isAdjusted(2013, 'patriarch') ? 'attention' : ''">{{ get(2013, 'patriarch') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'patriarch') ? 'attention' : ''">{{ get(2014, 'patriarch') | currency : $ : 0 }}</td>
+  <td class="small explanation" colspan=2>{{ formData.patriarch_lines }}</td>
+  <td class="small explanation" colspan=2>{{ reviewData.patriarch_comment }}</td>
+</tr>
+<tr>
+  <td>C6</td>
+  <th scope=row colspan=2 class="small indent">Capital Improvement</th>
+  <td class=money ng-class="isAdjusted(2013, 'cap') ? 'attention' : ''">{{ get(2013, 'cap') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'cap') ? 'attention' : ''">{{ get(2014, 'cap') | currency : $ : 0 }}</td>
+  <td class="small explanation" colspan=2>{{ formData.cap_lines }} {{ formData.cap_projects }} </td>
+  <td class="small explanation" colspan=2>{{ reviewData.cap_comment }}</td>
+</tr>
+<tr>
+  <td>C7</td>
+  <th scope=row colspan=2 class="small indent">Construction Loan</th>
+  <td class=money ng-class="isAdjusted(2013, 'const_loan') ? 'attention' : ''">{{ get(2013, 'const_loan') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'const_loan') ? 'attention' : ''">{{ get(2014, 'const_loan') | currency : $ : 0 }}</td>
+  <td class="small explanation" colspan=2>{{ formData.const_loan_lines }}</td>
+  <td class="small explanation" colspan=2>{{ reviewData.const_loan_comment }}</td>
+</tr>
+<tr>
+  <td>C8</td>
+  <th scope=row colspan=2 class="small indent">Mortgage</th>
+  <td class=money ng-class="isAdjusted(2013, 'mort') ? 'attention' : ''">{{ get(2013, 'mort') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'mort') ? 'attention' : ''">{{ get(2014, 'mort') | currency : $ : 0 }}</td>
+  <td class="small explanation" colspan=2>{{ formData.mort_lines }}</td>
+  <td class="small explanation" colspan=2>{{ reviewData.mort_comment }}</td>
+</tr>
+<tr>
+  <td>C9</td>
+  <th scope=row colspan=2 class="small indent">Fundraising Expenses</th>
+  <td class=money ng-class="isAdjusted(2013, 'fundraising') ? 'attention' : ''">{{ get(2013, 'fundraising') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'fundraising') ? 'attention' : ''">{{ get(2014, 'fundraising') | currency : $ : 0 }}</td>
+  <td class="small explanation" colspan=2>{{ formData.fundraising_lines }}</td>
+  <td class="small explanation" colspan=2>{{ reviewData.fundraising_comment }}</td>
+</tr>
+<tr>
+  <td>C10</td>
+  <th scope=row colspan=2 class="small indent">Greek/Day School Expenses</th>
+  <td class=money ng-class="isAdjusted(2013, 'school') ? 'attention' : ''">{{ get(2013, 'school') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'school') ? 'attention' : ''">{{ get(2014, 'school') | currency : $ : 0 }}</td>
+  <td class="small explanation" colspan=2>{{ formData.school_lines }}</td>
+  <td class="small explanation" colspan=2>{{ reviewData.school_comment }}</td>
+</tr>
+<tr>
+  <td>C11</td>
+  <th scope=row colspan=2 class="small indent">Religious Ed.</th>
+  <td class=money ng-class="isAdjusted(2013, 'religious_ed') ? 'attention' : ''">{{ get(2013, 'religious_ed') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'religious_ed') ? 'attention' : ''">{{ get(2014, 'religious_ed') | currency : $ : 0 }}</td>
+  <td class="small explanation" colspan=2>{{ formData.religious_ed_lines }}</td>
+  <td class="small explanation" colspan=2>{{ reviewData.religious_ed_comment }}</td>
+</tr>
+<tr>
+  <td>C12</td>
+  <th scope=row colspan=2 class="small indent">Catastrophic Risk Insurance</th>
+  <td class=money ng-class="isAdjusted(2013, 'unusual') ? 'attention' : ''">{{ get(2013, 'unusual') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'unusual') ? 'attention' : ''">{{ get(2014, 'unusual') | currency : $ : 0 }}</td>
+  <td class="small explanation" colspan=2>{{ formData.catastrophic_lines }}</td>
+  <td class="small explanation" colspan=2>{{ reviewData.catastrophic_comment }}</td>
+</tr>
+<tr>
+  <td>C13</td>
+  <th scope=row colspan=2 class="small indent">Clergy Moving Expenses</th>
+  <td class=money ng-class="isAdjusted(2013, 'moving') ? 'attention' : ''">{{ get(2013, 'moving') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'moving') ? 'attention' : ''">{{ get(2014, 'moving') | currency : $ : 0 }}</td>
+  <td class="small explanation" colspan=2>{{ formData.moving_lines }}</td>
+  <td class="small explanation" colspan=2>{{ reviewData.moving_comment }}</td>
+</tr>
+<tr>
+  <td>C14</td>
+  <th scope=row colspan=2 class="small indent">Outreach and Evangelism</th>
+  <td class=money ng-class="isAdjusted(2013, 'outreach') ? 'attention' : ''">{{ get(2013, 'outreach') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'outreach') ? 'attention' : ''">{{ get(2014, 'outreach') | currency : $ : 0 }}</td>
+  <td class="small explanation" colspan=2>{{ formData.outreach_lines }}</td>
+  <td class="small explanation" colspan=2>{{ reviewData.outreach_comment }}</td>
+</tr>
+<tr>
+  <td>C15</td>
+  <th scope=row colspan=2 class="small indent">Clergy Laity Congress</th>
+  <td class=money ng-class="isAdjusted(2013, 'clergy_laity') ? 'attention' : ''">{{ get(2013, 'clergy_laity') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'clergy_laity') ? 'attention' : ''">{{ get(2014, 'clergy_laity') | currency : $ : 0 }}</td>
+  <td class="small explanation" colspan=2>{{ formData.clergy_laity_lines }}</td>
+  <td class="small explanation" colspan=2>{{ reviewData.clergy_laity_comment }}</td>
+</tr>
+<tr>
+  <td>C16</td>
+  <th scope=row colspan=2 class="small indent">Other Deductions</th>
+  <td class=money ng-class="isAdjusted(2013, 'other_hier') ? 'attention' : ''">{{ get(2013, 'other_hier') | currency : $ : 0 }}</td>
+  <td class=money ng-class="isAdjusted(2014, 'other_hier') ? 'attention' : ''">{{ get(2014, 'other_hier') | currency : $ : 0 }}</td>
+  <td class="small explanation" colspan=2>{{ formData.other_hier_lines }} {{ formData.other_hier_explanation }}</td>
+  <td class="small explanation" colspan=2>{{ reviewData.other_hier_comment }}</td>
+</tr>
+<tr>
+  <td><strong>C</strong></td>
+  <th scope=row colspan=2><strong>Total Deductions</strong></th>
+  <td class=money><strong>=SUM(D15:D30)</strong></td>
+  <td class=money><strong>=SUM(E15:E30)</strong></td>
+</tr>
+<tr>
+  <td><strong>B-C</strong></td>
+  <th scope=row colspan=2><strong>Net Expenses</strong></th>
+  <td class=money><strong>=D13-D31</strong></td>
+  <td class=money><strong>=E13-E31</strong></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
