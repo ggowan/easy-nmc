@@ -3,9 +3,10 @@
 ## Introduction
 Easy NMC is an application for collecting financial reports from parishes that was developed for the Greek Orthodox Metropolis of San Francisco. The production deployment of Easy NMC can be found at https://easy-nmc.appspot.com/. 
 
-## Developer Info
+## Technical Overview
 Easy NMC is written entirely in HTML & JavaScript. It uses [Firebase Realtime Database](https://firebase.google.com/products/database/) as its database & backend. It is deployed on App Engine as a Python application in the Standard Environment, even though it doesn't have a single line of Python code.
 
+## Basic Development Guide
 If you want to make changes to Easy NMC, you should first install the Google Cloud SDK for Python on App Engine following the instructions here: https://cloud.google.com/appengine/docs/standard/python/download. Then clone the `dev` branch of this repository to your computer. If you're looking for a good editor, try [Visual Studio Code](https://code.visualstudio.com/).
 
 Once you've made your changes and want to try them out, you can start a local development appserver using this command:
@@ -14,7 +15,10 @@ Once you've made your changes and want to try them out, you can start a local de
 dev_appserver.py app.yaml
 ```
 
-Point your webrowser at http://localhost:8080 to try out your changes. After committing and pushing your changes you can deploy the application to the development site using this command:
+Point your webrowser at http://localhost:8080 to try out your changes.
+
+## Release Process
+After committing and pushing your changes on the dev branch you can deploy the application to the development site using this command:
 
 ```
 gcloud app deploy app.yaml
@@ -26,6 +30,15 @@ In order to push your changes to production, you need to checkout the `prod` bra
 
 Don't forget to checkout the `dev` branch again after you are done doing the deployment so you'll be ready to make and test your next change.
 
+## Updating Development Tools
+If a significant amount of time has gone by, you should update your dev tools.
+
+1. Update Cloud SDK. Right click on Google Cloud SDK shortcut on desktop and choose Run As Administrator. Then execute `gcloud components update` inside that shell.
+
+2. Update Visual Studio Code.
+
+3. Update Git for Windows.
+
 ## Updating the Form for a New Year
 This is a summary of the steps needed to update the form for a new year.
 
@@ -34,7 +47,7 @@ This is a summary of the steps needed to update the form for a new year.
 3. Update app.yaml. For URLs that don't have the year in the URL itself, but refer to a file within a directory having a year, just increment the year of the directory. For URLs that actually have the year in the URL itself, you'll want to make a copy of the URL entry for the new year rather than changing the existing one. That way existing links continue to work.
 4. Within the directory for next year, make the following changes:
 
-     a. Do a find-and-replace-in-files within the new directory of the current year with the next year. Visual Studio Code has a convenient way of doing this if you right-click on the directory. This should hit a bunch of href paths containing the year as well as the shared.FOR_YEAR variable in shared.js.
+     a. Do a find-and-replace-in-files of the current year with next year (**only** affecting files within next year's directory). Visual Studio Code has a convenient way of doing this if you right-click on next year's directory. This should hit a bunch of href paths containing the year as well as the shared.FOR_YEAR variable in shared.js.
 
      b. Update the "Changes Since Last Year" section in data-form.html with whatever changes have occurred.
 
