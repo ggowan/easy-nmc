@@ -11,7 +11,7 @@ If you want to make changes to Easy NMC, you should first install the Google Clo
 
 Once you've made your changes and want to try them out, you can start a local development appserver using this command:
 
-```
+``` bash
 dev_appserver.py app.yaml
 ```
 
@@ -20,13 +20,30 @@ Point your webrowser at http://localhost:8080 to try out your changes.
 ## Release Process
 After committing and pushing your changes on the dev branch you can deploy the application to the development site using this command:
 
-```
+``` bash
 gcloud app deploy app.yaml
 ```
 
 The development deployment can be accessed at https://friendly-aurora-855.appspot.com/. It has a separate Firebase database from the production deployment so can be used to safely try out changes without affecting the data in the production deployment.
 
-In order to push your changes to production, you need to checkout the `prod` branch in Git and merge changes from the `dev` branch into it. You can try out the app with the production data using the same command to start the dev server (`dev_appserver.py app.yaml`). Once the changes have been committed and pushed, you can also deploy to production using the same command as above (`gcloud app deploy app.yaml`).
+In order to merge your changes into the production branch, you need to checkout the `prod` branch in Git and merge changes from the `dev` branch into it. 
+
+``` bash
+git checkout prod
+git merge dev
+```
+
+If the merge added a new year with a new shared.js, you'll likely need to update the `shared.firebaseBackend` variable near the top of shared.js to point to the production database. It should be the same as what you see near the top of the shared.js file for previous years.
+
+``` javascript
+shared.firebaseBackend = "https://intense-heat-7228.firebaseio.com/";
+```
+
+You can try out the app with the production data using the same command to start the dev server (`dev_appserver.py app.yaml`). Once the changes have been committed and pushed, you can also deploy to production using the same command as above but with the `--project` flag: 
+
+``` bash
+gcloud app deploy app.yaml --project=easy-nmc
+```
 
 Don't forget to checkout the `dev` branch again after you are done doing the deployment so you'll be ready to make and test your next change.
 
