@@ -75,3 +75,8 @@ This is a summary of the steps needed to update the form for a new year.
      b. The most recent year from last year's report is copied over as the first of two years being reported this year. If adjustments were made by the reviewer, the adjusted values are copied over. This is helpful even if we aren't allowing people to change the values for the first year because they are available for inclusion in the spreadsheet export and can potentially be displayed in the UI for review.
      
      c. We can also display the adjustments that were made last year to give guidance on what to watch out for this year.
+
+6. There is a security rule that needs to be updated each year in Firebase.
+To do that, go to the Firebase admin console located at console.firebase.google.com and look for a security rule on both the production
+and staging versions which says something like $year == '2018'. Change the year
+to the next year.
