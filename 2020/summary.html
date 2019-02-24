@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="easyNmcMetroSummary">
+<head>
+  <title>NMC - Summary</title>
+  <link rel="stylesheet" href="/2020/style.css" type="text/css">
+
+  <!-- AngularJS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+
+  <!-- Firebase -->
+  <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+
+  <!-- AngularFire -->
+  <script src="https://cdn.firebase.com/libs/angularfire/1.1.1/angularfire.min.js"></script>
+
+  <!-- Google APIs -->
+  <script type="text/javascript" src="https://apis.google.com/js/client.js"></script>
+
+  <script src="/2020/shared.js"></script>
+  <script src="/2020/summary.js"></script>
+</head>
+<body class="wide" ng-controller="Ctrl" ng-cloak ng-show="parishIdsFinishedLoading && formDataFinishedLoading && reviewStatusFinishedLoading">
+<p><button ng-click="exportSpreadsheet()">Export To Spreadsheet</button>
+<table class="bordered-table">
+<thead>
+<tr>
+<th>Parish Name</th>
+<th>City</th>
+<th>State</th>
+<!--
+<th>Data Form</th>
+-->
+<th class="small">Data Entered?</th>
+<th class="small">Approved By Parish?</th>
+<th class="small">Status Note</th>
+<th class="small">Reviewer</th>
+<th class="small">Review Status</th>
+<th class="small">Links</th>
+</tr>
+</thead>
+<tbody>
+<tr ng-repeat="(parish_id, parish_data) in parishIds | objectByKeyValFilter : 'excused' : 'true'">
+<td>{{parish_data.name}}</td>
+<td>{{parish_data.city}}</td>
+<td>{{parish_data.state}}</td>
+
+<!--
+<td><a target="data-form" ng-href="parish/{{parish_id}}/data-form/{{FOR_YEAR}}?key={{parish_data.access_key}}">form</a></td>
+-->
+
+<td ng-if="dataEntered(parish_id)" class="good">Yes</td>
+<td ng-if="!dataEntered(parish_id)" class="bad">No</td>
+
+<td ng-if="parishApproval(parish_id) == 'full'" class="good">Yes</td>
+<td ng-if="parishApproval(parish_id) != 'full'" class="bad">No</td>
+
+<td><input ng-change="reviewStatus.$save()" ng-model="reviewStatus.parish[parish_id].note" type="text" size=20></td>
+<td><input ng-change="reviewStatus.$save()" ng-model="reviewStatus.parish[parish_id].reviewer_name" type="text" size=15></td>
+<td ng-class="'small ' + statusClass(reviewStatus.parish[parish_id].review_status, reviewStatus.parish[parish_id].form_edit_mode)">
+  {{ reviewStatus.parish[parish_id].review_status | shortReviewStatus }}, 
+  {{ reviewStatus.parish[parish_id].form_edit_mode | formEditMode }}
+</td>
+
+<td class="small">
+  <a target="review" ng-href="parish/{{parish_id}}/review/{{FOR_YEAR}}">review</a>
+</td>
+</tr>
+</tbody>
+</table>
+<br>
+<table class="bordered-table" ng-if="reviewStatusFinishedLoading">
+<caption>
+<strong>Count of Parishes By Review Status and Reviewer</strong>
+</caption>
+<thead>
+<tr>
+  <th>Reviewer</th><th>Not Started</th><th>Started</th><th>Waiting for Response</th><th>Needs Re-Review</th><th>Finished</th><th>Total</th>
+</tr>
+</thead>
+<tbody>
+<tr ng-repeat="(reviewer, count) in reviewerStatusCount">
+  <th scope="row">
+    {{ reviewer }}
+  </th>
+  <td>
+    {{ count[''] }}
+  </td>
+  <td>
+    {{ count['started'] }}
+  </td>
+  <td>
+    {{ count['waiting'] }}
+  </td>
+  <td>
+    {{ count['re-review'] }}
+  </td>
+  <td>
+    {{ count['finished'] }}
+  </td>
+  <td>
+    <strong>{{ reviewerCount[reviewer] }}</strong>
+  </td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+  <th scope="row">
+    <strong>Total</strong>
+  </th>
+  <td>
+    <strong>{{ statusCount[''] }}</strong>
+  </td>
+  <td>
+    <strong>{{ statusCount['started'] }}</strong>
+  </td>
+  <td>
+    <strong>{{ statusCount['waiting'] }}</strong>
+  </td>
+  <td>
+    <strong>{{ statusCount['re-review'] }}</strong>
+  </td>
+  <td>
+    <strong>{{ statusCount['finished'] }}</strong>
+  </td>
+  <td>
+    <strong>{{ numParishes }}</strong>
+  </td>
+</tr>
+</tfoot>
+</table>
+
+</body>
+</html>

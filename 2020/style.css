@@ -1,0 +1,137 @@
+body {
+  width: 7.5in;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: justify;
+  font-family: Arial, sans-serif;
+}
+
+body.wide {
+  width: 10in;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+@page  
+{ 
+    margin: 1in 1in 1in 1in;  
+} 
+
+body.letter
+{ 
+  margin: 0px 0px 0px 0px;  
+  text-align: justify;
+  font-size: 1.1em;
+} 
+
+h1, h2, h3, h4 {
+  margin-top: 1em;
+  margin-bottom: 0.3em;
+}
+p, ul, ol {
+  margin-top: 0.3em;
+  margin-bottom: 0.6em;
+}
+label {
+  display: inline-block;
+}
+span.input-block {
+  display: inline-block;
+  text-align: left;
+  vertical-align: top;
+}
+*.money, *.number {
+  text-align: right;
+}
+input {
+  font-size: 13.3333px;
+  box-sizing: border-box;
+}
+input.ng-invalid.ng-touched {
+  background-color: #FF999E;
+}
+div.fixed-panel {
+  position: fixed;
+  top: 0em;
+  right: 0.5em;
+}
+div.offline-warning, div.error-message {
+  background-color: #C80000;
+  color: #FFFFFF;
+  padding: 0.2em 1em;
+  margin: 0.5em 0em;
+  font-size: 140%;
+  border-radius: 0.3em;
+  box-shadow: 0.3em 0.3em 0.15em #AFAFAF;
+  text-align: center;
+}
+.explanation {
+  text-align: left;
+}
+th {
+  text-align: center;
+}
+th[scope="row"] {
+  text-align: left;
+  font-weight: normal;
+}
+td {
+  text-align: center;
+}
+.small {
+  font-size: 80%;
+}
+.good {
+  background-color: #B2FEB3;
+}
+.bad {
+  background-color: #FEB2B2;
+}
+.attention {
+  background-color: #F8FF6A;
+}
+.requested-info {
+  background-color: #FFE398;
+}
+.in-progress {
+  background-color: #6AFFF7;
+}
+table.unbordered-table {
+  border-collapse: collapse;
+}
+table.bordered-table td, table.bordered-table th {
+  border: none;
+  padding: 0.1em 0.5em
+}
+table.bordered-table {
+  border-collapse: collapse;
+}
+table.bordered-table tr {
+  height: 1.2em;
+}
+table.bordered-table td, table.bordered-table th {
+  border: thin solid gray;
+  padding: 0.1em 0.5em
+}
+table.bordered-table th.indent {
+  padding-left: 1.5em;
+}
+tr.title {
+  background-color: #BEBEBE;
+  height: 1.2em;
+}
+tr.title td {
+  border: none;
+  height: 1.2em;
+}
+tr.nontabular td {
+  border: none;
+  text-align: left;
+  height: 1.2em;
+}
+table.bordered-table tr.nontabular td {
+  border: none;
+}
+button.image-button {
+  border-width: medium;
+}

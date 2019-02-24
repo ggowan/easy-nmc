@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="easyNmc">
+<head>
+  <title>National Ministries Commitment Form - Login Page</title>
+  <link rel="stylesheet" href="/2020/style.css" type="text/css">
+
+  <!-- AngularJS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+  <script src="//unpkg.com/angular-ui-router@0.4.2/release/angular-ui-router.js"></script>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/5.8.3/firebase.js"></script>
+
+  <script src="/2020/shared.js"></script>
+  <script src="/2020/index.js"></script>
+</head>
+<body ng-controller="Ctrl" ng-cloak>
+<h1 align="center">National Ministries Allocation Data Form for {{year}}</h1>
+<div ng-if="!ready">Loading...</div>
+<ui-view ng-if="ready"></ui-view>
+</body>
+</html>
