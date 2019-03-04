@@ -162,27 +162,7 @@ function copyDataIfReady(parishId, parishInfo, previousFormVal, previousReviewVa
         adjusted: {}
       };
     }
-    copyPropertiesIfPresent(previousFormVal.Y2, previousReviewVal.Y2, currentFormVal.Y1, [
-      'income',
-      'expenses',
-      'nmc',
-      'metro',
-      'arch',
-      'patriarch',
-      'auth_min',
-      'cap',
-      'const_loan',
-      'mort',
-      'fundraising',
-      'school',
-      'religious_ed',
-      'moving',
-      'outreach',
-      'clergy_laity',
-      'catastrophic',
-      'other_hier',
-      'prop_liab'
-    ]);
+    copyPropertiesIfPresent(previousFormVal.Y2, previousReviewVal.Y2, currentFormVal.Y1, shared.FINANCIAL_FIELDS);
     copyPropertiesIfPresent(previousFormVal.Y2, null,
         currentFormVal.Y1, shared.STEWARDSHIP_FIELDS_PER_YEAR);
     if (!currentFormVal.Y2) {

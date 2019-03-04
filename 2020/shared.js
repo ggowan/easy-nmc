@@ -63,22 +63,18 @@ shared.TOP_LEVEL_INFO_FIELDS = [
 // All deduction fields.
 shared.DEDUCTION_FIELDS = [
   'nmc',
-  'arch',
-  'auth_min',
-  'metro',
-  'patriarch',
   'cap',
-  'const_loan',
   'mort',
   'fundraising',
   'school',
-  'religious_ed',
-  'catastrophic',
-  'moving',
   'outreach',
-  'clergy_laity',
-  'other_hier'
 ];
+
+// All financial report fields.
+shared.FINANCIAL_FIELDS = [
+  'income',
+  'expenses'
+].concat(shared.DEDUCTION_FIELDS);
 
 shared.STEWARDSHIP_FIELDS_PER_YEAR = [
   'stew_or_dues',
