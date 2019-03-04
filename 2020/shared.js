@@ -311,6 +311,30 @@ shared.handleMetroLogin = function($scope, callback) {
   });
 };
 
+// A callback-based function to get the current user, signing-in anonymously
+// if there is no current user. The current user (firebase.User type) will be passed to the
+// successCallback function if successful. Otherwise the errorCallback will be
+// invoked with an error message/object. This function is only appropriate for
+// parts of the app that should be accessible anonymously, such as the data form.
+shared.getUser = function(ref, successCallback, errorCallback) {
+  var auth = firebase.auth();
+  var user = auth.currentUser;
+  if (!user) {
+    auth.signInAnonymously().then(function (userCred) {
+      console.log("Authenticated successfully with provider", userCred.user.providerId, 
+          "uid", userCred.user.uid, "user cred", userCred);
+      successCallback(userCred.user);
+    }).catch(function (error) {
+      console.log("Login Failed!", error);
+      errorCallback(error);
+    });
+  } else {
+    console.log("Already authenticated with provider", user.providerId, "uid", user.uid,
+        "user", user);
+    successCallback(user);
+  }
+}
+
 // Stores a parish access key in the specified user's directory.
 //   ref: A Firebase pointing at the root of the tree.
 //   accessKey: The key to store.
@@ -319,7 +343,7 @@ shared.handleMetroLogin = function($scope, callback) {
 //       operation completes. If the parameter is a non-empty string then
 //       the operation failed; otherwise it succeeded.
 shared.storeAccessKey = function(ref, accessKey, user, callback) {
-  var userProfile = ref.child("easy-nmc/user").child(getGoogleUid(user));
+  var userProfile = ref.child("easy-nmc/user").child(user.uid);
   var keys = userProfile.child("access-key");
   keys.child(accessKey).set(true, function(error) {
     if (error) {
