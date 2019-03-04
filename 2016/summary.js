@@ -34,7 +34,7 @@ function refreshDriveDataHelper($scope) {
 }
 
 function setupScope($scope, $firebaseObject) {
-  var ref = new Firebase(shared.firebaseBackend);
+  var ref = new Firebase(base.firebaseBackend);
   $scope.FOR_YEAR = shared.FOR_YEAR;
   $scope.metroRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id);
 
@@ -114,7 +114,7 @@ function setupScope($scope, $firebaseObject) {
         $scope.yearField(parishId, shared.FOR_YEAR-2, 'expenses') != null;
   };
   $scope.refreshDriveData = function() {
-    shared.initDriveApi(function () {refreshDriveDataHelper($scope);});
+    base.initDriveApi(function () {refreshDriveDataHelper($scope);});
   };
   $scope.saveExtension = function() {
     console.log("saving extension ", $scope.parishIds);
@@ -170,7 +170,7 @@ function setupScope($scope, $firebaseObject) {
 }
 
 app.controller("Ctrl", function($scope, $firebaseObject) {
-  shared.handleMetroLogin($scope, function() {
+  base.handleMetroLogin($scope, function() {
     setupScope($scope, $firebaseObject);
   });
 });

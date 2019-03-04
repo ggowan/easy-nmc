@@ -543,7 +543,7 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
 }
 
 function setupScope($scope, $firebaseObject, $filter) {
-  var ref = new Firebase(shared.firebaseBackend);
+  var ref = new Firebase(base.firebaseBackend);
   $scope.FOR_YEAR = shared.FOR_YEAR;
   $scope.metroRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id);
 
@@ -615,10 +615,10 @@ function setupScope($scope, $firebaseObject, $filter) {
         $scope.yearField(parishId, shared.FOR_YEAR-2, 'expenses') != null;
   };
   $scope.refreshDriveData = function() {
-    shared.initDriveApi(function () {refreshDriveDataHelper($scope);});
+    base.initDriveApi(function () {refreshDriveDataHelper($scope);});
   };
   $scope.exportSpreadsheet = function() {
-    shared.initGoogleApi(
+    base.initGoogleApi(
       'https://www.googleapis.com/auth/spreadsheets', 
       'https://sheets.googleapis.com/$discovery/rest?version=v4', 
       function () { exportSpreadsheetHelper($scope, $filter); });
@@ -676,7 +676,7 @@ function setupScope($scope, $firebaseObject, $filter) {
 }
 
 app.controller("Ctrl", function($scope, $firebaseObject, $filter) {
-  shared.handleMetroLogin($scope, function() {
+  base.handleMetroLogin($scope, function() {
     setupScope($scope, $firebaseObject, $filter);
   });
 });

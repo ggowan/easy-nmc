@@ -14,7 +14,7 @@ function anyFieldIsNumber(fields, yearObj) {
 function setupScope($scope, $firebaseObject) {
   $scope.parish_id = $scope.patharray[3];
   $scope.year = $scope.patharray[5];
-  var ref = new Firebase(shared.firebaseBackend);
+  var ref = new Firebase(base.firebaseBackend);
   var metroRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id);
   var parishIdRef = metroRef.child("/parish-id/" + $scope.parish_id);
   parishIdRef.child("name").on("value", function(snap) {
@@ -108,13 +108,13 @@ function setupScope($scope, $firebaseObject) {
   $scope.totalDeductions = function(year) {
     if (!$scope.formData) return null;
     var yearField = shared.yearToYearField(year);
-    return shared.sumFields(
+    return base.sumFields(
         shared.DEDUCTION_FIELDS, $scope.reviewData[yearField], $scope.formData[yearField]);
   };
   $scope.totalOriginalDeductions = function(year) {
     if (!$scope.formData) return null;
     var yearField = shared.yearToYearField(year);
-    return shared.sumFields(
+    return base.sumFields(
         shared.DEDUCTION_FIELDS, $scope.formData[yearField]);
   };
   $scope.totalOriginalDeductionsIfChanged = function(year) {
@@ -178,7 +178,7 @@ function setupScope($scope, $firebaseObject) {
 }
 
 app.controller("Ctrl", function($scope, $firebaseObject) {
-  shared.handleMetroLogin($scope, function() {
+  base.handleMetroLogin($scope, function() {
     setupScope($scope, $firebaseObject);
   });
 });

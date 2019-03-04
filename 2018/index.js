@@ -20,7 +20,7 @@ function getAuth(ref, successCallback, errorCallback) {
 
 app.controller("Ctrl", function($scope, $state, $location, $urlRouter) {
   $scope.year = shared.FOR_YEAR;
-  var ref = new Firebase(shared.firebaseBackend);
+  var ref = new Firebase(base.firebaseBackend);
   ref.child("easy-nmc/public/metropolis-summary").once("value", function(snap) {
     $scope.error = null;
     $scope.metro_summary = snap.val();
@@ -108,7 +108,7 @@ app.controller("Ctrl", function($scope, $state, $location, $urlRouter) {
     $scope.pendingKeyCheck++;
     getAuth(ref, function(auth) {
       $scope.error = null;
-      shared.storeAccessKey(ref, accessKey, auth, function(error) {
+      base.storeAccessKey(ref, accessKey, auth, function(error) {
         console.log('finished store', error);
         $scope.error = error;
         if (error) {

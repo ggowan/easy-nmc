@@ -61,7 +61,7 @@ function createFoldersAuthorized($scope) {
 
 function createParishFolders($scope) {
   console.log("createParishFolders called with $scope.metaData.upload_folder: ", $scope.metaData.upload_folder);
-  shared.initDriveApi(function() {createFoldersAuthorized($scope);});
+  base.initDriveApi(function() {createFoldersAuthorized($scope);});
 }
 
 // Copies a single property from the formSource to the dest object. If reviewSource is provided,
@@ -209,7 +209,7 @@ function copyDataIfReady(parishId, parishInfo, previousFormVal, previousReviewVa
 }
 
 function setupScope($scope, $firebaseObject) {
-  var ref = shared.getRootRef();
+  var ref = base.getRootRef();
   console.log("in setupScope, ref= ", ref, "; current user= ", firebase.auth().currentUser);
   $scope.metroRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id);
   $scope.forYear = shared.FOR_YEAR;
@@ -317,7 +317,7 @@ function setupScope($scope, $firebaseObject) {
 }
 
 app.controller("Ctrl", function($scope, $firebaseObject) {
-  shared.handleMetroLogin($scope, function() {
+  base.handleMetroLogin($scope, function() {
     setupScope($scope, $firebaseObject);
   });
 });

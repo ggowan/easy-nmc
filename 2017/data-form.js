@@ -62,7 +62,7 @@ function bindFirebase($scope, $firebaseObject, ref) {
       yearObj.patriarch, yearObj.cap, yearObj.const_loan, yearObj.mort,
       yearObj.fundraising, yearObj.school, yearObj.religious_ed, yearObj.catastrophic,
       yearObj.moving, yearObj.outreach, yearObj.clergy_laity, yearObj.other_hier
-    ].reduce(shared.sumNumbers);
+    ].reduce(base.sumNumbers);
     return total;
   };
   $scope.editing = function() {
@@ -103,7 +103,7 @@ function setupSession($scope, $firebaseObject, ref, auth) {
     pathname = pathname.substr(1);
   }
   var patharray = pathname.split('/');
-  var queryParams = shared.getQueryParams(url_parser.search);
+  var queryParams = base.getQueryParams(url_parser.search);
   $scope.metropolis_id = patharray[1];
   $scope.parish_id = patharray[3];
   $scope.year = patharray[5];
@@ -126,7 +126,7 @@ function setupSession($scope, $firebaseObject, ref, auth) {
 }
 
 app.controller("Ctrl", function($scope, $firebaseObject) {
-  var ref = new Firebase(shared.firebaseBackend);
+  var ref = new Firebase(base.firebaseBackend);
 
   var auth = ref.getAuth();
   if (!auth) {

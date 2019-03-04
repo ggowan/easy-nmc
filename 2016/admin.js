@@ -61,11 +61,11 @@ function createFoldersAuthorized($scope) {
 
 function createParishFolders($scope) {
   console.log("createParishFolders called with $scope.metaData.upload_folder: ", $scope.metaData.upload_folder);
-  shared.initDriveApi(function() {createFoldersAuthorized($scope);});
+  base.initDriveApi(function() {createFoldersAuthorized($scope);});
 }
 
 function setupScope($scope, $firebaseObject) {
-  var ref = new Firebase(shared.firebaseBackend);
+  var ref = new Firebase(base.firebaseBackend);
   $scope.metroRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id);
   $scope.addParish = function(parishId) {
     console.log("addParish", parishId);
@@ -114,7 +114,7 @@ function setupScope($scope, $firebaseObject) {
 }
 
 app.controller("Ctrl", function($scope, $firebaseObject) {
-  shared.handleMetroLogin($scope, function() {
+  base.handleMetroLogin($scope, function() {
     setupScope($scope, $firebaseObject);
   });
 });

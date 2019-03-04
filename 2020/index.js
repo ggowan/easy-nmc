@@ -4,7 +4,7 @@ app.controller("Ctrl", function($scope, $state, $location, $urlRouter) {
   $scope.year = shared.FOR_YEAR;
 
   // Initialize Firebase
-  firebase.initializeApp(shared.firebaseConfig);
+  firebase.initializeApp(base.firebaseConfig);
   var ref = firebase.database().ref();
   ref.child("easy-nmc/public/metropolis-summary").once("value", function(snap) {
     $scope.error = null;
@@ -40,7 +40,7 @@ app.controller("Ctrl", function($scope, $state, $location, $urlRouter) {
   // Checks to see if the user has access to the form for the specified
   // parish. If so, invokes successCallback; otherwise, failureCallback.
   $scope.checkAccess = function(parishId, successCallback, failureCallback) {
-    shared.getUser(ref, function(user) {
+    base.getUser(ref, function(user) {
       $scope.error = null;
       // Test to see if the access key is working by reading small piece of
       // data from protected area.
@@ -85,9 +85,9 @@ app.controller("Ctrl", function($scope, $state, $location, $urlRouter) {
   $scope.submitKey = function(accessKey) {
     console.log('submitKey', accessKey);
     $scope.pendingKeyCheck++;
-    shared.getUser(ref, function(user) {
+    base.getUser(ref, function(user) {
       $scope.error = null;
-      shared.storeAccessKey(ref, accessKey, user, function(error) {
+      base.storeAccessKey(ref, accessKey, user, function(error) {
         console.log('finished store', error);
         $scope.error = error;
         if (error) {

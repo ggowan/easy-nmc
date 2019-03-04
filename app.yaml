@@ -144,6 +144,11 @@ handlers:
   upload: 2016/.*\.(gif|png|jpg|html|css|js)$
   secure: always
 
+- url: /(.*\.(gif|png|jpg|html|css|js))$
+  static_files: \1
+  upload: .*\.(gif|png|jpg|html|css|js)$
+  secure: always
+
 - url: /.*
   static_files: 2020/index.html
   upload: 2020/index.html

@@ -62,7 +62,7 @@ function bindFirebase($scope, $firebaseObject, ref) {
       yearObj.patriarch, yearObj.cap, yearObj.const_loan, yearObj.mort,
       yearObj.fundraising, yearObj.school, yearObj.religious_ed, yearObj.catastrophic,
       yearObj.moving, yearObj.outreach, yearObj.clergy_laity, yearObj.other_hier
-    ].reduce(shared.sumNumbers);
+    ].reduce(base.sumNumbers);
     return total;
   };
   $scope.editing = function() {
@@ -103,14 +103,14 @@ function setupSession($scope, $firebaseObject, ref, user) {
     pathname = pathname.substr(1);
   }
   var patharray = pathname.split('/');
-  var queryParams = shared.getQueryParams(url_parser.search);
+  var queryParams = base.getQueryParams(url_parser.search);
   $scope.metropolis_id = patharray[1];
   $scope.parish_id = patharray[3];
   $scope.year = patharray[5];
   $scope.user = user;
   console.log("metropolis_id: ", $scope.metropolis_id, " parish_id: ", $scope.parish_id, " year: ", $scope.year);
   if ("key" in queryParams) {
-    shared.storeAccessKey(ref, queryParams.key, user, function(error) {
+    base.storeAccessKey(ref, queryParams.key, user, function(error) {
       bindFirebase($scope, $firebaseObject, ref);
     });
   } else {
@@ -119,9 +119,9 @@ function setupSession($scope, $firebaseObject, ref, user) {
 }
 
 app.controller("Ctrl", function($scope, $firebaseObject) {
-  firebase.initializeApp(shared.firebaseConfig);
+  firebase.initializeApp(base.firebaseConfig);
   var ref = firebase.database().ref();
-  shared.getUser(ref, function(user) {
+  base.getUser(ref, function(user) {
     setupSession($scope, $firebaseObject, ref, user);
   }, function(error) {
     console.log("Couldn't get user!", error);

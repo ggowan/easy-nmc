@@ -1,7 +1,7 @@
 var app = angular.module("easyNmc", []);
 
 function setupScope($scope) {
-  firebase.initializeApp(shared.firebaseConfig);
+  firebase.initializeApp(base.firebaseConfig);
   var ref = firebase.database().ref();
   let metroRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id);
   let parishIdRef = metroRef.child("parish-id");
@@ -17,9 +17,9 @@ function setupScope($scope) {
 }
 
 app.controller("Ctrl", function($scope) {
-  shared.handleMetroLogin($scope, function() {
+  base.handleMetroLogin($scope, function() {
     setupScope($scope);
   });
 });
 
-app.filter('objectByKeyValFilter', shared.objectByKeyValFilter);
+app.filter('objectByKeyValFilter', base.objectByKeyValFilter);
