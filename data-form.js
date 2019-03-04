@@ -57,24 +57,18 @@ function bindFirebase($scope, $firebaseObject, ref) {
 
   $scope.totalDeductions = function(yearObj) {
     if (yearObj === undefined) return 0;
-    var total = [
-      yearObj.nmc, yearObj.arch, yearObj.auth_min, yearObj.metro,
-      yearObj.patriarch, yearObj.cap, yearObj.const_loan, yearObj.mort,
-      yearObj.fundraising, yearObj.school, yearObj.religious_ed, yearObj.catastrophic,
-      yearObj.moving, yearObj.outreach, yearObj.clergy_laity, yearObj.other_hier
-    ].reduce(base.sumNumbers);
-    return total;
+    return base.sumFields(shared.DEDUCTION_FIELDS, yearObj);
   };
   $scope.editing = function() {
     return $scope.form_edit_mode !== 'locked' && $scope.firebaseData.editing_user && 
-        $scope.firebaseData.editing_user === $scope.auth.uid && $scope.infoFinishedLoading &&
+        $scope.firebaseData.editing_user === $scope.user.uid && $scope.infoFinishedLoading &&
         $scope.firebaseInfo.connected;
   };
   $scope.toggleEditing = function() {
     if ($scope.editing()) {
       $scope.firebaseData.editing_user = '';
     } else {
-      $scope.firebaseData.editing_user = $scope.auth.uid;
+      $scope.firebaseData.editing_user = $scope.user.uid;
     }
     $scope.firebaseData.$save();
   };
@@ -93,7 +87,7 @@ function bindFirebase($scope, $firebaseObject, ref) {
   });
 }
 
-function setupSession($scope, $firebaseObject, ref, auth) {
+function setupSession($scope, $firebaseObject, ref, user) {
   var url_parser = document.createElement('a');
   url_parser.href = document.URL;
   var pathname = url_parser.pathname;
@@ -107,10 +101,10 @@ function setupSession($scope, $firebaseObject, ref, auth) {
   $scope.metropolis_id = patharray[1];
   $scope.parish_id = patharray[3];
   $scope.year = patharray[5];
-  $scope.auth = auth;
+  $scope.user = user;
   console.log("metropolis_id: ", $scope.metropolis_id, " parish_id: ", $scope.parish_id, " year: ", $scope.year);
   if ("key" in queryParams) {
-    base.storeAccessKey(ref, queryParams.key, auth, function(error) {
+    base.storeAccessKey(ref, queryParams.key, user, function(error) {
       bindFirebase($scope, $firebaseObject, ref);
     });
   } else {
@@ -119,22 +113,13 @@ function setupSession($scope, $firebaseObject, ref, auth) {
 }
 
 app.controller("Ctrl", function($scope, $firebaseObject) {
-  var ref = new Firebase(base.firebaseBackend);
-
-  var auth = ref.getAuth();
-  if (!auth) {
-    ref.authAnonymously(function(error, authData) {
-      if (error) {
-        console.log("Login Failed!", error);
-      } else {
-        console.log("Authenticated successfully with payload:", authData);
-        setupSession($scope, $firebaseObject, ref, authData);
-      }
-    });
-  } else {
-    console.log("Already authenticated: ", auth);
-    setupSession($scope, $firebaseObject, ref, auth);
-  }
+  firebase.initializeApp(base.firebaseConfig);
+  var ref = firebase.database().ref();
+  base.getUser(ref, function(user) {
+    setupSession($scope, $firebaseObject, ref, user);
+  }, function(error) {
+    console.log("Couldn't get user!", error);
+  });
 });
 
 // Checks whether the specified string appears to be a number, optionally
