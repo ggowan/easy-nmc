@@ -145,10 +145,13 @@ trays, restricted and unrestricted funds.
 </ol>
 <table>
   <thead>
-    <tr><th>{{ year - 2 }}</tr>
+    <tr><th>{{ year - 3 }}<th>{{ year - 2 }}</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.income" type="text" style="width: 7em"></tr>
+    <tr>
+      <td><input ng-model="firebaseData.Y1.income" class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" type="text" style="width: 7em"></td>
+      <td><input ng-model="firebaseData.Y2.income" class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" type="text" style="width: 7em"></td>
+    </tr>
   </tbody>
 </table>
 <p>If the above does not appear exactly as in your P&amp;L, please explain the calculation here:<br>
@@ -163,10 +166,13 @@ endowment fund.
 </ol>
 <table>
   <thead>
-    <tr><th>{{ year - 2 }}</tr>
+    <tr><th>{{ year - 3 }}<th>{{ year - 2 }}</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.expenses" type="text" style="width: 7em"></tr>
+    <tr>
+      <td><input ng-model="firebaseData.Y1.expenses" class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" type="text" style="width: 7em"></td>
+      <td><input ng-model="firebaseData.Y2.expenses" class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" type="text" style="width: 7em"></td>
+    </tr>
   </tbody>
 </table>
 <p>If the above does not appear exactly as in your P&amp;L, please explain the calculation here:<br>
@@ -187,10 +193,13 @@ expenses on Line B and then deduct the expenses.
 <p>Actual amount paid during the calendar year toward the National Ministries Allocation. Do not include payments for clergy pension or other benefits.
 <table>
   <thead>
-    <tr><th>{{ year - 2 }}</tr>
+    <tr><th>{{ year - 3 }}<th>{{ year - 2 }}</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.nmc" type="text" style="width: 7em"></tr>
+    <tr>
+      <td><input ng-model="firebaseData.Y1.nmc" class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" type="text" style="width: 7em"></td>
+      <td><input ng-model="firebaseData.Y2.nmc" class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" type="text" style="width: 7em"></td>
+    </tr>
   </tbody>
 </table>
 <p>Line(s) on P&amp;L containing the deducted expenses:<br>
@@ -211,10 +220,13 @@ employees may not be applied to this item. Capital expenditures include the foll
 </ul>
 <table>
   <thead>
-    <tr><th>{{ year - 2 }}</tr>
+    <tr><th>{{ year - 3 }}<th>{{ year - 2 }}</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.cap" type="text" style="width: 7em"></tr>
+    <tr>
+      <td><input ng-model="firebaseData.Y1.cap" class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" type="text" style="width: 7em"></td>
+      <td><input ng-model="firebaseData.Y2.cap" class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" type="text" style="width: 7em"></td>
+    </tr>
   </tbody>
 </table>
 <p>Line(s) on P&amp;L containing the deducted expenses:<br>
@@ -230,10 +242,13 @@ employees may not be applied to this item. Capital expenditures include the foll
 <p>As a reminder, only amounts that were included in parish gross expenses (section B, above) are deductible.
 <table>
   <thead>
-    <tr><th>{{ year - 2 }}</tr>
+    <tr><th>{{ year - 3 }}<th>{{ year - 2 }}</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.mort" type="text" style="width: 7em"></tr>
+    <tr>
+      <td><input ng-model="firebaseData.Y1.mort" class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" type="text" style="width: 7em"></td>
+      <td><input ng-model="firebaseData.Y2.mort" class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" type="text" style="width: 7em"></td>
+    </tr>
   </tbody>
 </table>
 <p>Line(s) on P&amp;L containing the deducted expenses:<br>
@@ -249,10 +264,13 @@ employees may not be applied to this item. Capital expenditures include the foll
 </ol>
 <table>
   <thead>
-    <tr><th>{{ year - 2 }}</tr>
+    <tr><th>{{ year - 3 }}<th>{{ year - 2 }}</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.fundraising" type="text" style="width: 7em"></tr>
+    <tr>
+      <td><input ng-model="firebaseData.Y1.fundraising" class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" type="text" style="width: 7em"></td>
+      <td><input ng-model="firebaseData.Y2.fundraising" class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" type="text" style="width: 7em"></td>
+    </tr>
   </tbody>
 </table>
 <p>Please list the lines on the P&amp;L containing the deducted expenses:<br>
@@ -293,10 +311,13 @@ employees may not be applied to this item. Capital expenditures include the foll
 </ol>
 <table>
   <thead>
-    <tr><th>{{ year - 2 }}</tr>
+    <tr><th>{{ year - 3 }}<th>{{ year - 2 }}</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.school" type="text" style="width: 7em"></tr>
+    <tr>
+      <td><input ng-model="firebaseData.Y1.school" class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" type="text" style="width: 7em"></td>
+      <td><input ng-model="firebaseData.Y2.school" class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" type="text" style="width: 7em"></td>
+    </tr>
   </tbody>
 </table>
 <p>Line(s) on P&amp;L containing the deducted expenses:<br>
@@ -315,10 +336,13 @@ the United States
 <p>Gifts to parish controlled foundations or trusts are not allowable deductions.
 <table>
   <thead>
-    <tr><th>{{ year - 2 }}</tr>
+    <tr><th>{{ year - 3 }}<th>{{ year - 2 }}</tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model="firebaseData.Y2.outreach" type="text" style="width: 7em"></tr>
+    <tr>
+      <td><input ng-model="firebaseData.Y1.outreach" class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" type="text" style="width: 7em"></td>
+      <td><input ng-model="firebaseData.Y2.outreach" class="money" dollars ng-readonly="!editing()" ng-change="firebaseData.$save()" type="text" style="width: 7em"></td>
+    </tr>
   </tbody>
 </table>
 <p>Line(s) on P&amp;L containing the deducted expenses:<br>
@@ -409,23 +433,31 @@ the United States
 <p>This section is automatically populated with the values you enter above.
 <table class="bordered-table">
 <thead>
-<tr><th>Line</th><th>Description</th><th>{{ year - 2 }}</th></tr>
+<tr><th>Line</th><th>Description</th><th>{{ year - 3 }}</th><th>{{ year - 2 }}</th></tr>
 </thead>
 <tbody>
-<tr><td><strong>A</strong></td><th scope=row><strong>Total Income</strong></th><td class=money><strong>{{ (firebaseData.Y2.income || 0) | currency : $ : 0 }}</strong></td></tr>
-<tr><td><strong>B</strong></td><th scope=row><strong>Total Expenses</strong></th><td class=money><strong>{{ (firebaseData.Y2.expenses || 0) | currency : $ : 0 }}</strong></td></tr>
-<tr><td>C1</td><th scope=row class="indent">National Ministries Commitment</th><td class=money>{{ (firebaseData.Y2.nmc || 0) | currency : $ : 0 }}</td></tr>
-<tr><td>C2</td><th scope=row class="indent">Capital Improvement</th><td class=money>{{ (firebaseData.Y2.cap || 0) | currency : $ : 0 }}</td></tr>
-<tr><td>C3</td><th scope=row class="indent">Mortgage/Construction Loans</th><td class=money>{{ (firebaseData.Y2.mort || 0) | currency : $ : 0 }}</td></tr>
-<tr><td>C4</td><th scope=row class="indent">Fundraising Expenses</th><td class=money>{{ (firebaseData.Y2.fundraising || 0) | currency : $ : 0 }}</td></tr>
-<tr><td>C5</td><th scope=row class="indent">School Expenses</th><td class=money>{{ (firebaseData.Y2.school || 0) | currency : $ : 0 }}</td></tr>
-<tr><td>C6</td><th scope=row class="indent">Charitable Giving</th><td class=money>{{ (firebaseData.Y2.outreach || 0) | currency : $ : 0 }}</td></tr>
-<tr><td><strong>C</strong></td><th scope=row><strong>Total Deductions</strong></th><td class=money><strong>{{ totalDeductions(firebaseData.Y2) | currency : $ : 0 }}</strong></td></tr>
-<tr><td><strong>B-C</strong></td><th scope=row><strong>Net Expenses</strong></th>
-<td class=money><strong>{{ firebaseData.Y2.expenses - totalDeductions(firebaseData.Y2) | currency : $ : 0 }}</strong></td></tr>
+<tr><td><strong>A</strong></td><th scope=row><strong>Total Income</strong></th><td class=money><strong>{{ (firebaseData.Y1.income || 0) | currency : $ : 0 }}</strong></td><td class=money><strong>{{ (firebaseData.Y2.income || 0) | currency : $ : 0 }}</strong></td></tr>
+<tr><td><strong>B</strong></td><th scope=row><strong>Total Expenses</strong></th><td class=money><strong>{{ (firebaseData.Y1.expenses || 0) | currency : $ : 0 }}</strong></td><td class=money><strong>{{ (firebaseData.Y2.expenses || 0) | currency : $ : 0 }}</strong></td></tr>
+<tr><td>C1</td><th scope=row class="indent">National Ministries Commitment</th><td class=money>{{ (firebaseData.Y1.nmc || 0) | currency : $ : 0 }}</td><td class=money>{{ (firebaseData.Y2.nmc || 0) | currency : $ : 0 }}</td></tr>
+<tr><td>C2</td><th scope=row class="indent">Capital Improvement</th><td class=money>{{ (firebaseData.Y1.cap || 0) | currency : $ : 0 }}</td><td class=money>{{ (firebaseData.Y2.cap || 0) | currency : $ : 0 }}</td></tr>
+<tr><td>C3</td><th scope=row class="indent">Mortgage/Construction Loans</th><td class=money>{{ (firebaseData.Y1.mort || 0) | currency : $ : 0 }}</td><td class=money>{{ (firebaseData.Y2.mort || 0) | currency : $ : 0 }}</td></tr>
+<tr><td>C4</td><th scope=row class="indent">Fundraising Expenses</th><td class=money>{{ (firebaseData.Y1.fundraising || 0) | currency : $ : 0 }}</td><td class=money>{{ (firebaseData.Y2.fundraising || 0) | currency : $ : 0 }}</td></tr>
+<tr><td>C5</td><th scope=row class="indent">School Expenses</th><td class=money>{{ (firebaseData.Y1.school || 0) | currency : $ : 0 }}</td><td class=money>{{ (firebaseData.Y2.school || 0) | currency : $ : 0 }}</td></tr>
+<tr><td>C6</td><th scope=row class="indent">Charitable Giving</th><td class=money>{{ (firebaseData.Y1.outreach || 0) | currency : $ : 0 }}</td><td class=money>{{ (firebaseData.Y2.outreach || 0) | currency : $ : 0 }}</td></tr>
+<tr><td><strong>C</strong></td><th scope=row><strong>Total Deductions</strong></th><td class=money><strong>{{ totalDeductions(firebaseData.Y1) | currency : $ : 0 }}</strong></td><td class=money><strong>{{ totalDeductions(firebaseData.Y2) | currency : $ : 0 }}</strong></td></tr>
+<tr>
+  <td><strong>B-C</strong></td>
+  <th scope=row><strong>Net Expenses</strong></th>
+  <td class=money><strong>{{ firebaseData.Y1.expenses - totalDeductions(firebaseData.Y1) | currency : $ : 0 }}</strong></td>
+  <td class=money><strong>{{ firebaseData.Y2.expenses - totalDeductions(firebaseData.Y2) | currency : $ : 0 }}</strong></td>
+</tr>
 <tr style="height: 1em"></tr>
-<tr><td style="border:none"></td><th scope=row>Stewardship/Dues Income</th>
-<td class=money>{{ (firebaseData.Y2.stew_income || 0) | currency : $ : 0 }}</td></tr>
+<tr>
+  <td style="border:none"></td>
+  <th scope=row>Stewardship/Dues Income</th>
+  <td class=money>{{ (firebaseData.Y1.stew_income || 0) | currency : $ : 0 }}</td>
+  <td class=money>{{ (firebaseData.Y2.stew_income || 0) | currency : $ : 0 }}</td>
+</tr>
 </tbody>
 </table>
 </section>
