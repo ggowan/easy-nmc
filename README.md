@@ -24,6 +24,13 @@ After committing and pushing your changes on the dev branch you can deploy the a
 gcloud app deploy app.yaml
 ```
 
+Sometimes you may get an error saying you have too many versions deployed. In that case you can clean up using commands like this:
+
+``` bash
+gcloud app versions list
+app versions delete VERSIONS
+```
+
 The development deployment can be accessed at https://friendly-aurora-855.appspot.com/. It has a separate Firebase database from the production deployment so can be used to safely try out changes without affecting the data in the production deployment.
 
 In order to merge your changes into the production branch, you need to checkout the `prod` branch in Git and merge changes from the `dev` branch into it. 
