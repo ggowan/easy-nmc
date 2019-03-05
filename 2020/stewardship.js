@@ -1,7 +1,8 @@
 var app = angular.module("easyNmcMetroStewardship", ["firebase"]);
 
 function setupScope($scope, $firebaseObject) {
-  var ref = new Firebase(base.firebaseBackend);
+  firebase.initializeApp(base.firebaseConfig);
+  var ref = firebase.database().ref();
   $scope.FOR_YEAR = shared.FOR_YEAR;
   $scope.metroRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id);
 
@@ -43,7 +44,7 @@ function setupScope($scope, $firebaseObject) {
     if (!$scope.formData || !$scope.formData.parish) return null;
     var parishData = $scope.formData.parish[parishId];
     if (!parishData) return null;
-    var yearData = parishData['Y' + year];
+    var yearData = parishData[shared.yearToYearField(year)];
     if (!yearData) return null;
     return yearData[fieldName];
   };

@@ -1,7 +1,8 @@
 var app = angular.module("easyNmc", []);
 
 function setupScope($scope) {
-  var ref = new Firebase(base.firebaseBackend);
+  firebase.initializeApp(base.firebaseConfig);
+  var ref = firebase.database().ref();
   let metroRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id);
   let parishIdRef = metroRef.child("parish-id");
   $scope.year = shared.FOR_YEAR;

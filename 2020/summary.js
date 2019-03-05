@@ -1,38 +1,5 @@
 var app = angular.module("easyNmcMetroSummary", ["firebase"]);
 
-function refreshDriveDataHelper($scope) {
-  angular.forEach($scope.parishIds, function(parishData, parishId) {
-    var parishDriveFolder = parishData.upload_folder;
-    var listParams = {q: "'" + (parishDriveFolder + "' in parents")};
-    console.log('listParams: ', listParams);
-    var request = gapi.client.drive.files.list(listParams);
-    console.log('sending drive request: ', request);
-    request.execute(function(resp) {
-      console.log('got response for ' + parishId + ': ', resp);
-      var driveEmpty = resp.items.length == 0;
-      if (parishData.driveEmpty != driveEmpty) {
-        console.log("updating driveEmpty for parish " + parishId + " to " + driveEmpty);
-        $scope.$apply(function ($scope) {
-          parishData.driveEmpty = driveEmpty;
-          if (driveEmpty) {
-            console.log("applying empty drive changes for " + parishId);
-            if (typeof parishData[$scope.FOR_YEAR-3] === "undefined") {
-              parishData[$scope.FOR_YEAR-3] = {};
-            }
-            if (typeof parishData[$scope.FOR_YEAR-2] == "undefined") {
-              parishData[$scope.FOR_YEAR-2] = {};
-            }
-            parishData[$scope.FOR_YEAR-3].have_pl = false;
-            parishData[$scope.FOR_YEAR-2].have_pl = false;
-            parishData[$scope.FOR_YEAR-3].have_bal = false;
-            parishData[$scope.FOR_YEAR-2].have_bal = false;
-          }
-        });
-      }
-    });
-  });
-}
-
 function exportSpreadsheetHelper($scope, $filter) {
   var reviewDataRef = $scope.metroRef.child("/review-data/" + shared.FOR_YEAR + "/parish");
   reviewDataRef.once("value", function(snap) {
@@ -184,6 +151,9 @@ function footerRow() {
 }
 
 function contactRow(contactType, prefix, parishFormData) {
+  if (!parishFormData) {
+    return row(contactType);
+  }
   return row(contactType, parishFormData[prefix + "_name"], "",
     parishFormData[prefix + "_phone"], "", parishFormData[prefix + "_email"]);
 }
@@ -211,7 +181,7 @@ function dataRow($filter, line, description, fieldName, parishReviewData, parish
     commentField = fieldName + "_comment";
   }
   return row(line, description, "",
-    dataCell($filter, shared.FOR_YEAR-3, fieldName, parishReviewData, parishFormData),
+    //dataCell($filter, shared.FOR_YEAR-3, fieldName, parishReviewData, parishFormData),
     dataCell($filter, shared.FOR_YEAR-2, fieldName, parishReviewData, parishFormData),
     wrappedCell(explanation), "",
     wrappedCell(parishReviewData ? parishReviewData[commentField] : ""));
@@ -254,11 +224,11 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
         startRow: 0,
         startColumn: 0,
         rowData: [
-          headerRow("", "", "", "", "", "Total Parish", "", "Total Parish", "", "Total", "", "Total Net", "", "", "Average Net", "# Households"),
-          headerRow("", "", "", "", "", "Income", "", "Expenditures", "", "Deductions", "", "Operating Expense", "", "", "Expenses", "Over"),
+          headerRow("", "", "", "", "", "Total Parish", "", "Total Parish", "", "Total", "", "Total Net", "", "", "Average Net"/*, "# Households"*/),
+          headerRow("", "", "", "", "", "Income", "", "Expenditures", "", "Deductions", "", "Operating Expense", "", "", "Expenses"/*, "Over"*/),
           headerRow("Sheet", "ID#", "Parish", "City, State", "", shared.FOR_YEAR-3, shared.FOR_YEAR-2,
               shared.FOR_YEAR-3, shared.FOR_YEAR-2, shared.FOR_YEAR-3, shared.FOR_YEAR-2, shared.FOR_YEAR-3, 
-              shared.FOR_YEAR-2, "", "for " + String(shared.FOR_YEAR), "$300"),
+              shared.FOR_YEAR-2, "", "for " + String(shared.FOR_YEAR)/*, "$300"*/),
         ],
       },
     ],
@@ -352,50 +322,38 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
             contactRow(boldCell("Treasurer"), "treas", parishFormData),
             contactRow(boldCell("President"), "pres", parishFormData),
             contactRow(boldCell("Priest"), "priest", parishFormData),
-            row(boldCell("Reviewer"), parishReviewStatus.reviewer_name),
+            row(boldCell("Reviewer"), parishReviewStatus ? parishReviewStatus.reviewer_name : ""),
             row(),
-            headerRow("Line", "Description", "", String(shared.FOR_YEAR-3), String(shared.FOR_YEAR-2),
+            headerRow("Line", "Description", "", /*String(shared.FOR_YEAR-3),*/ String(shared.FOR_YEAR-2),
               "Parish Notes", "", "Reviewer Comments"),
             dataRow($filter, centeredCell("A"), "Gross Income", "income", parishReviewData, parishFormData,
               "income_explanation"),
             dataRow($filter, centeredCell("B"), "Gross Expenses", "expenses", parishReviewData, parishFormData,
               "expense_explanation", "expense_comment"),
             dataRow($filter, centeredCell("C1"), "National Ministries Commitment", "nmc", parishReviewData, parishFormData),
-            dataRow($filter, centeredCell("C2"), "Donations to Archdiocese", "arch", parishReviewData, parishFormData, 
-              "arch_don_lines", "arch_don_comment"),
-            dataRow($filter, centeredCell("C3"), "Assembly of Bishops Ministries", "auth_min", parishReviewData, parishFormData),
-            dataRow($filter, centeredCell("C4"), "Donations to Metropolis", "metro", parishReviewData, parishFormData),
-            dataRow($filter, centeredCell("C5"), "Donations to Patriarchate", "patriarch", parishReviewData, parishFormData),
-            dataRow($filter, centeredCell("C6"), "Capital Improvement", "cap", parishReviewData, parishFormData,
+            dataRow($filter, centeredCell("C2"), "Capital Improvement", "cap", parishReviewData, parishFormData,
               ["cap_lines", "cap_projects"], "cap_comment"),
-            dataRow($filter, centeredCell("C7"), "Construction Loan", "const_loan", parishReviewData, parishFormData),
-            dataRow($filter, centeredCell("C8"), "Mortgage", "mort", parishReviewData, parishFormData),
-            dataRow($filter, centeredCell("C9"), "Fundraising Expenses", "fundraising", parishReviewData, parishFormData),
-            dataRow($filter, centeredCell("C10"), "Greek/Day School Expenses", "school", parishReviewData, parishFormData),
-            dataRow($filter, centeredCell("C11"), "Religious Ed.", "religious_ed", parishReviewData, parishFormData),
-            dataRow($filter, centeredCell("C12"), "Catastrophic Risk Insurance", "catastrophic", parishReviewData, parishFormData),
-            dataRow($filter, centeredCell("C13"), "Clergy Moving Expenses", "moving", parishReviewData, parishFormData),
-            dataRow($filter, centeredCell("C14"), "Outreach and Evangelism", "outreach", parishReviewData, parishFormData),
-            dataRow($filter, centeredCell("C15"), "Clergy Laity Congress", "clergy_laity", parishReviewData, parishFormData),
-            dataRow($filter, centeredCell("C16"), "Other Deductions", "other_hier", parishReviewData, parishFormData,
-              ["other_hier_lines", "other_hier_explanation"], "other_hier_comment"),
-            row(centeredCell("C"), "Total Deductions", "", formulaCell("=SUM(D15:D30)"), formulaCell("=SUM(E15:E30)")),
-            row(centeredCell("B-C"), "Net Expenses", "", formulaCell("=D14-D31"), formulaCell("=E14-E31")),
-            row(),
+            dataRow($filter, centeredCell("C3"), "Mortgage/Construction Loans", "mort", parishReviewData, parishFormData),
+            dataRow($filter, centeredCell("C4"), "Fundraising Expenses", "fundraising", parishReviewData, parishFormData),
+            dataRow($filter, centeredCell("C5"), "School Expenses", "school", parishReviewData, parishFormData),
+            dataRow($filter, centeredCell("C6"), "Charitable Giving", "outreach", parishReviewData, parishFormData),
+            row(centeredCell("C"), "Total Deductions", "", formulaCell("=SUM(D15:D20)")/*, formulaCell("=SUM(E15:E20)")*/),
+            row(centeredCell("B-C"), "Net Expenses", "", formulaCell("=D14-D21")/*, formulaCell("=E14-E21")*/),
+            /*row(),
             dataRow($filter, "", "Property Insurance", "prop_liab", parishReviewData, parishFormData),
             dataRow($filter, "", "Total Stewardship", "stew_income", parishReviewData, parishFormData),
             dataRow($filter, "", "Number of Members", "num_members", parishReviewData, parishFormData),
             row(),
             row(boldCell("Number of stewards")),
-            row("$5,000+", Number(parishFormData.num_stew_over_5000)),
-            row("$3,000-$4,999", Number(parishFormData.num_stew_3000_4999)),
-            row("$2,000-$2,999", Number(parishFormData.num_stew_2000_2999)),
-            row("$1,000-$1,999", Number(parishFormData.num_stew_1000_1999)),
-            row("$800-$999", Number(parishFormData.num_stew_800_999)),
-            row("$500-$799", Number(parishFormData.num_stew_500_799)),
-            row("$300-$499", Number(parishFormData.num_stew_300_499)),
-            row("<$300", Number(parishFormData.num_stew_under_300)),
-            row("300+", formulaCell("=SUM(B39:B45)")),
+            row("$5,000+", parishFormData ? Number(parishFormData.num_stew_over_5000) : ""),
+            row("$3,000-$4,999", parishFormData ? Number(parishFormData.num_stew_3000_4999) : ""),
+            row("$2,000-$2,999", parishFormData ? Number(parishFormData.num_stew_2000_2999) : ""),
+            row("$1,000-$1,999", parishFormData ? Number(parishFormData.num_stew_1000_1999) : ""),
+            row("$800-$999", parishFormData ? Number(parishFormData.num_stew_800_999) : ""),
+            row("$500-$799", parishFormData ? Number(parishFormData.num_stew_500_799) : ""),
+            row("$300-$499", parishFormData ? Number(parishFormData.num_stew_300_499) : ""),
+            row("<$300", parishFormData ? Number(parishFormData.num_stew_under_300) : ""),
+            row("300+", formulaCell("=SUM(B39:B45)")),*/
           ],
         },
       ],
@@ -467,7 +425,7 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
         },
       ]);
     }
-    for (j = 0; j < 25; j++) {
+    for (j = 0; j < 15; j++) {
       sheet.merges.push([
         // Data Row
         {
@@ -481,15 +439,15 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
           sheetId: i+1,
           startRowIndex: 11 + j,
           endRowIndex: 12 + j,
-          startColumnIndex: 5,
-          endColumnIndex: 7,
+          startColumnIndex: 4,
+          endColumnIndex: 6,
         },
         {
           sheetId: i+1,
           startRowIndex: 11 + j,
           endRowIndex: 12 + j,
-          startColumnIndex: 7,
-          endColumnIndex: 9,
+          startColumnIndex: 6,
+          endColumnIndex: 8,
         },
       ]);
     }
@@ -497,22 +455,26 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
     overviewSheet.data[0].rowData.push(
       row(i+1, parishData.parish_code, parishData.name, parishData.city + ", " + parishData.state, "", 
         // Income.
+        "",
         formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D13\"))"),
-        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E13\"))"),
+        //formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E13\"))"),
         // Expenses.
+        "",
         formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D14\"))"),
-        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E14\"))"),
+        //formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E14\"))"),
         // Deductions.
-        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D31\"))"),
-        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E31\"))"),
+        "",
+        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D21\"))"),
+        //formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E21\"))"),
         // Net operating expenses.
-        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D32\"))"),
-        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E32\"))"),
+        "",
+        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D22\"))"),
+        //formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E22\"))"),
         "",
         // Average net expenses.
         formulaCell("=(L" + String(i+4) + "+M" + String(i+4) + ")/2"),
         // # Stewards >= $300.
-        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!B47\"))")
+        //formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!B47\"))")
         ));
   }
   overviewSheet.data[0].rowData.push(
@@ -543,7 +505,8 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
 }
 
 function setupScope($scope, $firebaseObject, $filter) {
-  var ref = new Firebase(base.firebaseBackend);
+  firebase.initializeApp(base.firebaseConfig);
+  var ref = firebase.database().ref();
   $scope.FOR_YEAR = shared.FOR_YEAR;
   $scope.metroRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id);
 
@@ -681,19 +644,7 @@ app.controller("Ctrl", function($scope, $firebaseObject, $filter) {
   });
 });
 
-// Filters for properties that do not have the specified sub-property value.
-// From http://stackoverflow.com/a/19850450 (with tweaks).
-app.filter('objectByKeyValFilter', function () {
-  return function (input, subPropertyName, subPropertyValue) {
-    var filteredInput ={};
-    angular.forEach(input, function(value, key) {
-      if (value[subPropertyName] !== subPropertyValue) {
-        filteredInput[key] = value;
-      }
-    });
-    return filteredInput;
-  }
-});
+app.filter('objectByKeyValFilter', base.objectByKeyValFilter);
 
 app.filter('shortReviewStatus', function() {
   return function(status) {

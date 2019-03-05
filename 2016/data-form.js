@@ -48,7 +48,7 @@ function bindFirebase($scope, $firebaseObject, ref) {
     var total = [
       yearObj.arch_don, yearObj.hchc, yearObj.stbasil, yearObj.stmichael,
       yearObj.stphotios, yearObj.ionian, yearObj.standrew, yearObj.other_arch
-    ].reduce(shared.sumNumbers);
+    ].reduce(base.sumNumbers);
     return total;
   };
   $scope.authMinTotal = function(yearObj) {
@@ -56,7 +56,7 @@ function bindFirebase($scope, $firebaseObject, ref) {
     var total = [
       yearObj.iocc, yearObj.ocmc, yearObj.ocf, yearObj.prison_min,
       yearObj.eocs, yearObj.ocn, yearObj.ocec, yearObj.ocampr, yearObj.ed_comm
-    ].reduce(shared.sumNumbers);
+    ].reduce(base.sumNumbers);
     return total;
   };
   $scope.totalDeductions = function(yearObj) {
@@ -66,7 +66,7 @@ function bindFirebase($scope, $firebaseObject, ref) {
       yearObj.patriarch, yearObj.cap, yearObj.const_loan, yearObj.mort,
       yearObj.fundraising, yearObj.school, yearObj.religious_ed, yearObj.unusual,
       yearObj.moving, yearObj.outreach, yearObj.clergy_laity, yearObj.other_hier
-    ].reduce(shared.sumNumbers);
+    ].reduce(base.sumNumbers);
     return total;
   };
   $scope.editing = function() {
@@ -91,7 +91,7 @@ function setupSession($scope, $firebaseObject, ref, auth) {
     pathname = pathname.substr(1);
   }
   var patharray = pathname.split('/');
-  var queryParams = shared.getQueryParams(url_parser.search);
+  var queryParams = base.getQueryParams(url_parser.search);
   $scope.metropolis_id = patharray[1];
   $scope.parish_id = patharray[3];
   $scope.year = patharray[5];
@@ -114,7 +114,7 @@ function setupSession($scope, $firebaseObject, ref, auth) {
 }
 
 app.controller("Ctrl", function($scope, $firebaseObject) {
-  var ref = new Firebase(shared.firebaseBackend);
+  var ref = new Firebase(base.firebaseBackend);
 
   var auth = ref.getAuth();
   if (!auth) {

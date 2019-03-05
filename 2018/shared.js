@@ -1,9 +1,5 @@
 var shared = {};
 
-// Left unspecified in master branch so that it must be specified in the
-// deployment branch.
-shared.firebaseBackend = "https://intense-heat-7228.firebaseio.com/";
-
 // Data form fields signifying approval.
 shared.APPROVAL_FIELDS = [
   'priest_approval_name',
@@ -96,7 +92,7 @@ shared.STEWARDSHIP_FIELDS_PER_YEAR = [
 shared.FOR_YEAR = 2018;
 
 // Adapted from http://stackoverflow.com/a/2880929 by Andy E.
-shared.getQueryParams = function(search) {
+base.getQueryParams = function(search) {
   var match,
       pl     = /\+/g,  // Regex for replacing addition symbol with a space
       search = /([^&=]+)=?([^&]*)/g,
@@ -109,7 +105,7 @@ shared.getQueryParams = function(search) {
   return queryParams;
 };
 
-shared.initGoogleApi = function (scopes, discoveryUrl, callback) {
+base.initGoogleApi = function (scopes, discoveryUrl, callback) {
   var CLIENT_ID = '540806466980-i5mifkaf6utq2g8k3p3opbj6gd4jv9oj.apps.googleusercontent.com';
   gapi.auth.authorize(
       {'client_id': CLIENT_ID, 'scope': scopes},
@@ -124,7 +120,7 @@ shared.initGoogleApi = function (scopes, discoveryUrl, callback) {
 }
 
 // Authorizes and loads the Google Drive API, and then executes the specified function.
-shared.initDriveApi = function (callback) {
+base.initDriveApi = function (callback) {
   var CLIENT_ID = '540806466980-i5mifkaf6utq2g8k3p3opbj6gd4jv9oj.apps.googleusercontent.com';
   var SCOPES = 'https://www.googleapis.com/auth/drive';
   gapi.auth.authorize(
@@ -144,8 +140,8 @@ shared.initDriveApi = function (callback) {
 // Sums the inputs, ignoring any inputs that aren't numbers.
 // Returns zero if neither is a number. In addition to using
 // this directly, you can use it like
-//   [1, 2, 3].reduce(shared.sumNumbers)
-shared.sumNumbers = function(a, b) {
+//   [1, 2, 3].reduce(base.sumNumbers)
+base.sumNumbers = function(a, b) {
   if (angular.isNumber(a)) {
     if (angular.isNumber(b)) {
       return a + b;
@@ -161,7 +157,7 @@ shared.sumNumbers = function(a, b) {
 // Sums the specified fields of the object.
 // The third parameter (fallback) is an optional alternate source
 // for fields that are missing in obj.
-shared.sumFields = function(fields, obj, fallback) {
+base.sumFields = function(fields, obj, fallback) {
   var total = 0;
   angular.forEach(fields, function(fieldName) {
     if (obj && angular.isNumber(obj[fieldName])) {
@@ -209,7 +205,7 @@ function setupSession($scope, ref, auth, callback) {
   $scope.patharray = pathname.split('/');
   $scope.metropolis_id = $scope.patharray[1];
   $scope.auth = auth;  
-  var queryParams = shared.getQueryParams(url_parser.search);
+  var queryParams = base.getQueryParams(url_parser.search);
   if ("invite" in queryParams) {
     var metroRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id);
     metroRef.child("committee/" + auth.uid).set(queryParams.invite, function(error) {
@@ -284,8 +280,8 @@ function handleAuthChange($scope, ref, auth, callback) {
 //         patharray[4] = 'parish'
 //         patharray[5] = 'ascension'
 //   - $scope.metropolis_id receives patharray[1]
-shared.handleMetroLogin = function($scope, callback) {
-  var ref = new Firebase(shared.firebaseBackend);
+base.handleMetroLogin = function($scope, callback) {
+  var ref = new Firebase(base.firebaseBackend);
   ref.onAuth(function (auth) {
     handleAuthChange($scope, ref, auth, callback);
   });  
@@ -298,7 +294,7 @@ shared.handleMetroLogin = function($scope, callback) {
 //   callback: A function taking an error parameter which is called when the
 //       operation completes. If the parameter is a non-empty string then
 //       the operation failed; otherwise it succeeded.
-shared.storeAccessKey = function(ref, accessKey, auth, callback) {
+base.storeAccessKey = function(ref, accessKey, auth, callback) {
   var userProfile = ref.child("easy-nmc/user").child(auth.uid);
   var keys = userProfile.child("access-key");
   keys.child(accessKey).set(true, function(error) {
@@ -313,7 +309,7 @@ shared.storeAccessKey = function(ref, accessKey, auth, callback) {
 
 // Filters for properties that do not have the specified sub-property value.
 // From http://stackoverflow.com/a/19850450 (with tweaks).
-shared.objectByKeyValFilter = function() {
+base.objectByKeyValFilter = function() {
   return function (input, subPropertyName, subPropertyValue) {
     var filteredInput ={};
     angular.forEach(input, function(value, key) {

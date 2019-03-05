@@ -24,6 +24,13 @@ After committing and pushing your changes on the dev branch you can deploy the a
 gcloud app deploy app.yaml
 ```
 
+Sometimes you may get an error saying you have too many versions deployed. In that case you can clean up using commands like this:
+
+``` bash
+gcloud app versions list
+app versions delete VERSIONS
+```
+
 The development deployment can be accessed at https://friendly-aurora-855.appspot.com/. It has a separate Firebase database from the production deployment so can be used to safely try out changes without affecting the data in the production deployment.
 
 In order to merge your changes into the production branch, you need to checkout the `prod` branch in Git and merge changes from the `dev` branch into it. 
@@ -33,10 +40,10 @@ git checkout prod
 git merge dev
 ```
 
-If the merge added a new year with a new shared.js, you'll likely need to update the `shared.firebaseBackend` variable near the top of shared.js to point to the production database. It should be the same as what you see near the top of the shared.js file for previous years.
+If the merge added a new year with a new shared.js, you'll likely need to update the `base.firebaseBackend` variable near the top of shared.js to point to the production database. It should be the same as what you see near the top of the shared.js file for previous years.
 
 ``` javascript
-shared.firebaseBackend = "https://intense-heat-7228.firebaseio.com/";
+base.firebaseBackend = "https://intense-heat-7228.firebaseio.com/";
 ```
 
 You can try out the app with the production data using the same command to start the dev server (`dev_appserver.py app.yaml`). Once the changes have been committed and pushed, you can also deploy to production using the same command as above but with the `--project` flag: 
@@ -68,15 +75,28 @@ This is a summary of the steps needed to update the form for a new year.
 
      b. Update the "Changes Since Last Year" section in data-form.html with whatever changes have occurred.
 
-5. We can automatically copy a lot of data from the prior year. The way to do this is to click "Copy Last Year's Data" on the admin screen, but if field names changed last year you likely need to update the code. Test changes on the dev branch before executing it on the prod branch. Copying data from last year is supposed to provide the following:
-
-     a. Contact info of priest, president, treasurer and preparer are copied over.
-     
-     b. The most recent year from last year's report is copied over as the first of two years being reported this year. If adjustments were made by the reviewer, the adjusted values are copied over. This is helpful even if we aren't allowing people to change the values for the first year because they are available for inclusion in the spreadsheet export and can potentially be displayed in the UI for review.
-     
-     c. We can also display the adjustments that were made last year to give guidance on what to watch out for this year.
-
-6. There is a security rule that needs to be updated each year in Firebase.
+5. There is a security rule that needs to be updated each year in Firebase.
 To do that, go to the Firebase admin console located at console.firebase.google.com and look for a security rule on both the production
 and staging versions which says something like $year == '2018'. Change the year
 to the next year.
+
+6. We can automatically copy a lot of data from the prior year. The way to do this is to follow this sequence:
+
+    a. If you are changing any field names this year, you'll need to update the copying code to map from old
+       to new field names.
+    b. Make sure that your git is synced to the dev branch for testing.
+    c. Run `dev_appserver.py app.yaml` from within the easy-nmc directory.
+    d. Open a web browser pointed at http://localhost:8080/metropolis/SF/admin
+    e. click "Copy Last Year's Data" on the admin screen.  
+    f. Once you are happy with how things copied on the dev instance, you can repeat the above on the prod
+       branch.
+    
+   Copying data from last year is supposed to provide the following:
+
+     * Contact info of priest, president, treasurer and preparer are copied over.     
+     * The most recent year from last year's report is copied over as the first of two years being reported this
+       year. If adjustments were made by the reviewer, the adjusted values are copied over. This is helpful even 
+       if we aren't allowing people to change the values for the first year because they are available for
+       inclusion in the spreadsheet export and can potentially be displayed in the UI for review.     
+     * We can also display the adjustments that were made last year to give guidance on what to watch out for
+       this year.

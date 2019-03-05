@@ -1,4 +1,4 @@
-var app = angular.module("easyNmcReview", ["firebase"]);
+var app = angular.module("easyNmcReport", ["firebase"]);
 
 function sumFields(fields, yearObj, fallback) {
   var total = 0;
@@ -26,7 +26,8 @@ function anyFieldIsNumber(fields, yearObj) {
 function setupScope($scope, $firebaseObject) {
   $scope.parish_id = $scope.patharray[3];
   $scope.year = $scope.patharray[5];
-  var ref = new Firebase(base.firebaseBackend);
+  firebase.initializeApp(base.firebaseConfig);
+  var ref = firebase.database().ref();
   var metroRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id);
   var parishIdRef = metroRef.child("/parish-id/" + $scope.parish_id);
   parishIdRef.child("name").on("value", function(snap) {
@@ -43,6 +44,12 @@ function setupScope($scope, $firebaseObject) {
   });
   parishIdRef.child("state").on("value", function(snap) {
     $scope.parish_state = snap.val();
+  }, function(error) {
+    console.log("loading state failed: ", error);
+    $scope.error = error;
+  });
+  parishIdRef.child("parish_code").on("value", function(snap) {
+    $scope.parish_code = snap.val();
   }, function(error) {
     console.log("loading state failed: ", error);
     $scope.error = error;
@@ -116,9 +123,6 @@ function setupScope($scope, $firebaseObject) {
     return sumFields(
         shared.DEDUCTION_FIELDS, $scope.reviewData[yearField], $scope.formData[yearField]);
   };
-  $scope.editing = function() {
-    return false;
-  };
   $scope.firebaseInfo = $firebaseObject(ref.child(".info"));
   $scope.firebaseInfo.$loaded().then(function(data) {
     $scope.infoFinishedLoading = true;
@@ -127,48 +131,6 @@ function setupScope($scope, $firebaseObject) {
     $scope.error = error;
   });
   $scope.FOR_YEAR = shared.FOR_YEAR;
-  // We use objects instead of arrays for the tallies to work around a bug.
-  // https://github.com/firebase/angularfire/issues/623
-  $scope.addTally = function() {
-    if (!$scope.reviewData.nextTally) $scope.reviewData.nextTally = 100;
-    if (!$scope.reviewData.tallies) $scope.reviewData.tallies = {};
-    $scope.reviewData.tallies['tally' + $scope.reviewData.nextTally] = {
-      rows: {
-        'row100': {description: ''},
-        'row101': {description: ''}
-      },
-      nextRow: 102
-    };
-    $scope.reviewData.nextTally += 1;
-    $scope.reviewData.$save();
-  };
-  $scope.addRow = function(tally) {
-    if (!tally.rows) tally.rows = {};
-    if (!tally.nextRow) tally.nextRow = 100;
-    tally.rows['row' + tally.nextRow] = {description: ''};
-    tally.nextRow += 1;
-    $scope.reviewData.$save();
-  };
-  $scope.deleteRow = function(tally, rowKey) {
-    delete tally.rows[rowKey];
-    $scope.reviewData.$save();
-  }
-  $scope.tallyTotal = function(tally) {
-    result = 0;
-    angular.forEach(tally.rows, function(row, rowKey) {
-      if (angular.isNumber(row.amount)) {
-        result += row.amount;
-      }
-    });
-    return result;
-  }
-  $scope.statusChanged = function() {
-    if ($scope.reviewData.review_status === 'started' ||
-        $scope.reviewData.review_status === 'finished') {
-      $scope.reviewData.form_edit_mode = 'locked';
-    }
-    $scope.reviewData.$save();
-  };
 }
 
 app.controller("Ctrl", function($scope, $firebaseObject) {
@@ -176,79 +138,3 @@ app.controller("Ctrl", function($scope, $firebaseObject) {
     setupScope($scope, $firebaseObject);
   });
 });
-
-// Checks whether the specified string appears to be a number, optionally
-// formatted like currency.
-function looksLikePositiveNumber(val) {
-  if (!angular.isString(val)) return false;
-  // Make sure there are no extraneous characters and it looks like a number,
-  // optionally currency formatted.
-  return /^\s*\$?\s*[,0-9]+\.?\d*\s*$/.test(val);
-}
-
-// Checks whether the specified string appears to be a number, optionally
-// formatted like currency.
-function looksLikeNegativeNumber(val) {
-  if (!angular.isString(val)) return false;
-  // Make sure there are no extraneous characters and it looks like a number,
-  // optionally currency formatted.
-  if (/^\s*\(\$?\s*[,0-9]+\.?\d*\)\s*$/.test(val)) {
-    // Negative number surrounded in parens.
-    return true;
-  } else if (/^\s*\$?-\$?[,0-9]+\.?\d*\s*$/.test(val)) {
-    // Negative number with minus sign.
-    return true;
-  }
-  return false;
-}
-
-function looksLikeNumber(val) {
-  return looksLikePositiveNumber(val) || looksLikeNegativeNumber(val);
-}
-
-app.directive('dollars', ['currencyFilter', function(currencyFilter) {
-  return {
-    require: 'ngModel',
-    link: function(scope, element, attrs, ngModel) {
-      ngModel.$parsers.push(function(value) {
-        if (looksLikePositiveNumber(value)) {
-          return Math.round(Number(value.replace(/[^0-9\.]+/g,"")));
-        } else if (looksLikeNegativeNumber(value)) {
-          return -Math.round(Number(value.replace(/[^0-9\.]+/g,"")));
-        } else if (angular.isString(value)) {
-          // If it's not quite a number, we just save whatever they typed in
-          // as a string for later analysis.
-          return value;
-        } else {
-          // We store an empty string to represent nothing entered.
-          return '';
-        }
-      });
-      ngModel.$formatters.push(function(value) {
-        if (angular.isNumber(value)) {
-          return currencyFilter(value, '$', 0);
-        } else if (angular.isString(value)) {
-          return value;
-        } else {
-          return '';
-        }
-      });
-      ngModel.$validators.validCharacters = function(modelValue, viewValue) {
-        if (viewValue === undefined || viewValue === '') {
-          return true;
-        }
-        return looksLikeNumber(viewValue);
-      };
-      ngModel.$validators.numericRange = function(modelValue, viewValue) {
-        if (viewValue === undefined || viewValue === '') {
-          return true;
-        }
-        if (angular.isNumber(modelValue)) {
-          return modelValue >= -100000000 && modelValue <= 100000000;
-        } else {
-          return true;
-        }
-      };
-    }
-  };
-}]);

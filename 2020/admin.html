@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="easyNmcMetro">
+<head>
+  <title>NMC Admin</title>
+  <link rel="stylesheet" href="/2020/style.css" type="text/css">
+
+  <!-- AngularJS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/5.8.3/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.8.3/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.8.3/firebase-database.js"></script>
+
+  <!-- AngularFire -->
+  <script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
+
+  <!-- Google APIs -->
+  <script type="text/javascript" src="https://apis.google.com/js/client.js"></script>
+
+  <script src="/base.js"></script>
+  <script src="/2020/shared.js"></script>
+  <script src="/2020/admin.js"></script>
+</head>
+<body class="wide" ng-controller="Ctrl" ng-cloak ng-show="parishInfosFinishedLoading && infoFinishedLoading">
+<p><label>Metropolis Name: <input type="text" ng-model="metaData.name" size=40 ng-show="metaDataFinishedLoading"></label>
+<button ng-click="autoFillForms()">Copy Last Year's Data</button>
+<button ng-click="generateKeys()">Generate Keys</button>
+<button ng-click="updateLandingPage()">Update Landing Page</button>
+<table class="bordered-table">
+<thead>
+<tr><th>Parish IDs</th><th>Parish Names</th><th>Address</th><th>Rector</th><th>Upload Link</th><th>Required</th><th>Access Key</th></tr>
+</thead>
+<tbody>
+<tr ng-repeat="(parish_id, parish_data) in parishInfos">
+<td>{{ parish_id }}
+    <input placeholder="Code" type="text" class=number ng-model=parish_data.parish_code size=6></td>
+<td><input placeholder="Short Parish Name" type="text" ng-model=parish_data.name size=15>
+    <input placeholder="Long Parish Name" type="text" ng-model=parish_data.long_name size=20></td>
+<td><input placeholder="Address" type="text" ng-model=parish_data.address size=25>
+    <input placeholder="City" type="text" ng-model=parish_data.city size=15>
+    <input placeholder="State" type="text" ng-model=parish_data.state size=3>
+    <input placeholder="ZIP" type="text" ng-model=parish_data.zip size=5></td>
+<td><input placeholder="Rector Short Name" type="text" ng-model=parish_data.short_rector size=15>
+    <input placeholder="Rector Long Name" type="text" ng-model=parish_data.long_rector size=20></td>
+<td><input type="text" ng-model=parish_data.upload_link size=20></td>
+<td>
+  <select ng-model=parish_data.excused>
+    <option value="">Yes</option>
+    <option value="true">No</option>
+  </select>
+</td>
+<td>{{parish_data.access_key}}</td>
+</tr>
+</tbody>
+</table>
+<p><label>New Parish ID: <input type="text" ng-model=new_parish_id size=20></label><button ng-click="addParish(new_parish_id)">Add Parish</button>
+<p>
+<div>Committee Invitations:</div>
+<div ng-repeat="(token, name) in committeeInvites" class="small">{{ name }}: https://easy-nmc.appspot.com/metropolis/SF/summary?invite={{token}}</div>
+<p><input type="text" ng-model="recipientName" size=20 placeholder="Name of Recipient">
+<button ng-click="createInvitation(recipientName)">Create Invitation</button>
+</body>
+</html>

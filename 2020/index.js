@@ -1,26 +1,11 @@
 var app = angular.module("easyNmc", ['ui.router']);
 
-function getAuth(ref, successCallback, errorCallback) {
-  var auth = ref.getAuth();
-  if (!auth) {
-    ref.authAnonymously(function(error, authData) {
-      if (error) {
-        console.log("Login Failed!", error);
-        errorCallback(error);
-      } else {
-        console.log("Authenticated successfully with payload:", authData);
-        successCallback(authData);
-      }
-    });
-  } else {
-    console.log("Already authenticated: ", auth);
-    successCallback(auth);
-  }
-}
-
 app.controller("Ctrl", function($scope, $state, $location, $urlRouter) {
   $scope.year = shared.FOR_YEAR;
-  var ref = new Firebase(base.firebaseBackend);
+
+  // Initialize Firebase
+  firebase.initializeApp(base.firebaseConfig);
+  var ref = firebase.database().ref();
   ref.child("easy-nmc/public/metropolis-summary").once("value", function(snap) {
     $scope.error = null;
     $scope.metro_summary = snap.val();
@@ -55,7 +40,7 @@ app.controller("Ctrl", function($scope, $state, $location, $urlRouter) {
   // Checks to see if the user has access to the form for the specified
   // parish. If so, invokes successCallback; otherwise, failureCallback.
   $scope.checkAccess = function(parishId, successCallback, failureCallback) {
-    getAuth(ref, function(auth) {
+    base.getUser(ref, function(user) {
       $scope.error = null;
       // Test to see if the access key is working by reading small piece of
       // data from protected area.
@@ -74,20 +59,14 @@ app.controller("Ctrl", function($scope, $state, $location, $urlRouter) {
   }
 
   // Redirects the browser to the data form for the specified parish.
-  $scope.redirectToForm = function(parishId) {
-    var dest = '/metropolis/' + $scope.metroId() + '/parish/' + parishId + '/data-form/' + shared.FOR_YEAR;
+  $scope.redirectToForm = function(parishId, accessKey) {
+    var dest = '/metropolis/' + $scope.metroId() + '/parish/' + parishId + '/data-form/' + shared.FOR_YEAR + '?key=' + accessKey;
     console.log("redirecting to", dest);
     window.location.href = dest;
   }
   
   $scope.selectParish = function(parishId) {
-    $scope.checkAccess(parishId, function() {
-      // Already have access to this parish; go straight to the form.
-      $scope.redirectToForm(parishId);
-    }, function() {
-      // Don't have access yet; need access key.
-      $state.go('enter-access-key', {metroId: $scope.metroId(), parishId: parishId});
-    });
+    $state.go('enter-access-key', {metroId: $scope.metroId(), parishId: parishId});
   };
 
   $scope.metroSummary = function() {
@@ -106,9 +85,9 @@ app.controller("Ctrl", function($scope, $state, $location, $urlRouter) {
   $scope.submitKey = function(accessKey) {
     console.log('submitKey', accessKey);
     $scope.pendingKeyCheck++;
-    getAuth(ref, function(auth) {
+    base.getUser(ref, function(user) {
       $scope.error = null;
-      base.storeAccessKey(ref, accessKey, auth, function(error) {
+      base.storeAccessKey(ref, accessKey, user, function(error) {
         console.log('finished store', error);
         $scope.error = error;
         if (error) {
@@ -119,7 +98,7 @@ app.controller("Ctrl", function($scope, $state, $location, $urlRouter) {
           console.log("access successful, redirecting to form.");
           $scope.failedKeyCheck = false;
           $scope.pendingKeyCheck--;
-          $scope.redirectToForm($scope.parishId());
+          $scope.redirectToForm($scope.parishId(), accessKey);
         }, function() {
           $scope.failedKeyCheck = true;
           $scope.pendingKeyCheck--;
@@ -136,15 +115,15 @@ app.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider.state({
     name: 'select-metro',
     url: '/',
-    templateUrl: '/2018/select-metro.html'
+    templateUrl: '/2020/select-metro.html'
   }).state({
     name: 'select-parish',
     url: '/metropolis/:metroId',
-    templateUrl: '/2018/select-parish.html'
+    templateUrl: '/2020/select-parish.html'
   }).state({
     name: 'enter-access-key',
     url: '/metropolis/:metroId/parish/:parishId',
-    templateUrl: '/2018/enter-access-key.html'
+    templateUrl: '/2020/enter-access-key.html'
   });
   $urlRouterProvider.otherwise("/");
 });

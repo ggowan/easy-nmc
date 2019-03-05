@@ -162,27 +162,7 @@ function copyDataIfReady(parishId, parishInfo, previousFormVal, previousReviewVa
         adjusted: {}
       };
     }
-    copyPropertiesIfPresent(previousFormVal.Y2, previousReviewVal.Y2, currentFormVal.Y1, [
-      'income',
-      'expenses',
-      'nmc',
-      'metro',
-      'arch',
-      'patriarch',
-      'auth_min',
-      'cap',
-      'const_loan',
-      'mort',
-      'fundraising',
-      'school',
-      'religious_ed',
-      'moving',
-      'outreach',
-      'clergy_laity',
-      'catastrophic',
-      'other_hier',
-      'prop_liab'
-    ]);
+    copyPropertiesIfPresent(previousFormVal.Y2, previousReviewVal.Y2, currentFormVal.Y1, shared.FINANCIAL_FIELDS);
     copyPropertiesIfPresent(previousFormVal.Y2, null,
         currentFormVal.Y1, shared.STEWARDSHIP_FIELDS_PER_YEAR);
     if (!currentFormVal.Y2) {
@@ -209,7 +189,8 @@ function copyDataIfReady(parishId, parishInfo, previousFormVal, previousReviewVa
 }
 
 function setupScope($scope, $firebaseObject) {
-  var ref = new Firebase(base.firebaseBackend);
+  var ref = base.getRootRef();
+  console.log("in setupScope, ref= ", ref, "; current user= ", firebase.auth().currentUser);
   $scope.metroRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id);
   $scope.forYear = shared.FOR_YEAR;
   $scope.addParish = function(parishId) {
@@ -224,9 +205,10 @@ function setupScope($scope, $firebaseObject) {
     for (var parishId in $scope.parishInfos) {
       if ($scope.parishInfos.hasOwnProperty(parishId) && parishId.charAt(0) !== '$') {
         console.log("parishId: ", parishId);
-        //if (!$scope.parishInfos[parishId].access_key) {
+        // This if statement can be commented out if we need new keys for all parishes.
+        if (!$scope.parishInfos[parishId].access_key) {
           $scope.parishInfos[parishId].access_key = generateKey();
-        //}
+        }
       }
     }
   };
@@ -263,6 +245,7 @@ function setupScope($scope, $firebaseObject) {
     console.log("parish-id finished loading");
     $scope.parishInfosFinishedLoading = true;
   }, function(error) {
+    console.log("parish-id read failed", error);
     $scope.error = error;
   });
   $firebaseObject($scope.metroRef.child("meta-data")).$bindTo($scope, "metaData").then(function() {

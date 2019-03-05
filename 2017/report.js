@@ -26,7 +26,7 @@ function anyFieldIsNumber(fields, yearObj) {
 function setupScope($scope, $firebaseObject) {
   $scope.parish_id = $scope.patharray[3];
   $scope.year = $scope.patharray[5];
-  var ref = new Firebase(shared.firebaseBackend);
+  var ref = new Firebase(base.firebaseBackend);
   var metroRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id);
   var parishIdRef = metroRef.child("/parish-id/" + $scope.parish_id);
   parishIdRef.child("name").on("value", function(snap) {
@@ -133,7 +133,7 @@ function setupScope($scope, $firebaseObject) {
 }
 
 app.controller("Ctrl", function($scope, $firebaseObject) {
-  shared.handleMetroLogin($scope, function() {
+  base.handleMetroLogin($scope, function() {
     setupScope($scope, $firebaseObject);
   });
 });
