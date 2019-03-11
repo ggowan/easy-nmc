@@ -60,5 +60,45 @@
 <div ng-repeat="(token, name) in committeeInvites" class="small">{{ name }}: https://easy-nmc.appspot.com/metropolis/SF/summary?invite={{token}}</div>
 <p><input type="text" ng-model="recipientName" size=20 placeholder="Name of Recipient">
 <button ng-click="createInvitation(recipientName)">Create Invitation</button>
+<h2>Export</h2>
+<p>Start copy here</p>
+<table class="bordered-table">
+<thead>
+<tr>
+<th>Online ID</th>
+<th>Parish Code</th>
+<th>Short Parish Name</th>
+<th>Long Parish Name</th>
+<th>Street Address</th>
+<th>City</th>
+<th>State</th>
+<th>Zip</th>
+<th>Rector Short Name</th>
+<th>Rector Full Name</th>
+<th>Access Key</th>
+<th>Form Link</th>
+<th>Upload Link</th>
+</tr>
+</thead>
+<tbody>
+<tr ng-repeat="(parish_id, parish_data) in parishInfos | objectByKeyValFilter : 'excused' : 'true'">
+<td>{{ parish_id }}</td>
+<td>{{ parish_data.parish_code }}</td>
+<td>{{ parish_data.name }}</td>
+<td>{{ parish_data.long_name }}</td>
+<td>{{ parish_data.address }}</td>
+<td>{{ parish_data.city }}</td>
+<td>{{ parish_data.state }}</td>
+<td>{{ parish_data.zip }}</td>
+<td>{{ parish_data.short_rector }}</td>
+<td>{{ parish_data.long_rector }}</td>
+<td>{{ parish_data.access_key }}</td>
+<td>{{ 'https://easy-nmc.appspot.com/metropolis/SF/parish/' + parish_id + '/data-form/2020?key=' + parish_data.access_key }}</td>
+<td>{{ parish_data.upload_link }}</td>
+</tr>
+</tbody>
+</table>
+<p>Finish copy here</p>
+    
 </body>
 </html>

@@ -247,6 +247,9 @@ base.objectByKeyValFilter = function() {
   return function (input, subPropertyName, subPropertyValue) {
     var filteredInput ={};
     angular.forEach(input, function(value, key) {
+      if (value === null) {
+          return;
+      }
       if (value[subPropertyName] !== subPropertyValue) {
         filteredInput[key] = value;
       }
