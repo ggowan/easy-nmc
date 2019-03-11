@@ -301,3 +301,5 @@ app.controller("Ctrl", function($scope, $firebaseObject) {
     setupScope($scope, $firebaseObject);
   });
 });
+
+app.filter('objectByKeyValFilter', base.objectByKeyValFilter);

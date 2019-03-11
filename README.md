@@ -28,7 +28,7 @@ Sometimes you may get an error saying you have too many versions deployed. In th
 
 ``` bash
 gcloud app versions list
-app versions delete VERSIONS
+gcloud app versions delete VERSIONS
 ```
 
 The development deployment can be accessed at https://friendly-aurora-855.appspot.com/. It has a separate Firebase database from the production deployment so can be used to safely try out changes without affecting the data in the production deployment.
