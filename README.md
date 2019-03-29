@@ -80,9 +80,9 @@ This is a summary of the steps needed to update the form for a new year.
      b. Update the "Changes Since Last Year" section in data-form.html with whatever changes have occurred.
 
 5. There is a security rule that needs to be updated each year in Firebase.
-To do that, go to the Firebase admin console located at console.firebase.google.com and look for a security rule on both the production
-and staging versions which says something like $year == '2018'. Change the year
-to the next year.
+To do that, go to the Firebase admin console located at console.firebase.google.com and look for a security rule 
+**on both the production and staging versions** which says something like $year == '2018'. Change the year
+to the next year. Do it on both at the same time so you don't forget to do production on rollout!
 
 6. We can automatically copy a lot of data from the prior year. The way to do this is to follow this sequence:
 
@@ -104,3 +104,6 @@ to the next year.
        inclusion in the spreadsheet export and can potentially be displayed in the UI for review.     
      * We can also display the adjustments that were made last year to give guidance on what to watch out for
        this year.
+
+7. Make sure to test making an edit on production before sending out the form links to everybody! Test in an
+incognito window.
