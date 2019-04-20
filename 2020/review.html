@@ -56,11 +56,11 @@ You are offline<br>
 <span class="attention" ng-if="reviewStatus.form_edit_mode !== 'locked'">
 <strong>Lock the data form to prevent changes before you review the form.</strong></span>
 <p>Things to look for in your review:
-<div ng-class="reviewData.all_expenses ? 'good' : 'attention'">
+<div ng-class="reviewData.have_pl_y2 ? 'good' : 'attention'">
 <input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.have_pl_y2>
 Did the parish submit a P&amp;L for {{FOR_YEAR-2}}?
 </div>
-<div ng-class="reviewData.all_expenses ? 'good' : 'attention'">
+<div ng-class="reviewData.have_bs_y2 ? 'good' : 'attention'">
 <input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.have_bs_y2>
 Did the parish submit a balance sheet for {{FOR_YEAR-2}}?
 </div>
