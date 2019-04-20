@@ -505,8 +505,7 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
 }
 
 function setupScope($scope, $firebaseObject, $filter) {
-  firebase.initializeApp(base.firebaseConfig);
-  var ref = firebase.database().ref();
+  var ref = base.getRootRef();
   $scope.FOR_YEAR = shared.FOR_YEAR;
   $scope.metroRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id);
 
