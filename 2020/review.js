@@ -14,8 +14,7 @@ function anyFieldIsNumber(fields, yearObj) {
 function setupScope($scope, $firebaseObject) {
   $scope.parish_id = $scope.patharray[3];
   $scope.year = $scope.patharray[5];
-  firebase.initializeApp(base.firebaseConfig);
-  var ref = firebase.database().ref();
+  var ref = base.getRootRef();
   var metroRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id);
   var parishIdRef = metroRef.child("/parish-id/" + $scope.parish_id);
   parishIdRef.child("name").on("value", function(snap) {
@@ -106,6 +105,14 @@ function setupScope($scope, $firebaseObject) {
     return $scope.reviewData && $scope.reviewData[yearField] && 
         angular.isNumber($scope.reviewData[yearField][field]);
   };
+  $scope.lastYearsAdjustment = function(fieldName) {
+    if ($scope.formData.Y1 && $scope.formData.Y1.original && $scope.formData.Y1.adjusted) {
+      if (base.isDifferent($scope.formData.Y1.original[fieldName], $scope.formData.Y1.adjusted[fieldName])) {
+        return $scope.formData.Y1.adjusted[fieldName];
+      }
+    }
+    return null;
+  };
   $scope.totalDeductions = function(year) {
     if (!$scope.formData) return null;
     var yearField = shared.yearToYearField(year);
@@ -144,7 +151,7 @@ function setupScope($scope, $firebaseObject) {
     return null;
   };
   $scope.editing = function() {
-    return $scope.reviewData.editing_user && $scope.reviewData.editing_user === $scope.auth.uid
+    return $scope.reviewData.editing_user && $scope.reviewData.editing_user === $scope.user.uid
         && $scope.infoFinishedLoading && $scope.firebaseInfo.connected;
   };
   $scope.toggleEditing = function() {
@@ -154,7 +161,7 @@ function setupScope($scope, $firebaseObject) {
       $scope.reviewData.editing_user = '';
     } else {
       console.log("setting editing_user");
-      $scope.reviewData.editing_user = $scope.auth.uid;
+      $scope.reviewData.editing_user = $scope.user.uid;
     }
     $scope.reviewData.$save().then(function(ref) {
     }, function(error) {

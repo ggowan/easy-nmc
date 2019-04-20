@@ -9,11 +9,14 @@
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
 
   <!-- Firebase -->
-  <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.8.3/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.8.3/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.8.3/firebase-database.js"></script>
 
   <!-- AngularFire -->
-  <script src="https://cdn.firebase.com/libs/angularfire/1.1.1/angularfire.min.js"></script>
+  <script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
 
+  <script src="/base.js"></script>
   <script src="/2020/shared.js"></script>
   <script src="/2020/review.js"></script>
 </head>
@@ -53,11 +56,11 @@ You are offline<br>
 <span class="attention" ng-if="reviewStatus.form_edit_mode !== 'locked'">
 <strong>Lock the data form to prevent changes before you review the form.</strong></span>
 <p>Things to look for in your review:
-<div ng-class="reviewData.all_expenses ? 'good' : 'attention'">
+<div ng-class="reviewData.have_pl_y2 ? 'good' : 'attention'">
 <input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.have_pl_y2>
 Did the parish submit a P&amp;L for {{FOR_YEAR-2}}?
 </div>
-<div ng-class="reviewData.all_expenses ? 'good' : 'attention'">
+<div ng-class="reviewData.have_bs_y2 ? 'good' : 'attention'">
 <input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.have_bs_y2>
 Did the parish submit a balance sheet for {{FOR_YEAR-2}}?
 </div>
@@ -214,16 +217,22 @@ trays, restricted and unrestricted funds.
 </ol>
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-2}}</tr>
+    <tr>
+      <th>Source</th>
+      <th>{{FOR_YEAR-3}}</th>
+      <th>{{FOR_YEAR-2}}</th>
+    </tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y2.income | currency : $ : 0 }}
+      <td class=money>{{ formData.Y1.original.income | currency : $ : 0 }}</td>
+      <td class=money>{{ formData.Y2.income | currency : $ : 0 }}</td>
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.income" type="text" size=10>
+      <td class=money>{{ lastYearsAdjustment('income') | currency : $ : 0 }}</td>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.income" type="text" size=10></td>
     </tr>
   </tbody>
 </table>
@@ -242,16 +251,22 @@ endowment fund.
 </ol>
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-2}}</tr>
+    <tr>
+      <th>Source</th>
+      <th>{{FOR_YEAR-3}}</th>
+      <th>{{FOR_YEAR-2}}</th>
+    </tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y2.expenses | currency : $ : 0 }}
+      <td class=money>{{ formData.Y1.original.expenses | currency : $ : 0 }}</td>
+      <td class=money>{{ formData.Y2.expenses | currency : $ : 0 }}</td>
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.expenses" type="text" size=10>
+      <td class=money>{{ lastYearsAdjustment('expenses') | currency : $ : 0 }}</td>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.expenses" type="text" size=10></td>
     </tr>
   </tbody>
 </table>
@@ -276,16 +291,22 @@ expenses on Line B and then deduct the expenses.
 <p>Actual amount paid during the calendar year toward the National Ministries Allocation. Do not include payments for clergy pension or other benefits.
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-2}}</tr>
+    <tr>
+      <th>Source</th>
+      <th>{{FOR_YEAR-3}}</th>
+      <th>{{FOR_YEAR-2}}</th>
+    </tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y2.nmc | currency : $ : 0 }}
+      <td class=money>{{ formData.Y1.original.nmc | currency : $ : 0 }}</td>
+      <td class=money>{{ formData.Y2.nmc | currency : $ : 0 }}</td>
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.nmc" type="text" size=10>
+      <td class=money>{{ lastYearsAdjustment('nmc') | currency : $ : 0 }}</td>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.nmc" type="text" size=10></td>
     </tr>
   </tbody>
 </table>
@@ -309,16 +330,22 @@ employees may not be applied to this item. Capital expenditures include the foll
 <p>As a reminder, only amounts that were included in parish gross expenses (section B, above) are deductible.
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-2}}</tr>
+    <tr>
+      <th>Source</th>
+      <th>{{FOR_YEAR-3}}</th>
+      <th>{{FOR_YEAR-2}}</th>
+    </tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y2.cap | currency : $ : 0 }}
+      <td class=money>{{ formData.Y1.original.cap | currency : $ : 0 }}</td>
+      <td class=money>{{ formData.Y2.cap | currency : $ : 0 }}</td>
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.cap" type="text" size=10>
+      <td class=money>{{ lastYearsAdjustment('cap') | currency : $ : 0 }}</td>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.cap" type="text" size=10></td>
     </tr>
   </tbody>
 </table>
@@ -338,16 +365,22 @@ employees may not be applied to this item. Capital expenditures include the foll
 <p>As a reminder, only amounts that were included in parish gross expenses (section B, above) are deductible.
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-2}}</tr>
+    <tr>
+      <th>Source</th>
+      <th>{{FOR_YEAR-3}}</th>
+      <th>{{FOR_YEAR-2}}</th>
+    </tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y2.mort | currency : $ : 0 }}
+      <td class=money>{{ formData.Y1.original.mort | currency : $ : 0 }}</td>
+      <td class=money>{{ formData.Y2.mort | currency : $ : 0 }}</td>
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.mort" type="text" size=10>
+      <td class=money>{{ lastYearsAdjustment('mort') | currency : $ : 0 }}</td>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.mort" type="text" size=10></td>
     </tr>
   </tbody>
 </table>
@@ -367,16 +400,22 @@ employees may not be applied to this item. Capital expenditures include the foll
 </ol>
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-2}}</tr>
+    <tr>
+      <th>Source</th>
+      <th>{{FOR_YEAR-3}}</th>
+      <th>{{FOR_YEAR-2}}</th>
+    </tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y2.fundraising | currency : $ : 0 }}
+      <td class=money>{{ formData.Y1.original.fundraising | currency : $ : 0 }}</td>
+      <td class=money>{{ formData.Y2.fundraising | currency : $ : 0 }}</td>
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.fundraising" type="text" size=10>
+      <td class=money>{{ lastYearsAdjustment('fundraising') | currency : $ : 0 }}</td>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.fundraising" type="text" size=10></td>
     </tr>
   </tbody>
 </table>
@@ -421,16 +460,22 @@ employees may not be applied to this item. Capital expenditures include the foll
 </ol>
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-2}}</tr>
+    <tr>
+      <th>Source</th>
+      <th>{{FOR_YEAR-3}}</th>
+      <th>{{FOR_YEAR-2}}</th>
+    </tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y2.school | currency : $ : 0 }}
+      <td class=money>{{ formData.Y1.original.school | currency : $ : 0 }}</td>
+      <td class=money>{{ formData.Y2.school | currency : $ : 0 }}</td>
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.school" type="text" size=10>
+      <td class=money>{{ lastYearsAdjustment('school') | currency : $ : 0 }}</td>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.school" type="text" size=10></td>
     </tr>
   </tbody>
 </table>
@@ -453,16 +498,22 @@ the United States
 <p>Gifts to parish controlled foundations or trusts are not allowable deductions.
 <table class="bordered-table">
   <thead>
-    <tr><th>Source</th><th>{{FOR_YEAR-2}}</tr>
+    <tr>
+      <th>Source</th>
+      <th>{{FOR_YEAR-3}}</th>
+      <th>{{FOR_YEAR-2}}</th>
+    </tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Parish</th>
-      <td class=money>{{ formData.Y2.outreach | currency : $ : 0 }}
+      <td class=money>{{ formData.Y1.original.outreach | currency : $ : 0 }}</td>
+      <td class=money>{{ formData.Y2.outreach | currency : $ : 0 }}</td>
     </tr>
     <tr>
       <th scope="row">Reviewer</th>
-      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.outreach" type="text" size=10>
+      <td class=money>{{ lastYearsAdjustment('outreach') | currency : $ : 0 }}</td>
+      <td><input class="money" dollars ng-readonly="!editing()" ng-change="reviewData.$save()" ng-model="reviewData.Y2.outreach" type="text" size=10></td>
     </tr>
   </tbody>
 </table>
@@ -474,12 +525,18 @@ the United States
 
 <h4>Property and Liability Insurance</h4>
 <p>Please report the total amount paid for property and liability insurance for your parish. This is collected for informational purposes but is not a deductible expense.
-<table>
+<table class="bordered-table">
   <thead>
-    <tr><th>{{FOR_YEAR-2}}</tr>
+    <tr>
+      <th>{{FOR_YEAR-3}}</th>
+      <th>{{FOR_YEAR-2}}</th>
+    </tr>
   </thead>
   <tbody>
-    <tr><td><input class="money" dollars ng-readonly="true" ng-model="formData.Y2.prop_liab" type="text" size=10></tr>
+    <tr>
+      <td class=money>{{ formData.Y1.prop_liab | currency : $ : 0 }}</td>
+      <td class=money>{{ formData.Y2.prop_liab | currency : $ : 0 }}</td>
+    </tr>
   </tbody>
 </table>
 

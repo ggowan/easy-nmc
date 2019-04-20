@@ -257,3 +257,16 @@ base.objectByKeyValFilter = function() {
     return filteredInput;
   }
 };
+
+// Returns true unless both parameters are numbers and differ by no more than 0.5.
+base.isDifferent = function(val1, val2) {
+  if (angular.isNumber(val1)) {
+    if (angular.isNumber(val2)) {
+      return Math.abs(val1 - val2) > 0.5;
+    } else {
+      return true;
+    }
+  } else {
+    return angular.isNumber(val2);
+  }
+}
