@@ -105,6 +105,14 @@ function setupScope($scope, $firebaseObject) {
     return $scope.reviewData && $scope.reviewData[yearField] && 
         angular.isNumber($scope.reviewData[yearField][field]);
   };
+  $scope.lastYearsAdjustment = function(fieldName) {
+    if ($scope.formData.Y1 && $scope.formData.Y1.original && $scope.formData.Y1.adjusted) {
+      if (base.isDifferent($scope.formData.Y1.original[fieldName], $scope.formData.Y1.adjusted[fieldName])) {
+        return $scope.formData.Y1.adjusted[fieldName];
+      }
+    }
+    return null;
+  };
   $scope.totalDeductions = function(year) {
     if (!$scope.formData) return null;
     var yearField = shared.yearToYearField(year);

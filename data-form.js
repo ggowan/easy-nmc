@@ -1,17 +1,5 @@
 var app = angular.module("easyNmc", ["firebase"]);
 
-function isDifferent(val1, val2) {
-  if (angular.isNumber(val1)) {
-    if (angular.isNumber(val2)) {
-      return Math.abs(val1 - val2) > 0.5;
-    } else {
-      return true;
-    }
-  } else {
-    return angular.isNumber(val2);
-  }
-}
-
 // Binds the firebase data to a field in the AngularJS scope.
 function bindFirebase($scope, $firebaseObject, ref) {
   var metroRef = ref.child("easy-nmc/metropolis/" + $scope.metropolis_id);
@@ -74,7 +62,7 @@ function bindFirebase($scope, $firebaseObject, ref) {
   };
   $scope.wasAdjusted = function(fieldName) {
     if ($scope.dataFinishedLoading && $scope.firebaseData.Y1 && $scope.firebaseData.Y1.original && $scope.firebaseData.Y1.adjusted) {
-      return isDifferent($scope.firebaseData.Y1.original[fieldName], $scope.firebaseData.Y1.adjusted[fieldName]);
+      return base.isDifferent($scope.firebaseData.Y1.original[fieldName], $scope.firebaseData.Y1.adjusted[fieldName]);
     }
     return false;
   };
