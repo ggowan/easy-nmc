@@ -106,7 +106,7 @@ function setupScope($scope, $firebaseObject) {
         angular.isNumber($scope.reviewData[yearField][field]);
   };
   $scope.lastYearsAdjustment = function(fieldName) {
-    if ($scope.formData.Y1 && $scope.formData.Y1.original && $scope.formData.Y1.adjusted) {
+    if ($scope.formData && $scope.formData.Y1 && $scope.formData.Y1.original && $scope.formData.Y1.adjusted) {
       if (base.isDifferent($scope.formData.Y1.original[fieldName], $scope.formData.Y1.adjusted[fieldName])) {
         return $scope.formData.Y1.adjusted[fieldName];
       }

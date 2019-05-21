@@ -9,20 +9,19 @@
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
 
   <!-- Firebase -->
-  <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.8.3/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.8.3/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.8.3/firebase-database.js"></script>
 
   <!-- AngularFire -->
-  <script src="https://cdn.firebase.com/libs/angularfire/1.1.1/angularfire.min.js"></script>
+  <script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
 
+  <script src="/base.js"></script>
   <script src="/2019/shared.js"></script>
   <script src="/2019/review.js"></script>
 </head>
 <body class="wide" ng-controller="Ctrl" ng-cloak>
 <div class="fixed-panel">
-<div style="text-align: right">
-<button class="image-button" ng-show="formDataFinishedLoading" ng-style="editing() ? {'background-color': '#93FA86', 'border-color': '#93FA86'} : {}" ng-click="toggleEditing()">
-<img alt="pencil icon" src="/2019/pencil-icon.png" width=36 height=36></button>
-</div>
 <div ng-show="error" class="error-message">
 Error: {{ error.code }}<br>
 <small>Do you have the correct URL?</small>
@@ -53,11 +52,11 @@ You are offline<br>
 <span class="attention" ng-if="reviewStatus.form_edit_mode !== 'locked'">
 <strong>Lock the data form to prevent changes before you review the form.</strong></span>
 <p>Things to look for in your review:
-<div ng-class="reviewData.all_expenses ? 'good' : 'attention'">
+<div ng-class="reviewData.have_pl_y2 ? 'good' : 'attention'">
 <input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.have_pl_y2>
 Did the parish submit a P&amp;L for {{FOR_YEAR-2}}?
 </div>
-<div ng-class="reviewData.all_expenses ? 'good' : 'attention'">
+<div ng-class="reviewData.have_bs_y2 ? 'good' : 'attention'">
 <input type="checkbox" ng-disabled="!editing()" ng-change="reviewData.$save()" ng-model=reviewData.have_bs_y2>
 Did the parish submit a balance sheet for {{FOR_YEAR-2}}?
 </div>
