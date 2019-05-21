@@ -121,7 +121,7 @@ function getGoogleUid(user) {
 }
 
 function setupSession($scope, ref, user, callback) {
-  console.log("setupSession for user.uid=", getGoogleUid(user));
+  console.log("setupSession for googleUid=", getGoogleUid(user), ", user.uid=", user.uid);
   var url_parser = document.createElement('a');
   url_parser.href = document.URL;
   var pathname = url_parser.pathname;
