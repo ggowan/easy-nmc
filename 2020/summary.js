@@ -455,19 +455,15 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
     overviewSheet.data[0].rowData.push(
       row(i+1, parishData.parish_code, parishData.name, parishData.city + ", " + parishData.state, "", 
         // Income.
-        "",
         formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D13\"))"),
         formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E13\"))"),
         // Expenses.
-        "",
         formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D14\"))"),
         formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E14\"))"),
         // Deductions.
-        "",
         formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D21\"))"),
         formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E21\"))"),
         // Net operating expenses.
-        "",
         formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D22\"))"),
         formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E22\"))"),
         "",
