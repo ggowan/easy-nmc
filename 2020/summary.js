@@ -181,7 +181,7 @@ function dataRow($filter, line, description, fieldName, parishReviewData, parish
     commentField = fieldName + "_comment";
   }
   return row(line, description, "",
-    //dataCell($filter, shared.FOR_YEAR-3, fieldName, parishReviewData, parishFormData),
+    dataCell($filter, shared.FOR_YEAR-3, fieldName, parishReviewData, parishFormData),
     dataCell($filter, shared.FOR_YEAR-2, fieldName, parishReviewData, parishFormData),
     wrappedCell(explanation), "",
     wrappedCell(parishReviewData ? parishReviewData[commentField] : ""));
@@ -228,7 +228,7 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
           headerRow("", "", "", "", "", "Income", "", "Expenditures", "", "Deductions", "", "Operating Expense", "", "", "Expenses"/*, "Over"*/),
           headerRow("Sheet", "ID#", "Parish", "City, State", "", shared.FOR_YEAR-3, shared.FOR_YEAR-2,
               shared.FOR_YEAR-3, shared.FOR_YEAR-2, shared.FOR_YEAR-3, shared.FOR_YEAR-2, shared.FOR_YEAR-3, 
-              shared.FOR_YEAR-2, "", "for " + String(shared.FOR_YEAR)/*, "$300"*/),
+              shared.FOR_YEAR-2, "", "for " + String(shared.FOR_YEAR)),
         ],
       },
     ],
@@ -324,7 +324,7 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
             contactRow(boldCell("Priest"), "priest", parishFormData),
             row(boldCell("Reviewer"), parishReviewStatus ? parishReviewStatus.reviewer_name : ""),
             row(),
-            headerRow("Line", "Description", "", /*String(shared.FOR_YEAR-3),*/ String(shared.FOR_YEAR-2),
+            headerRow("Line", "Description", "", String(shared.FOR_YEAR-3), String(shared.FOR_YEAR-2),
               "Parish Notes", "", "Reviewer Comments"),
             dataRow($filter, centeredCell("A"), "Gross Income", "income", parishReviewData, parishFormData,
               "income_explanation"),
@@ -337,8 +337,8 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
             dataRow($filter, centeredCell("C4"), "Fundraising Expenses", "fundraising", parishReviewData, parishFormData),
             dataRow($filter, centeredCell("C5"), "School Expenses", "school", parishReviewData, parishFormData),
             dataRow($filter, centeredCell("C6"), "Charitable Giving", "outreach", parishReviewData, parishFormData),
-            row(centeredCell("C"), "Total Deductions", "", formulaCell("=SUM(D15:D20)")/*, formulaCell("=SUM(E15:E20)")*/),
-            row(centeredCell("B-C"), "Net Expenses", "", formulaCell("=D14-D21")/*, formulaCell("=E14-E21")*/),
+            row(centeredCell("C"), "Total Deductions", "", formulaCell("=SUM(D15:D20)"), formulaCell("=SUM(E15:E20)")),
+            row(centeredCell("B-C"), "Net Expenses", "", formulaCell("=D14-D21"), formulaCell("=E14-E21")),
             /*row(),
             dataRow($filter, "", "Property Insurance", "prop_liab", parishReviewData, parishFormData),
             dataRow($filter, "", "Total Stewardship", "stew_income", parishReviewData, parishFormData),
@@ -439,15 +439,15 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
           sheetId: i+1,
           startRowIndex: 11 + j,
           endRowIndex: 12 + j,
-          startColumnIndex: 4,
-          endColumnIndex: 6,
+          startColumnIndex: 5,
+          endColumnIndex: 7,
         },
         {
           sheetId: i+1,
           startRowIndex: 11 + j,
           endRowIndex: 12 + j,
-          startColumnIndex: 6,
-          endColumnIndex: 8,
+          startColumnIndex: 7,
+          endColumnIndex: 9,
         },
       ]);
     }
@@ -457,19 +457,19 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
         // Income.
         "",
         formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D13\"))"),
-        //formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E13\"))"),
+        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E13\"))"),
         // Expenses.
         "",
         formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D14\"))"),
-        //formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E14\"))"),
+        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E14\"))"),
         // Deductions.
         "",
         formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D21\"))"),
-        //formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E21\"))"),
+        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E21\"))"),
         // Net operating expenses.
         "",
         formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D22\"))"),
-        //formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E22\"))"),
+        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E22\"))"),
         "",
         // Average net expenses.
         formulaCell("=(L" + String(i+4) + "+M" + String(i+4) + ")/2"),
