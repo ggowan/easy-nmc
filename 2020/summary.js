@@ -1,9 +1,13 @@
 var app = angular.module("easyNmcMetroSummary", ["firebase"]);
 
-function exportSpreadsheetHelper($scope, $filter) {
+// Exports data to a spreadsheet.
+// Format may be one of these values:
+//   'multi': Summary data only in top sheet, details for each parish in separate sheets.
+//   'single': All the numbers in a single sheet.
+function exportSpreadsheetHelper($scope, $filter, format) {
   var reviewDataRef = $scope.metroRef.child("/review-data/" + shared.FOR_YEAR + "/parish");
   reviewDataRef.once("value", function(snap) {
-    exportSpreadsheetWithData($scope, $filter, snap.val());
+    exportSpreadsheetWithData($scope, $filter, snap.val(), format);
   }, function(error) {
     console.log("loading state failed: ", error);
     $scope.error = error;
@@ -187,7 +191,95 @@ function dataRow($filter, line, description, fieldName, parishReviewData, parish
     wrappedCell(parishReviewData ? parishReviewData[commentField] : ""));
 }
 
-function exportSpreadsheetWithData($scope, $filter, reviewData) {
+function exportSpreadsheetWithData($scope, $filter, reviewData, format) {
+  var spreadsheet = {
+    properties: {
+      title: "Test Spreadsheet",
+    }
+  };
+  if (format === "multi") {
+    spreadsheet.sheets = multipleSheets($scope, $filter, reviewData);
+  } else {
+    spreadsheet.sheets = [singleSheet($scope, $filter, reviewData)];
+  }
+  gapi.client.sheets.spreadsheets.create(spreadsheet).then(function(response) {
+    console.log("response: ", response);
+    window.open("https://docs.google.com/spreadsheets/d/" + response.result.spreadsheetId + "/edit");
+  }, function(response) {
+    console.log("error from create spreadsheet: ", response);
+  });
+}
+
+function singleSheet($scope, $filter, reviewData) {
+  // We're going to sort the parishes by state and then code.
+  var parishesInOrder = [];
+  angular.forEach($scope.parishIds, function(parishData, parishId) {
+    if (parishData.excused) return;
+    parishesInOrder.push({
+      id: parishId,
+      code: parishData.parish_code,
+      state: parishData.state,
+    });
+  });
+  parishesInOrder.sort(function (a, b) {
+    if (a.state < b.state) {
+      return -1;
+    } else if (b.state < a.state) {
+      return 1;
+    }
+    if (Number(a.code) < Number(b.code)) {
+      return -1;
+    } else if (Number(b.code) < Number(a.code)) {
+      return 1;
+    }
+    return 0;
+  });
+  var sheet = {
+    properties: {
+      sheetId: 0,
+      title: "San Fran",
+      gridProperties: {
+        frozenRowCount: 3,
+        frozenColumnCount: 4,
+      },
+    },
+    data: [
+      {
+        startRow: 0,
+        startColumn: 0,
+        rowData: [
+          headerRow("", "", "", "", shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3),
+          headerRow("", "", "Parish", "", "Revenue", "Expenses", "TC", "Asset Acquisitions", "Loan Payments", "Fundraising Exp", "Greek/Sunday Sch", "Charitable giving", "Total", "Net Expense", "Revenue", "Expenses", "TC", "Asset Acquisitions", "Loan Payments", "Fundraising Exp", "Greek/Sunday Sch", "Charitable giving", "Total", "Net Expense"),
+          headerRow("", "Parish", "Code", "City, State Zip Code", "Line A", "Line B", "Line 1", "Line 2", "Line 3", "Line 4", "Line 5", "Line 6", "Lines 1-6", shared.FOR_YEAR-2, "Line A", "Line B", "Line 1", "Line 2", "Line 3", "Line 4", "Line 5", "Line 6", "Lines 1-6", shared.FOR_YEAR-3),
+        ],
+      },
+    ],
+  };
+  var rows = sheet.data[0].rowData;
+  var fields = ["income", "expenses", "nmc", "cap", "mort", "fundraising", "school", "outreach"];
+  for (i = 0; i < parishesInOrder.length; i++) {
+    var parishId = parishesInOrder[i].id;
+    var parishData = $scope.parishIds[parishId];
+    var parishFormData = $scope.formData.parish[parishId];
+    var parishReviewData = reviewData[parishId];
+    var parishReviewStatus = $scope.reviewStatus.parish[parishId];
+    var r = row(i+1, parishData.name, parishData.parish_code, parishData.city + ", " + parishData.state + " " + parishData.zip);
+    for (j = 0; j < fields.length; j++) {
+      r.values.push(dataCell($filter, shared.FOR_YEAR-2, fields[j], parishReviewData, parishFormData));
+    }
+    r.values.push(formulaCell("=SUM(G" + String(rows.length+1) + ":L" + String(rows.length+1) + ")"));
+    r.values.push(formulaCell("=F" + String(rows.length+1) + "-M" + String(rows.length+1)));
+    for (j = 0; j < fields.length; j++) {
+      r.values.push(dataCell($filter, shared.FOR_YEAR-3, fields[j], parishReviewData, parishFormData));
+    }
+    r.values.push(formulaCell("=SUM(Q" + String(rows.length+1) + ":V" + String(rows.length+1) + ")"));
+    r.values.push(formulaCell("=P" + String(rows.length+1) + "-W" + String(rows.length+1)));
+    rows.push(r);
+  }
+  return sheet;
+}
+
+function multipleSheets($scope, $filter, reviewData) {
   // We're going to sort the parishes by code.
   var parishesInOrder = [];
   angular.forEach($scope.parishIds, function(parishData, parishId) {
@@ -205,11 +297,6 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
     }
     return 0;
   });
-  var spreadsheet = {
-    properties: {
-      title: "Test Spreadsheet",
-    }
-  };
   var overviewSheet = {
     properties: {
       sheetId: 0,
@@ -491,13 +578,7 @@ function exportSpreadsheetWithData($scope, $filter, reviewData) {
       // Average net expenses.
       formulaCell("=SUM(O4:O" + String(parishesInOrder.length + 3) + ")")
       ));
-  spreadsheet.sheets = sheets;
-  gapi.client.sheets.spreadsheets.create(spreadsheet).then(function(response) {
-    console.log("response: ", response);
-    window.open("https://docs.google.com/spreadsheets/d/" + response.result.spreadsheetId + "/edit");
-  }, function(response) {
-    console.log("error from create spreadsheet: ", response);
-  });
+  return sheets;
 }
 
 function setupScope($scope, $firebaseObject, $filter) {
@@ -575,11 +656,11 @@ function setupScope($scope, $firebaseObject, $filter) {
   $scope.refreshDriveData = function() {
     base.initDriveApi(function () {refreshDriveDataHelper($scope);});
   };
-  $scope.exportSpreadsheet = function() {
+  $scope.exportSpreadsheet = function(format) {
     base.initGoogleApi(
       'https://www.googleapis.com/auth/spreadsheets', 
       'https://sheets.googleapis.com/$discovery/rest?version=v4', 
-      function () { exportSpreadsheetHelper($scope, $filter); });
+      function () { exportSpreadsheetHelper($scope, $filter, format); });
   };
   $scope.saveExtension = function() {
     console.log("saving extension ", $scope.parishIds);
