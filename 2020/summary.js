@@ -199,8 +199,10 @@ function exportSpreadsheetWithData($scope, $filter, reviewData, format) {
   };
   if (format === "multi") {
     spreadsheet.sheets = multipleSheets($scope, $filter, reviewData);
-  } else {
+  } else if (format === "single") {
     spreadsheet.sheets = [singleSheet($scope, $filter, reviewData)];
+  } else if (format === "contact") {
+    spreadsheet.sheets = [contactSheet($scope, $filter, reviewData)];
   }
   gapi.client.sheets.spreadsheets.create(spreadsheet).then(function(response) {
     console.log("response: ", response);
@@ -208,6 +210,60 @@ function exportSpreadsheetWithData($scope, $filter, reviewData, format) {
   }, function(response) {
     console.log("error from create spreadsheet: ", response);
   });
+}
+
+function contactSheet($scope, $filter, reviewData) {
+  // We're going to sort the parishes by city.
+  var parishesInOrder = [];
+  angular.forEach($scope.parishIds, function(parishData, parishId) {
+    if (parishData.excused) return;
+    parishesInOrder.push({
+      id: parishId,
+      city: parishData.city,
+    });
+  });
+  parishesInOrder.sort(function (a, b) {
+    if (a.city < b.city) {
+      return -1;
+    } else if (b.city < a.city) {
+      return 1;
+    }
+    return 0;
+  });
+  var sheet = {
+    properties: {
+      sheetId: 0,
+      title: "San Fran",
+      gridProperties: {
+        frozenRowCount: 1,
+        frozenColumnCount: 4,
+      },
+    },
+    data: [
+      {
+        startRow: 0,
+        startColumn: 0,
+        rowData: [
+          headerRow("", "Parish", "City", "Parish Code", "Priest Name", "Priest Email", "Priest Phone", "President Name", "President Email", "President Phone", "Treasurer Name", "Treasurer Email", "Treasurer Phone", "Preparer Name", "Preparer Email", "Preparer Phone"),
+        ],
+      },
+    ],
+  };
+  var rows = sheet.data[0].rowData;
+  for (i = 0; i < parishesInOrder.length; i++) {
+    var parishId = parishesInOrder[i].id;
+    var parishData = $scope.parishIds[parishId];
+    var parishFormData = $scope.formData.parish[parishId];
+    var parishReviewData = reviewData[parishId];
+    var parishReviewStatus = $scope.reviewStatus.parish[parishId];
+    var r = row(i+1, parishData.name, parishData.city, parishData.parish_code, 
+      parishFormData.priest_name, parishFormData.priest_email, parishFormData.priest_phone, 
+      parishFormData.pres_name, parishFormData.pres_email, parishFormData.pres_phone,
+      parishFormData.treas_name, parishFormData.treas_email, parishFormData.treas_phone,
+      parishFormData.preparer_name, parishFormData.preparer_email, parishFormData.preparer_phone);
+    rows.push(r);
+  }
+  return sheet;
 }
 
 function singleSheet($scope, $filter, reviewData) {
