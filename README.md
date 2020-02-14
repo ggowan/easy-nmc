@@ -40,12 +40,6 @@ git checkout prod
 git merge dev
 ```
 
-If the merge added a new year with a new shared.js, you'll likely need to update the `base.firebaseBackend` variable near the top of shared.js to point to the production database. It should be the same as what you see near the top of the shared.js file for previous years.
-
-``` javascript
-base.firebaseBackend = "https://intense-heat-7228.firebaseio.com/";
-```
-
 You can try out the app with the production data using the same command to start the dev server (`dev_appserver.py app.yaml`). 
 
 Commit any changes that you've made to the prod branch, then push them to github.
