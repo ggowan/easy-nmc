@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="easyNmcMetroStewardship">
+<head>
+  <title>NMC - Stewardship</title>
+  <link rel="stylesheet" href="/2021/style.css" type="text/css">
+
+  <!-- AngularJS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+
+  <!-- Firebase -->
+  <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+
+  <!-- AngularFire -->
+  <script src="https://cdn.firebase.com/libs/angularfire/1.1.1/angularfire.min.js"></script>
+
+  <!-- Google APIs -->
+  <script type="text/javascript" src="https://apis.google.com/js/client.js"></script>
+
+  <script src="/2021/shared.js"></script>
+  <script src="/2021/stewardship.js"></script>
+</head>
+<body class="wide" ng-controller="Ctrl" ng-cloak ng-show="parishIdsFinishedLoading && infoFinishedLoading && formDataFinishedLoading">
+<table class="bordered-table">
+<thead>
+<tr>
+<th rowspan=2>Parish Name</th>
+<th rowspan=2>City</th>
+<th rowspan=2>State</th>
+<th rowspan=2>Parish ID</th>
+<th rowspan=2>System</th>
+<th rowspan=2>Unit</th>
+<th colspan=2 class="small">Total Stewardship</th>
+<th colspan=2 class="small">Total Income</th>
+<th colspan=2 class="small"># of Members</th>
+<th rowspan=2># > $5,000</th>
+<th rowspan=2># $3,000-$4,999</th>
+<th rowspan=2># $2,000-$2,999</th>
+<th rowspan=2># $1,000-$1,999</th>
+<th rowspan=2># $800-$999</th>
+<th rowspan=2># $500-$799</th>
+<th rowspan=2># $300-$499</th>
+<th rowspan=2># < $300</th>
+<th rowspan=2># of new families in {{ FOR_YEAR - 2 }}</th>
+</tr>
+<tr>
+<th class="small">{{ FOR_YEAR - 3 }}</th>
+<th class="small">{{ FOR_YEAR - 2 }}</th>
+<th class="small">{{ FOR_YEAR - 3 }}</th>
+<th class="small">{{ FOR_YEAR - 2 }}</th>
+<th class="small">{{ FOR_YEAR - 3 }}</th>
+<th class="small">{{ FOR_YEAR - 2 }}</th>
+</tr>
+</thead>
+<tbody>
+<tr ng-repeat="(parish_id, parish_data) in parishIds | objectByKeyValFilter : 'excused' : 'true'">
+<td>{{parish_data.name}}</td>
+<td>{{parish_data.city}}</td>
+<td>{{parish_data.state}}</td>
+<td>{{parish_data.parish_code}}</td>
+<td>{{yearField(parish_id, FOR_YEAR - 2, 'stew_or_dues')}}</td>
+<td>{{yearField(parish_id, FOR_YEAR - 2, 'how_counted')}}</td>
+<td>{{yearField(parish_id, FOR_YEAR - 3, 'stew_income')}}</td>
+<td>{{yearField(parish_id, FOR_YEAR - 2, 'stew_income')}}</td>
+<td>{{yearField(parish_id, FOR_YEAR - 3, 'income')}}</td>
+<td>{{yearField(parish_id, FOR_YEAR - 2, 'income')}}</td>
+<td>{{yearField(parish_id, FOR_YEAR - 3, 'num_members')}}</td>
+<td>{{yearField(parish_id, FOR_YEAR - 2, 'num_members')}}</td>
+<td>{{formData.parish[parish_id].num_stew_over_5000}}</td>
+<td>{{formData.parish[parish_id].num_stew_3000_4999}}</td>
+<td>{{formData.parish[parish_id].num_stew_2000_2999}}</td>
+<td>{{formData.parish[parish_id].num_stew_1000_1999}}</td>
+<td>{{formData.parish[parish_id].num_stew_800_999}}</td>
+<td>{{formData.parish[parish_id].num_stew_500_799}}</td>
+<td>{{formData.parish[parish_id].num_stew_300_499}}</td>
+<td>{{formData.parish[parish_id].num_stew_under_300}}</td>
+<td>{{formData.parish[parish_id].num_new_families}}</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

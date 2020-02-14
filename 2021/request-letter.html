@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="easyNmc">
+<head>
+  <meta charset="UTF-8"> 
+  <title>NMC Request Letter</title>
+  <link rel="stylesheet" href="/2021/style.css" type="text/css">
+
+  <!-- AngularJS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+
+  <!-- Firebase -->
+  <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+
+  <script src="/2021/shared.js"></script>
+  <script src="/2021/request-letter.js"></script>
+</head>
+<body class="letter" ng-controller="Ctrl" ng-cloak>
+<div ng-if="ready">
+  <div ng-repeat="(parish_id, parish_data) in parishes | objectByKeyValFilter : 'excused' : 'true'" style="page-break-after:always;">
+    <p>February 23, 2017<br>
+       ✠St. Polycarp, Bishop of Smyrna
+
+    <p>{{parish_data.long_rector}}<br>
+       {{parish_data.long_name}}<br>
+       {{parish_data.address}}<br>
+       {{parish_data.city}}, {{parish_data.state}} {{parish_data.zip}}
+
+    <p>Beloved {{parish_data.short_rector || "Father"}} and Esteemed Parish Council Members,
+
+    <p>Blessed Triodion! At the instruction of His Eminence, I am sending you the below letter.
+
+    <p>I'm pleased to announce that the Metropolis once again contributed over 100% of its
+       National Ministries Allocation to the Archdiocese last year. Thank you for the contribution
+       that your parish made to this important accomplishment.
+        
+    <p>It is now time to prepare your parish's financial report for the determination of the {{year}}
+       National Ministries Allocation. This year we are continuing to use an online
+       data form, which reduces errors and greatly simplifies the work of the committee responsible
+       for reviewing the reports. The link to the form is below, along with the access key that
+       you will need to access your parish's data form. 
+      
+    <p><table style="padding-left:50px">
+      <tbody>
+        <tr class=nontabular><td>URL:</td><td>https://easy-nmc.appspot.com/</td></tr>
+        <tr class=nontabular><td>Access Key:</td><td>{{parish_data.access_key}}</td></tr>
+      </tbody>
+      </table>
+
+    <p>If you have any technical difficulties accessing the form, please try using a newer web
+       browser, such as Firefox or Chrome. You may also contact Geoffrey Gowan for
+       assistance, or to request a paper version of the form, at geoffrey.gowan@gmail.com, or
+       (510) 230-7650.
+      
+    <p>Once you have completed the form, please submit your parish's {{year-3}} &amp; {{year-2}} income statements
+       (profit and loss) and balance sheets as indicated at the bottom of the form. Please note that 
+       the deadline for submitting forms and financial statements is May 15, {{year-1}}.
+      
+     <p>Conveying to you His Eminence's paternal love and also my prayers for a blessed Great Lent and Pascha, I remain,
+
+     <p>With Love in Christ,
+     <br>+Bishop Apostolos
+     <br>Chancellor of the Metropolis of San Francisco
+
+  </div>
+</div>
+</body>
+</html>
+

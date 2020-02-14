@@ -75,9 +75,9 @@ This is a summary of the steps needed to update the form for a new year.
 3. Update app.yaml. For URLs that don't have the year in the URL itself, but refer to a file within a directory having a year, just increment the year of the directory. For URLs that actually have the year in the URL itself, you'll want to make a copy of the URL entry for the new year rather than changing the existing one. That way existing links continue to work.
 4. Within the directory for next year, make the following changes:
 
-     a. Do a find-and-replace-in-files of the current year with next year (**only** affecting files within next year's directory). Visual Studio Code has a convenient way of doing this if you right-click on next year's directory. This should hit a bunch of href paths containing the year as well as the shared.FOR_YEAR variable in shared.js.
+    a. Do a find-and-replace-in-files of the current year with next year (**only** affecting files within next year's directory). Visual Studio Code has a convenient way of doing this if you right-click on next year's directory. This should hit a bunch of href paths containing the year as well as the shared.FOR_YEAR variable in shared.js.
 
-     b. Update the "Changes Since Last Year" section in data-form.html with whatever changes have occurred.
+    b. Update the "Changes Since Last Year" section in data-form.html with whatever changes have occurred.
 
 5. There is a security rule that needs to be updated each year in Firebase.
 To do that, go to the Firebase admin console located at console.firebase.google.com and look for a security rule 
@@ -88,13 +88,18 @@ to the next year. Do it on both at the same time so you don't forget to do produ
 
     a. If you are changing any field names this year, you'll need to update the copying code to map from old
        to new field names.
+
     b. Make sure that your git is synced to the dev branch for testing.
+
     c. Run `dev_appserver.py app.yaml` from within the easy-nmc directory.
+
     d. Open a web browser pointed at http://localhost:8080/metropolis/SF/admin
-    e. click "Copy Last Year's Data" on the admin screen.  
+
+    e. Click "Copy Last Year's Data" on the admin screen.  
+
     f. Once you are happy with how things copied on the dev instance, you can repeat the above on the prod
        branch.
-    
+
    Copying data from last year is supposed to provide the following:
 
      * Contact info of priest, president, treasurer and preparer are copied over.     
