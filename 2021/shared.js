@@ -81,7 +81,6 @@ shared.STEWARDSHIP_FIELDS_PER_YEAR = [
   'num_members',
   'how_counted',
   'stew_income',
-  'income',
 ];
 
 // The year we are currently working on allocations for.

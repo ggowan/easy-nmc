@@ -72,26 +72,30 @@ function copyPropertyIfPresent(formSource, reviewSource, dest, sourceName, destN
   if (!destName) {
     destName = sourceName;
   }
-  if (reviewSource) {
-    if (angular.isNumber(formSource[sourceName])) {
-      dest.adjusted[destName] = dest.original[destName] = formSource[sourceName];
-    }
-    if (angular.isNumber(reviewSource[sourceName])) {
-      dest.adjusted[destName] = reviewSource[sourceName];
-    }
+  if (dest.adjusted && dest.original && angular.isNumber(formSource[sourceName])) {
+    dest.adjusted[destName] = dest.original[destName] = formSource[sourceName];
   }
+  var prePop;
   if (reviewSource && sourceName in reviewSource && angular.isNumber(reviewSource[sourceName])) {
     // review can override form only when review contains a number.
-    dest[destName] = reviewSource[sourceName];
+    if (dest.adjusted) {
+      dest.adjusted[destName] = reviewSource[sourceName];
+    }
     dest.wasAdjusted = true;
+    prePop = reviewSource[sourceName];
   } else if (sourceName in formSource) {
-    dest[destName] = formSource[sourceName];
+    prePop = formSource[sourceName];
+  }
+  // Never overwrite an existing value in the form.
+  if (dest[destName] == null && prePop != null) {
+    dest[destName] = prePop;
   }
 }
 
 // Copies specified properties from the formSource to the dest object. If reviewSource is provided,
 // it will override formSource if it contains a number (and not just a string, empty or otherwise).
 function copyPropertiesIfPresent(formSource, reviewSource, dest, properties) {
+  console.log("copying properties", properties, "from form", formSource, "and review", reviewSource, "to dest", dest);
   angular.forEach(properties, function(property) {
     copyPropertyIfPresent(formSource, reviewSource, dest, property);
   });
@@ -106,61 +110,68 @@ function copyDataIfReady(parishId, parishInfo, previousFormVal, previousReviewVa
   currentFormRef.transaction(function(currentFormVal) {
     console.log("transaction update function", parishId, currentFormVal);
     if (currentFormVal) {
-      console.log("recording that parish already has data", parishId);
-      transactionMessage = "parish already has data; not copying";
-      return currentFormVal;
+      console.log("parish", parishId, "already has data", currentFormVal);
     }
     transactionMessage = null;
-    currentFormVal = {};
-    copyPropertiesIfPresent(previousFormVal, null, currentFormVal, [
-      'priest_name',
-      'priest_phone',
-      'priest_email',
-      'pres_name',
-      'pres_phone',
-      'pres_email',
-      'treas_name',
-      'treas_phone',
-      'treas_email',
-      'preparer_name',
-      'preparer_phone',
-      'preparer_email',
-      'dues_family',
-      'dues_single',
-      'dues_senior',
-      'stew_name1',
-      'stew_phone1',
-      'stew_email1',
-      'stew_name2',
-      'stew_phone2',
-      'stew_email2',
-      'stew_name3',
-      'stew_phone3',
-      'stew_email3',
-      'stew_name4',
-      'stew_phone4',
-      'stew_email4',
-    ]);
-    currentFormVal.priorReview = {};
-    copyPropertiesIfPresent(previousReviewVal, null, currentFormVal.priorReview, [
-      'income_comment',
-      'expense_comment',
-      'nmc_comment',
-      'cap_comment',
-      'mort_comment',
-      'fundraising_comment',
-      'school_comment',
-      'outreach_comment',
-    ]);
+    var initiallyBlank = false;
+    if (!currentFormVal) {
+      currentFormVal = {};
+      initiallyBlank = true;
+    }
+    if (initiallyBlank) {
+      copyPropertiesIfPresent(previousFormVal, null, currentFormVal, [
+        'priest_name',
+        'priest_phone',
+        'priest_email',
+        'pres_name',
+        'pres_phone',
+        'pres_email',
+        'treas_name',
+        'treas_phone',
+        'treas_email',
+        'preparer_name',
+        'preparer_phone',
+        'preparer_email',
+        'dues_family',
+        'dues_single',
+        'dues_senior',
+        'stew_name1',
+        'stew_phone1',
+        'stew_email1',
+        'stew_name2',
+        'stew_phone2',
+        'stew_email2',
+        'stew_name3',
+        'stew_phone3',
+        'stew_email3',
+        'stew_name4',
+        'stew_phone4',
+        'stew_email4',
+      ]);
+      currentFormVal.priorReview = {};
+      copyPropertiesIfPresent(previousReviewVal, null, currentFormVal.priorReview, [
+        'income_comment',
+        'expense_comment',
+        'nmc_comment',
+        'cap_comment',
+        'mort_comment',
+        'fundraising_comment',
+        'school_comment',
+        'outreach_comment',
+      ]);
+    }
     if (!previousFormVal.Y2) {
       // Need this so we can copy from the adjustment if the parish never submitted a report.
       previousFormVal.Y2 = {};
     }
     if (!currentFormVal.Y1) {
-      currentFormVal.Y1 = {
-        original: {},
-        adjusted: {}
-      };
+      currentFormVal.Y1 = {};
+    }
+    if (!currentFormVal.Y1.original) {
+      currentFormVal.Y1.original = {};
+    }
+    if (!currentFormVal.Y1.adjusted) {
+      currentFormVal.Y1.adjusted = {};
     }
     copyPropertiesIfPresent(previousFormVal.Y2, previousReviewVal.Y2, currentFormVal.Y1, shared.FINANCIAL_FIELDS);
     copyPropertiesIfPresent(previousFormVal.Y2, null,
