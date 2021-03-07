@@ -5,18 +5,43 @@ threadsafe: yes
 handlers:
 
 - url: /metropolis/[A-Z]+/admin
-  static_files: 2021/admin.html
-  upload: 2021/admin.html
+  static_files: 2022/admin.html
+  upload: 2022/admin.html
   secure: always
 
 - url: /metropolis/[A-Z]+/request-letter
-  static_files: 2021/request-letter.html
-  upload: 2021/request-letter.html
+  static_files: 2022/request-letter.html
+  upload: 2022/request-letter.html
   secure: always
 
 - url: /metropolis/[A-Z]+/summary
-  static_files: 2021/summary.html
-  upload: 2021/summary.html
+  static_files: 2022/summary.html
+  upload: 2022/summary.html
+  secure: always
+
+- url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/data-form/2022
+  static_files: 2022/data-form.html
+  upload: 2022/data-form.html
+  secure: always
+
+- url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/review/2022
+  static_files: 2022/review.html
+  upload: 2022/review.html
+  secure: always
+
+- url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/report/2022
+  static_files: 2022/report.html
+  upload: 2022/report.html
+  secure: always
+
+- url: /metropolis/[A-Z]+/stewardship/2022
+  static_files: 2022/stewardship.html
+  upload: 2022/stewardship.html
+  secure: always
+
+- url: /2022/(.*\.(gif|png|jpg|html|css|js))$
+  static_files: 2022/\1
+  upload: 2022/.*\.(gif|png|jpg|html|css|js)$
   secure: always
 
 - url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/data-form/2021
