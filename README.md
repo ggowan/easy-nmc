@@ -66,7 +66,7 @@ This is a summary of the steps needed to update the form for a new year.
 
 1. Create a new directory for the next year.
 2. Copy all files from the current year to the next year.
-3. Update app.yaml. For URLs that don't have the year in the URL itself, but refer to a file within a directory having a year, just increment the year of the directory. For URLs that actually have the year in the URL itself, you'll want to make a copy of the URL entry for the new year rather than changing the existing one. That way existing links continue to work.
+3. Update app.yaml. For URLs that don't have the year in the URL itself, but refer to a file within a directory having a year, just increment the year of the directory. Most of these are at the top but one is at the very bottom. For URLs that actually have the year in the URL itself, you'll want to make a copy of the URL entry for the new year rather than changing the existing one. That way existing links continue to work.
 4. Within the directory for next year, make the following changes:
 
     a. Do a find-and-replace-in-files of the current year with next year (**only** affecting files within next year's directory). Visual Studio Code has a convenient way of doing this if you right-click on next year's directory. This should hit a bunch of href paths containing the year as well as the shared.FOR_YEAR variable in shared.js.

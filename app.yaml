@@ -200,6 +200,6 @@ handlers:
   secure: always
 
 - url: /.*
-  static_files: 2021/index.html
-  upload: 2021/index.html
+  static_files: 2022/index.html
+  upload: 2022/index.html
   secure: always
