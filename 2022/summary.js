@@ -244,7 +244,7 @@ function contactSheet($scope, $filter, reviewData) {
         startRow: 0,
         startColumn: 0,
         rowData: [
-          headerRow("", "Parish", "City", "Parish Code", "Priest Name", "Priest Email", "Priest Phone", "President Name", "President Email", "President Phone", "Treasurer Name", "Treasurer Email", "Treasurer Phone", "Preparer Name", "Preparer Email", "Preparer Phone", "Reviewer"),
+          headerRow("", "Parish", "City", "Parish Code", "Priest Name", "Priest Email", "Priest Phone", "President Name", "President Email", "President Phone", "Treasurer Name", "Treasurer Email", "Treasurer Phone", "Preparer Name", "Preparer Email", "Preparer Phone", "Reviewer", "Access Key", "Form Link", "Upload Link"),
         ],
       },
     ],
@@ -260,7 +260,9 @@ function contactSheet($scope, $filter, reviewData) {
       parishFormData.pres_name, parishFormData.pres_email, parishFormData.pres_phone,
       parishFormData.treas_name, parishFormData.treas_email, parishFormData.treas_phone,
       parishFormData.preparer_name, parishFormData.preparer_email, parishFormData.preparer_phone,
-      parishReviewStatus.reviewer_name);
+      parishReviewStatus.reviewer_name, parishData.access_key, 
+      'https://easy-nmc.appspot.com/metropolis/SF/parish/' + parishId + '/data-form/' + shared.FOR_YEAR + '?key=' + parishData.access_key,
+      parishData.upload_link);
     rows.push(r);
   }
   return sheet;
