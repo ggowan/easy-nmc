@@ -253,8 +253,8 @@ function contactSheet($scope, $filter, reviewData) {
   for (i = 0; i < parishesInOrder.length; i++) {
     var parishId = parishesInOrder[i].id;
     var parishData = $scope.parishIds[parishId];
-    var parishFormData = $scope.formData.parish[parishId];
-    var parishReviewStatus = $scope.reviewStatus.parish[parishId];
+    var parishFormData = $scope.formData.parish ? $scope.formData.parish[parishId] : {};
+    var parishReviewStatus = $scope.reviewStatus.parish ? $scope.reviewStatus.parish[parishId] : {};
     var r = row(i+1, parishData.name, parishData.city, parishData.parish_code, 
       parishFormData.priest_name, parishFormData.priest_email, parishFormData.priest_phone, 
       parishFormData.pres_name, parishFormData.pres_email, parishFormData.pres_phone,
