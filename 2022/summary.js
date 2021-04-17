@@ -244,7 +244,7 @@ function contactSheet($scope, $filter, reviewData) {
         startRow: 0,
         startColumn: 0,
         rowData: [
-          headerRow("", "Parish", "City", "Parish Code", "Priest Name", "Priest Email", "Priest Phone", "President Name", "President Email", "President Phone", "Treasurer Name", "Treasurer Email", "Treasurer Phone", "Preparer Name", "Preparer Email", "Preparer Phone"),
+          headerRow("", "Parish", "City", "Parish Code", "Priest Name", "Priest Email", "Priest Phone", "President Name", "President Email", "President Phone", "Treasurer Name", "Treasurer Email", "Treasurer Phone", "Preparer Name", "Preparer Email", "Preparer Phone", "Reviewer", "Access Key", "Form Link", "Upload Link"),
         ],
       },
     ],
@@ -253,14 +253,16 @@ function contactSheet($scope, $filter, reviewData) {
   for (i = 0; i < parishesInOrder.length; i++) {
     var parishId = parishesInOrder[i].id;
     var parishData = $scope.parishIds[parishId];
-    var parishFormData = $scope.formData.parish[parishId];
-    var parishReviewData = reviewData[parishId];
-    var parishReviewStatus = $scope.reviewStatus.parish[parishId];
+    var parishFormData = $scope.formData.parish ? $scope.formData.parish[parishId] : {};
+    var parishReviewStatus = $scope.reviewStatus.parish ? $scope.reviewStatus.parish[parishId] : {};
     var r = row(i+1, parishData.name, parishData.city, parishData.parish_code, 
       parishFormData.priest_name, parishFormData.priest_email, parishFormData.priest_phone, 
       parishFormData.pres_name, parishFormData.pres_email, parishFormData.pres_phone,
       parishFormData.treas_name, parishFormData.treas_email, parishFormData.treas_phone,
-      parishFormData.preparer_name, parishFormData.preparer_email, parishFormData.preparer_phone);
+      parishFormData.preparer_name, parishFormData.preparer_email, parishFormData.preparer_phone,
+      parishReviewStatus.reviewer_name, parishData.access_key, 
+      'https://easy-nmc.appspot.com/metropolis/SF/parish/' + parishId + '/data-form/' + shared.FOR_YEAR + '?key=' + parishData.access_key,
+      parishData.upload_link);
     rows.push(r);
   }
   return sheet;

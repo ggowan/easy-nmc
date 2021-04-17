@@ -223,6 +223,8 @@ function setupScope($scope, $firebaseObject) {
       }
     }
   };
+  // Stores the Metropolis names and each parish's name, city and state in a publicly-accessible list
+  // used on the landing page.
   $scope.updateLandingPage = function() {
     console.log("updateLandingPage", $scope.parishInfos, Object.keys($scope.parishInfos));
     let obj = {
