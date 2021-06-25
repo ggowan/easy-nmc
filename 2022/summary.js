@@ -269,6 +269,7 @@ function contactSheet($scope, $filter, reviewData) {
 }
 
 function singleSheet($scope, $filter, reviewData) {
+  if (!reviewData) reviewData = {};
   // We're going to sort the parishes by state and then code.
   var parishesInOrder = [];
   angular.forEach($scope.parishIds, function(parishData, parishId) {
@@ -338,6 +339,7 @@ function singleSheet($scope, $filter, reviewData) {
 }
 
 function multipleSheets($scope, $filter, reviewData) {
+  if (!reviewData) reviewData = {};
   // We're going to sort the parishes by code.
   var parishesInOrder = [];
   angular.forEach($scope.parishIds, function(parishData, parishId) {
