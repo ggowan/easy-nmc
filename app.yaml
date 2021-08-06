@@ -14,6 +14,31 @@ handlers:
   upload: 2022/request-letter.html
   secure: always
 
+- url: /metropolis/[A-Z]+/summary/2022
+  static_files: 2022/summary.html
+  upload: 2022/summary.html
+  secure: always
+
+- url: /metropolis/[A-Z]+/summary/2021
+  static_files: 2021/summary.html
+  upload: 2021/summary.html
+  secure: always
+
+- url: /metropolis/[A-Z]+/summary/2020
+  static_files: 2020/summary.html
+  upload: 2020/summary.html
+  secure: always
+
+- url: /metropolis/[A-Z]+/summary/2019
+  static_files: 2019/summary.html
+  upload: 2019/summary.html
+  secure: always
+
+- url: /metropolis/[A-Z]+/summary/2018
+  static_files: 2018/summary.html
+  upload: 2018/summary.html
+  secure: always
+
 - url: /metropolis/[A-Z]+/summary
   static_files: 2022/summary.html
   upload: 2022/summary.html
