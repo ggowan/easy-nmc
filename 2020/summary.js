@@ -456,7 +456,7 @@ function multipleSheets($scope, $filter, reviewData) {
           startRow: 0,
           startColumn: 0,
           rowData: [
-            headerRow("DATA FOR 2017 ARCHDIOCESE ALLOCATION"),
+            headerRow("DATA FOR " + shared.FOR_YEAR + " ARCHDIOCESE ALLOCATION"),
             headerRow("Metropolis of San Francisco"),
             headerRow(rightAlignedBoldCell("Parish Code"), "", "", "", "", "", "", "", parishData.parish_code),
             row(),
