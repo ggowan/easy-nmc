@@ -46,10 +46,13 @@ You are offline<br>
 Please use this form to report your parish's financial information for the National Ministries Allocation Process. 
 
 <h3>Changes This Year</h3>
-<p>Your parish's payments to the Archdiocese Benefits Plan are deductible expenses starting with 2021.
+<ol>
+  <li>Your parish's payments to the Archdiocese Benefits Plan are deductible expenses starting with 2021.
+  <li>We are no longer collecting stewardship data.
+</ol>
 
 <h3>Due Date</h3>
-<p>The due date for completing this form is <strong>June 30, {{ year - 1 }}</strong>. Please bear in mind that the form must be reviewed and approved by the parish priest, president, treasurer, and the chairperson of the parish's internal audit committee by that date.
+<p>The due date for completing this form is <strong>May 30, {{ year - 1 }}</strong>. Please bear in mind that the form must be reviewed and approved by the parish priest, president, treasurer, and the chairperson of the parish's internal audit committee by that date.
 
 <h3>Instructions for Online Form</h3>
 <p><strong>In order to enter your information into the form, please click the pencil button in the top-right corner.</strong> 
@@ -429,13 +432,6 @@ expenses are posted in the parish’s income statement.
   <th scope=row><strong>Net Expenses</strong></th>
   <td class=money><strong>{{ firebaseData.Y1.expenses - totalDeductions(firebaseData.Y1) | currency : $ : 0 }}</strong></td>
   <td class=money><strong>{{ firebaseData.Y2.expenses - totalDeductions(firebaseData.Y2) | currency : $ : 0 }}</strong></td>
-</tr>
-<tr style="height: 1em"></tr>
-<tr>
-  <td style="border:none"></td>
-  <th scope=row>Stewardship/Dues Income</th>
-  <td class=money>{{ (firebaseData.Y1.stew_income || 0) | currency : $ : 0 }}</td>
-  <td class=money>{{ (firebaseData.Y2.stew_income || 0) | currency : $ : 0 }}</td>
 </tr>
 </tbody>
 </table>
