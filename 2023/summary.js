@@ -307,15 +307,15 @@ function singleSheet($scope, $filter, reviewData) {
         startRow: 0,
         startColumn: 0,
         rowData: [
-          headerRow("", "", "", "", shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3),
-          headerRow("", "", "Parish", "", "Revenue", "Expenses", "TC", "Asset Acquisitions", "Loan Payments", "Fundraising Exp", "Greek/Sunday Sch", "Charitable giving", "Total", "Net Expense", "Revenue", "Expenses", "TC", "Asset Acquisitions", "Loan Payments", "Fundraising Exp", "Greek/Sunday Sch", "Charitable giving", "Total", "Net Expense"),
-          headerRow("", "Parish", "Code", "City, State Zip Code", "Line A", "Line B", "Line 1", "Line 2", "Line 3", "Line 4", "Line 5", "Line 6", "Lines 1-6", shared.FOR_YEAR-2, "Line A", "Line B", "Line 1", "Line 2", "Line 3", "Line 4", "Line 5", "Line 6", "Lines 1-6", shared.FOR_YEAR-3),
+          headerRow("", "", "", "", shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3),
+          headerRow("", "", "Parish", "", "Revenue", "Expenses", "TC", "Benefits", "Asset Acquisitions", "Loan Payments", "Fundraising Exp", "Greek/Sunday Sch", "Charitable giving", "Total", "Net Expense", "Revenue", "Expenses", "TC", "Benefits", "Asset Acquisitions", "Loan Payments", "Fundraising Exp", "Greek/Sunday Sch", "Charitable giving", "Total", "Net Expense"),
+          headerRow("", "Parish", "Code", "City, State Zip Code", "Line A", "Line B", "Line 1", "Line 2", "Line 3", "Line 4", "Line 5", "Line 6", "Line 7", "Lines 1-7", shared.FOR_YEAR-2, "Line A", "Line B", "Line 1", "Line 2", "Line 3", "Line 4", "Line 5", "Line 6", "Line 7", "Lines 1-7", shared.FOR_YEAR-3),
         ],
       },
     ],
   };
   var rows = sheet.data[0].rowData;
-  var fields = ["income", "expenses", "nmc", "cap", "mort", "fundraising", "school", "outreach"];
+  var fields = ["income", "expenses", "nmc", "benefits", "cap", "mort", "fundraising", "school", "outreach"];
   for (i = 0; i < parishesInOrder.length; i++) {
     var parishId = parishesInOrder[i].id;
     var parishData = $scope.parishIds[parishId];
@@ -326,13 +326,13 @@ function singleSheet($scope, $filter, reviewData) {
     for (j = 0; j < fields.length; j++) {
       r.values.push(dataCell($filter, shared.FOR_YEAR-2, fields[j], parishReviewData, parishFormData));
     }
-    r.values.push(formulaCell("=SUM(G" + String(rows.length+1) + ":L" + String(rows.length+1) + ")"));
-    r.values.push(formulaCell("=F" + String(rows.length+1) + "-M" + String(rows.length+1)));
+    r.values.push(formulaCell("=SUM(G" + String(rows.length+1) + ":M" + String(rows.length+1) + ")"));
+    r.values.push(formulaCell("=F" + String(rows.length+1) + "-N" + String(rows.length+1)));
     for (j = 0; j < fields.length; j++) {
       r.values.push(dataCell($filter, shared.FOR_YEAR-3, fields[j], parishReviewData, parishFormData));
     }
-    r.values.push(formulaCell("=SUM(Q" + String(rows.length+1) + ":V" + String(rows.length+1) + ")"));
-    r.values.push(formulaCell("=P" + String(rows.length+1) + "-W" + String(rows.length+1)));
+    r.values.push(formulaCell("=SUM(R" + String(rows.length+1) + ":X" + String(rows.length+1) + ")"));
+    r.values.push(formulaCell("=P" + String(rows.length+1) + "-Y" + String(rows.length+1)));
     rows.push(r);
   }
   return sheet;
@@ -478,14 +478,15 @@ function multipleSheets($scope, $filter, reviewData) {
             dataRow($filter, centeredCell("B"), "Gross Expenses", "expenses", parishReviewData, parishFormData,
               "expense_explanation", "expense_comment"),
             dataRow($filter, centeredCell("C1"), "National Ministries Commitment", "nmc", parishReviewData, parishFormData),
-            dataRow($filter, centeredCell("C2"), "Capital Improvement", "cap", parishReviewData, parishFormData,
+            dataRow($filter, centeredCell("C2"), "Benefits", "benefits", parishReviewData, parishFormData),
+            dataRow($filter, centeredCell("C3"), "Capital Improvement", "cap", parishReviewData, parishFormData,
               ["cap_lines", "cap_projects"], "cap_comment"),
-            dataRow($filter, centeredCell("C3"), "Mortgage/Construction Loans", "mort", parishReviewData, parishFormData),
-            dataRow($filter, centeredCell("C4"), "Fundraising Expenses", "fundraising", parishReviewData, parishFormData),
-            dataRow($filter, centeredCell("C5"), "School Expenses", "school", parishReviewData, parishFormData),
-            dataRow($filter, centeredCell("C6"), "Charitable Giving", "outreach", parishReviewData, parishFormData),
-            row(centeredCell("C"), "Total Deductions", "", formulaCell("=SUM(D15:D20)"), formulaCell("=SUM(E15:E20)")),
-            row(centeredCell("B-C"), "Net Expenses", "", formulaCell("=D14-D21"), formulaCell("=E14-E21")),
+            dataRow($filter, centeredCell("C4"), "Mortgage/Construction Loans", "mort", parishReviewData, parishFormData),
+            dataRow($filter, centeredCell("C5"), "Fundraising Expenses", "fundraising", parishReviewData, parishFormData),
+            dataRow($filter, centeredCell("C6"), "School Expenses", "school", parishReviewData, parishFormData),
+            dataRow($filter, centeredCell("C7"), "Charitable Giving", "outreach", parishReviewData, parishFormData),
+            row(centeredCell("C"), "Total Deductions", "", formulaCell("=SUM(D15:D21)"), formulaCell("=SUM(E15:E21)")),
+            row(centeredCell("B-C"), "Net Expenses", "", formulaCell("=D14-D22"), formulaCell("=E14-E22")),
             /*row(),
             dataRow($filter, "", "Property Insurance", "prop_liab", parishReviewData, parishFormData),
             dataRow($filter, "", "Total Stewardship", "stew_income", parishReviewData, parishFormData),
@@ -608,11 +609,11 @@ function multipleSheets($scope, $filter, reviewData) {
         formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D14\"))"),
         formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E14\"))"),
         // Deductions.
-        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D21\"))"),
-        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E21\"))"),
-        // Net operating expenses.
         formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D22\"))"),
         formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E22\"))"),
+        // Net operating expenses.
+        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!D23\"))"),
+        formulaCell("=INDIRECT(CONCATENATE($A" + String(i+4) + ",\"!E23\"))"),
         "",
         // Average net expenses.
         formulaCell("=(L" + String(i+4) + "+M" + String(i+4) + ")/2"),
