@@ -1,0 +1,4 @@
+<h2 align="center">Please Select Your Parish</h2>
+<div align="center" ng-repeat="parish in getParishList() | orderBy:['name', 'city', 'state']" style="padding:2px">
+  <button ng-click="selectParish(parish.key)" style="width:350px;font-size:1.2em">{{parish.name}}, {{parish.city}}, {{parish.state}}</button>
+</div>

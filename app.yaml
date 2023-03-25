@@ -5,13 +5,18 @@ threadsafe: yes
 handlers:
 
 - url: /metropolis/[A-Z]+/admin
-  static_files: 2023/admin.html
-  upload: 2023/admin.html
+  static_files: 2024/admin.html
+  upload: 2024/admin.html
   secure: always
 
 - url: /metropolis/[A-Z]+/request-letter
-  static_files: 2023/request-letter.html
-  upload: 2023/request-letter.html
+  static_files: 2024/request-letter.html
+  upload: 2024/request-letter.html
+  secure: always
+
+- url: /metropolis/[A-Z]+/summary/2024
+  static_files: 2024/summary.html
+  upload: 2024/summary.html
   secure: always
 
 - url: /metropolis/[A-Z]+/summary/2023
@@ -45,8 +50,33 @@ handlers:
   secure: always
 
 - url: /metropolis/[A-Z]+/summary
-  static_files: 2023/summary.html
-  upload: 2023/summary.html
+  static_files: 2024/summary.html
+  upload: 2024/summary.html
+  secure: always
+
+- url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/data-form/2024
+  static_files: 2024/data-form.html
+  upload: 2024/data-form.html
+  secure: always
+
+- url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/review/2024
+  static_files: 2024/review.html
+  upload: 2024/review.html
+  secure: always
+
+- url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/report/2024
+  static_files: 2024/report.html
+  upload: 2024/report.html
+  secure: always
+
+- url: /metropolis/[A-Z]+/stewardship/2024
+  static_files: 2024/stewardship.html
+  upload: 2024/stewardship.html
+  secure: always
+
+- url: /2024/(.*\.(gif|png|jpg|html|css|js))$
+  static_files: 2024/\1
+  upload: 2024/.*\.(gif|png|jpg|html|css|js)$
   secure: always
 
 - url: /metropolis/[A-Z]+/parish/[-a-z0-9]*/data-form/2023
@@ -255,6 +285,6 @@ handlers:
   secure: always
 
 - url: /.*
-  static_files: 2023/index.html
-  upload: 2023/index.html
+  static_files: 2024/index.html
+  upload: 2024/index.html
   secure: always
