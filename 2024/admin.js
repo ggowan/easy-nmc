@@ -267,7 +267,10 @@ function setupScope($scope, $firebaseObject) {
       previousFormRef.once("value", function(previousFormSnapshot) {
         console.log("data form responded", parishId);
         previousFormVal = previousFormSnapshot.val();
-        copyDataIfReady(parishId, parishInfo, previousFormVal, previousReviewVal, currentFormRef);
+        if (previousFormVal == null) {
+          previousFormVal = {};
+        }
+         copyDataIfReady(parishId, parishInfo, previousFormVal, previousReviewVal, currentFormRef);
       }, function(error) {
         console.log("Couldn't read prior year's form for parish", parishId, error);
       });
@@ -275,6 +278,9 @@ function setupScope($scope, $firebaseObject) {
       previousReviewRef.once("value", function(previousReviewSnapshot) {
         console.log("review responded", parishId);
         previousReviewVal = previousReviewSnapshot.val();
+        if (previousReviewVal == null) {
+          previousReviewVal = {};
+        }
         copyDataIfReady(parishId, parishInfo, previousFormVal, previousReviewVal, currentFormRef);
       }, function(error) {
         console.log("Couldn't read prior year's review for parish", parishId, error);
