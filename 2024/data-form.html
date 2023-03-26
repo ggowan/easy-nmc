@@ -438,6 +438,11 @@ expenses are posted in the parish’s income statement.
   </tbody>
 </table>
 
+<h3>Business Activities</h3>
+<p>Is the parish engaged in any business activities?  List any and all business related activities such as property rental, catering, weekly food sales. Also upload financial statements for these businesses if not in the total income and total expense above.</p>
+
+<textarea ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.business_activities cols=70 rows=3></textarea>
+
 </section>
 <section>
 
