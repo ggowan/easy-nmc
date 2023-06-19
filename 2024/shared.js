@@ -47,12 +47,12 @@ shared.yearToYearField = function (year) {
 shared.getNumericField = function(year, field, primary, fallback) {
   var yearField = shared.yearToYearField(year);
   if (primary && primary[yearField] && 
-      angular.isNumber(primary[yearField][field])) {
-    return primary[yearField][field];
+      angular.isNumber(base.coerceToNumber(primary[yearField][field]))) {
+    return base.coerceToNumber(primary[yearField][field]);
   }
   if (fallback && fallback[yearField] && 
-      angular.isNumber(fallback[yearField][field])) {
-    return fallback[yearField][field];
+      angular.isNumber(base.coerceToNumber(fallback[yearField][field]))) {
+    return base.coerceToNumber(fallback[yearField][field]);
   }
   return null;
 };

@@ -270,3 +270,24 @@ base.isDifferent = function(val1, val2) {
     return angular.isNumber(val2);
   }
 }
+
+// Returns true if val is a string that appears to be a number, optionally
+// formatted like currency.
+// Otherwise false.
+base.looksLikeNumber = function(val) {
+  if (!angular.isString(val)) return false;
+  // Make sure there are no extraneous characters and it looks like a number,
+  // optionally currency formatted.
+  return /^\s*\$?\s*[,0-9]+\.?\d*\s*$/.test(val);
+}
+
+// If the specified value is a number, just return it.
+// If it is a string that looks like a number, convert it to a number.
+// Otherwise, return null.
+base.coerceToNumber = function(val) {
+  if (angular.isNumber(val)) return val;
+  if (base.looksLikeNumber(val)) {
+    return Number(val.replace(/[^0-9\.]+/g,""));
+  }
+  return null;
+}

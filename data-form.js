@@ -110,24 +110,15 @@ app.controller("Ctrl", function($scope, $firebaseObject) {
   });
 });
 
-// Checks whether the specified string appears to be a number, optionally
-// formatted like currency.
-function looksLikeNumber(val) {
-  if (!angular.isString(val)) return false;
-  // Make sure there are no extraneous characters and it looks like a number,
-  // optionally currency formatted.
-  return /^\s*\$?\s*[,0-9]+\.?\d*\s*$/.test(val);
-}
-
 app.directive('dollars', ['currencyFilter', function(currencyFilter) {
   return {
     require: 'ngModel',
     link: function(scope, element, attrs, ngModel) {
       // Parse input.
       ngModel.$parsers.push(function(value) {
-        if (looksLikeNumber(value)) {
+        if (base.looksLikeNumber(value)) {
           // Remove anything that is not a digit or decimal point.
-          return Math.round(Number(value.replace(/[^0-9\.]+/g,"")));
+          return Math.round(base.coerceToNumber(value));
         } else if (angular.isString(value)) {
           // If it's not quite a number, we just save whatever they typed in
           // as a string for later analysis.
@@ -152,7 +143,56 @@ app.directive('dollars', ['currencyFilter', function(currencyFilter) {
         if (viewValue === undefined || viewValue === '') {
           return true;
         }
-        return looksLikeNumber(viewValue);
+        return base.looksLikeNumber(viewValue);
+      };
+      ngModel.$validators.numericRange = function(modelValue, viewValue) {
+        if (viewValue === undefined || viewValue === '') {
+          return true;
+        }
+        if (angular.isNumber(modelValue)) {
+          return modelValue >= 0.0 && modelValue <= 100000000;
+        } else {
+          return true;
+        }
+      };
+    }
+  };
+}]);
+
+app.directive('number', ['numberFilter', function(numberFilter) {
+  return {
+    require: 'ngModel',
+    link: function(scope, element, attrs, ngModel) {
+      // Parse input.
+      ngModel.$parsers.push(function(value) {
+        if (base.looksLikeNumber(value)) {
+          // Remove anything that is not a digit or decimal point.
+          return Math.round(base.coerceToNumber(value));
+        } else if (angular.isString(value)) {
+          // If it's not quite a number, we just save whatever they typed in
+          // as a string for later analysis.
+          return value;
+        } else {
+          // We store an empty string to represent nothing entered.
+          return '';
+        }
+      });
+
+      // Format output.
+      ngModel.$formatters.push(function(value) {
+        if (angular.isNumber(value)) {
+          return numberFilter(value, 0);
+        } else if (angular.isString(value)) {
+          return value;
+        } else {
+          return '';
+        }
+      });
+      ngModel.$validators.validCharacters = function(modelValue, viewValue) {
+        if (viewValue === undefined || viewValue === '') {
+          return true;
+        }
+        return base.looksLikeNumber(viewValue);
       };
       ngModel.$validators.numericRange = function(modelValue, viewValue) {
         if (viewValue === undefined || viewValue === '') {
