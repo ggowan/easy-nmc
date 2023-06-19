@@ -307,9 +307,9 @@ function singleSheet($scope, $filter, reviewData) {
         startRow: 0,
         startColumn: 0,
         rowData: [
-          headerRow("", "", "", "", shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3),
-          headerRow("", "", "Parish", "", "Revenue", "Expenses", "TC", "Benefits", "Asset Acquisitions", "Loan Payments", "Fundraising Exp", "Greek/Sunday Sch", "Charitable giving", "Total", "Net Expense", "Revenue", "Expenses", "TC", "Benefits", "Asset Acquisitions", "Loan Payments", "Fundraising Exp", "Greek/Sunday Sch", "Charitable giving", "Total", "Net Expense"),
-          headerRow("", "Parish", "Code", "City, State Zip Code", "Line A", "Line B", "Line 1", "Line 2", "Line 3", "Line 4", "Line 5", "Line 6", "Line 7", "Lines 1-7", shared.FOR_YEAR-2, "Line A", "Line B", "Line 1", "Line 2", "Line 3", "Line 4", "Line 5", "Line 6", "Line 7", "Lines 1-7", shared.FOR_YEAR-3),
+          headerRow("", "", "", "", shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2, shared.FOR_YEAR-2,shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3, shared.FOR_YEAR-3),
+          headerRow("", "", "Parish", "", "Revenue", "Expenses", "TC", "Benefits", "Asset Acquisitions", "Loan Payments", "Fundraising Exp", "Greek/Sunday Sch", "Charitable giving", "Total", "Net Expense", "Pledge", "Total", "Revenue", "Expenses", "TC", "Benefits", "Asset Acquisitions", "Loan Payments", "Fundraising Exp", "Greek/Sunday Sch", "Charitable giving", "Total", "Net Expense", "Pledge", "Total"),
+          headerRow("", "Parish", "Code", "City, State Zip Code", "Line A", "Line B", "Line 1", "Line 2", "Line 3", "Line 4", "Line 5", "Line 6", "Line 7", "Lines 1-7", shared.FOR_YEAR-2, "Units", "Stewardship", "Line A", "Line B", "Line 1", "Line 2", "Line 3", "Line 4", "Line 5", "Line 6", "Line 7", "Lines 1-7", shared.FOR_YEAR-3, "Units", "Stewardship"),
         ],
       },
     ],
@@ -321,18 +321,21 @@ function singleSheet($scope, $filter, reviewData) {
     var parishData = $scope.parishIds[parishId];
     var parishFormData = $scope.formData.parish[parishId];
     var parishReviewData = reviewData[parishId];
-    var parishReviewStatus = $scope.reviewStatus.parish[parishId];
     var r = row(i+1, parishData.name, parishData.parish_code, parishData.city + ", " + parishData.state + " " + parishData.zip);
     for (j = 0; j < fields.length; j++) {
       r.values.push(dataCell($filter, shared.FOR_YEAR-2, fields[j], parishReviewData, parishFormData));
     }
     r.values.push(formulaCell("=SUM(G" + String(rows.length+1) + ":M" + String(rows.length+1) + ")"));
     r.values.push(formulaCell("=F" + String(rows.length+1) + "-N" + String(rows.length+1)));
+    r.values.push(dataCell($filter, shared.FOR_YEAR-2, "pledge_units", parishReviewData, parishFormData));
+    r.values.push(dataCell($filter, shared.FOR_YEAR-2, "stew_income", parishReviewData, parishFormData));
     for (j = 0; j < fields.length; j++) {
       r.values.push(dataCell($filter, shared.FOR_YEAR-3, fields[j], parishReviewData, parishFormData));
     }
-    r.values.push(formulaCell("=SUM(R" + String(rows.length+1) + ":X" + String(rows.length+1) + ")"));
-    r.values.push(formulaCell("=P" + String(rows.length+1) + "-Y" + String(rows.length+1)));
+    r.values.push(formulaCell("=SUM(T" + String(rows.length+1) + ":Z" + String(rows.length+1) + ")"));
+    r.values.push(formulaCell("=S" + String(rows.length+1) + "-AA" + String(rows.length+1)));
+    r.values.push(dataCell($filter, shared.FOR_YEAR-3, "pledge_units", parishReviewData, parishFormData));
+    r.values.push(dataCell($filter, shared.FOR_YEAR-3, "stew_income", parishReviewData, parishFormData));
     rows.push(r);
   }
   return sheet;
