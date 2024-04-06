@@ -1,0 +1,5 @@
+
+<h2 align="center">Please Select Your Metropolis</h2>
+<div align="center" ng-repeat="metro in metro_list | orderBy:'name'" style="padding:2px">
+  <button ng-click="selectMetro(metro.key)" style="width:350px;font-size:1.2em">{{metro.name}}</button>
+</div>
