@@ -46,10 +46,10 @@ You are offline<br>
 Please use this form to report your parish's financial information for the National Ministries Allocation Process. 
 
 <h3>Changes This Year</h3>
-There are no changes since last year!
+Added checklist questions section.
 
 <h3>Due Date</h3>
-<p>The due date for completing this form is <strong>May 30, {{ year - 1 }}</strong>. Please bear in mind that the form must be reviewed and approved by the parish priest, president, treasurer, and the chairperson of the parish's internal audit committee by that date.
+<p>The due date for completing this form is <strong>MONTH DAY, {{ year - 1 }}</strong>. Please bear in mind that the form must be reviewed and approved by the parish priest, president, treasurer, and the chairperson of the parish's internal audit committee by that date.
 
 <h3>Instructions for Online Form</h3>
 <p><strong>In order to enter your information into the form, please click the pencil button in the top-right corner.</strong> 
@@ -443,6 +443,166 @@ expenses are posted in the parish’s income statement.
 
 <textarea ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.business_activities cols=70 rows=3></textarea>
 
+<h3>Checklist Questions</h3>
+Please answer all of the following questions to certify that your report is complete and provide additional context on your financial reports.
+<table class="bordered-table">
+<thead>
+<tr><th>#</th><th>Question</th><th>Yes</th><th>No</th><th>Explanation for no answers or as indicated</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td>1</td>
+  <th scope=row>Did you reference all numbers on the Data Form to the lines where they can be found on the P&L?</th>
+  <td><input ng-model="firebaseData.did_references" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="yes"></td>
+  <td><input ng-model="firebaseData.did_references" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="no"></td>
+  <td><textarea ng-readonly="!editing()" ng-change="firebaseData.$save()"
+      ng-model=firebaseData.did_references_explanation cols=30 rows=3></textarea></td>
+</tr>
+<tr>
+  <td>2</td>
+  <th scope=row>Did you submit an income statement (or statements of receipts and expenditures) for <b><u>every</u></b> fund you have?</th>
+  <td><input ng-model="firebaseData.income_statements" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="yes"></td>
+  <td><input ng-model="firebaseData.income_statements" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="no"></td>
+  <td><textarea ng-readonly="!editing()" ng-change="firebaseData.$save()"
+      ng-model=firebaseData.income_statements_explanation cols=30 rows=3></textarea></td>
+</tr>
+<tr>
+  <td>3</td>
+  <th scope=row>Did you submit a balance sheet for every fund that has a balance sheet? (Note that balance sheets are required).</th>
+  <td><input ng-model="firebaseData.balance_sheets" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="yes"></td>
+  <td><input ng-model="firebaseData.balance_sheets" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="no"></td>
+  <td><textarea ng-readonly="!editing()" ng-change="firebaseData.$save()"
+      ng-model=firebaseData.balance_sheets_explanation cols=30 rows=3></textarea></td>
+</tr>
+<tr>
+  <td>4</td>
+  <th scope=row>Was every deduction taken also included as an expense on line B? (If no, double check all amounts. Nothing can be deducted that is not first included on line B.)</th>
+  <td><input ng-model="firebaseData.deductions_in_b" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="yes"></td>
+  <td><input ng-model="firebaseData.deductions_in_b" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="no"></td>
+  <td><textarea ng-readonly="!editing()" ng-change="firebaseData.$save()"
+      ng-model=firebaseData.deductions_in_b_explanation cols=30 rows=3></textarea></td>
+</tr>
+<tr>
+  <td>5</td>
+  <th scope=row>Did you allocate any expenses?</th>
+  <td><input ng-model="firebaseData.did_allocate" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="yes"></td>
+  <td><input ng-model="firebaseData.did_allocate" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="no"></td>
+  <td><textarea ng-readonly="!editing()" ng-change="firebaseData.$save()"
+      ng-model=firebaseData.did_allocate_explanation cols=30 rows=3></textarea></td>
+</tr>
+<tr>
+  <td></td>
+  <th scope=row>If yes, 1. do those represent only ongoing, significant and incremental expenses that would not have been incurred except for the activity to which you are allocating?</th>
+  <td><input ng-model="firebaseData.allocation_criteria" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="yes"></td>
+  <td><input ng-model="firebaseData.allocation_criteria" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="no"></td>
+  <td><textarea ng-readonly="!editing()" ng-change="firebaseData.$save()"
+      ng-model=firebaseData.allocation_criteria_explanation cols=30 rows=3></textarea></td>
+</tr>
+<tr>
+  <td></td>
+  <th scope=row>And 2. Did you provide a rationale for the amount allocated?</th>
+  <td><input ng-model="firebaseData.allocation_rationale" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="yes"></td>
+  <td><input ng-model="firebaseData.allocation_rationale" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="no"></td>
+  <td><textarea ng-readonly="!editing()" ng-change="firebaseData.$save()"
+      ng-model=firebaseData.allocation_rationale_explanation cols=30 rows=3></textarea></td>
+</tr>
+<tr>
+  <td>6</td>
+  <th scope=row>Did you provide a detailed list of all amounts included as capital expenditures or repairs over $2500 and where the amounts are included in expenses so that the deduction can be verified?</th>
+  <td><input ng-model="firebaseData.capex_list" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="yes"></td>
+  <td><input ng-model="firebaseData.capex_list" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="no"></td>
+  <td><textarea ng-readonly="!editing()" ng-change="firebaseData.$save()"
+      ng-model=firebaseData.capex_list_explanation cols=30 rows=3></textarea></td>
+</tr>
+<tr>
+  <td>7</td>
+  <th scope=row>Did you provide a detailed list of payees and all amounts deducted as charitable contributions and where the amounts are included in expenses? (If you do not provide a detailed list, the amounts cannot be deducted.)</th>
+  <td><input ng-model="firebaseData.charitable_list" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="yes"></td>
+  <td><input ng-model="firebaseData.charitable_list" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="no"></td>
+  <td><textarea ng-readonly="!editing()" ng-change="firebaseData.$save()"
+      ng-model=firebaseData.charitable_list_explanation cols=30 rows=3></textarea></td>
+</tr>
+<tr>
+  <td>8</td>
+  <th scope=row>Is there any organization that is set up to provide your parish direct support? (These are often described as Type I, II or III Supporting Organizations.)</th>
+  <td><input ng-model="firebaseData.supporting_org" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="yes"></td>
+  <td><input ng-model="firebaseData.supporting_org" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="no"></td>
+  <td><textarea ng-readonly="!editing()" ng-change="firebaseData.$save()"
+      ng-model=firebaseData.supporting_org_explanation cols=30 rows=3></textarea></td>
+</tr>
+<tr>
+  <td></td>
+  <th scope=row>If yes, did you provide the organizations statements and describe the type of support it provides to you?</th>
+  <td><input ng-model="firebaseData.supporting_org_statements" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="yes"></td>
+  <td><input ng-model="firebaseData.supporting_org_statements" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="no"></td>
+  <td><textarea ng-readonly="!editing()" ng-change="firebaseData.$save()"
+      ng-model=firebaseData.supporting_org_statements_explanation cols=30 rows=3></textarea></td>
+</tr>
+<tr>
+  <td>9</td>
+  <th scope=row>Did any person or other type of organization pay any expenses for you directly? If yes, please describe and detail the amounts paid on your behalf. (This does not apply to any amounts paid directly as donations for a fundraiser, like a person buying the meat for Gyros.  It applies to such items as utilities or other operating costs paid directly by a 3rd party).</th>
+  <td><input ng-model="firebaseData.expenses_covered" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="yes"></td>
+  <td><input ng-model="firebaseData.expenses_covered" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="no"></td>
+  <td><textarea ng-readonly="!editing()" ng-change="firebaseData.$save()"
+      ng-model=firebaseData.expenses_covered_explanation cols=30 rows=3></textarea></td>
+</tr>
+<tr>
+  <td>10</td>
+  <th scope=row>Have you returned the Certificate of Insurance (COI) naming the Archdiocese and its Metropolises as additional insureds on your parish insurance policy?</th>
+  <td><input ng-model="firebaseData.returned_coi" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="yes"></td>
+  <td><input ng-model="firebaseData.returned_coi" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="no"></td>
+  <td><textarea ng-readonly="!editing()" ng-change="firebaseData.$save()"
+      ng-model=firebaseData.returned_coi_explanation cols=30 rows=3></textarea></td>
+</tr>
+<tr>
+  <td>11</td>
+  <th scope=row>Has your parish elected a Board of Auditors? Last fiscal year parish financial records were audited.</th>
+  <td><input ng-model="firebaseData.auditors" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="yes"></td>
+  <td><input ng-model="firebaseData.auditors" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="no"></td>
+  <td><textarea ng-readonly="!editing()" ng-change="firebaseData.$save()"
+      ng-model=firebaseData.auditors_explanation cols=30 rows=3></textarea></td>
+</tr>
+<tr>
+  <td>12</td>
+  <th scope=row>Does your parish have a discretionary fund where your priest is an authorized signor?</th>
+  <td><input ng-model="firebaseData.discretionary_fund" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="yes"></td>
+  <td><input ng-model="firebaseData.discretionary_fund" ng-disabled="!editing()" ng-change="firebaseData.$save()"
+      type="radio" value="no"></td>
+  <td><textarea ng-readonly="!editing()" ng-change="firebaseData.$save()"
+      ng-model=firebaseData.discretionary_fund_explanation cols=30 rows=3></textarea></td>
+</tr>
+</tbody>
+</table>
+  
 </section>
 <section>
 
@@ -480,10 +640,10 @@ expenses are posted in the parish’s income statement.
 <p>Before the Allocation Form is signed and submitted, take one last look for the following common errors:
 <ul>
   <li>Not including all expenses in Line B: Total Parish Expenditures. Some income statements have a supplemental P&L section for “Other Expenses” which needs to be added to the Total Expense Line B. Expenses that are reported as negative income should be converted to expenses added to Line B. All accounts and funds should be included in Line B, for example a building fund or a festival fund should be included in Line B. If you have a question about a particular situation, reach out to your Metropolis Finance Committee.
-  <li>Deducting expenses that are not included in Line B. It’s very important to verify that every deduction corresponds to an expense that was included in Line B. For example, if mortgage principal payments were not included in Line B, then they cannot be deducted. Another common example would be deducting capital improvement expenses when those expenses were capitalized – in the Balance Sheet - and not included in Line B.
-  <li>Deducting expenses that do not qualify for any deductible category according to the Archdiocese’s guidelines. A common case is trying to deduct a portion of undifferentiated parish operational expenses as fundraising expenses.
   <li>Misreporting transfers as expenses. A transfer of money into a savings account or between accounts is not an expense. This is an accounting error. As long as the money is still held/owned by the parish, the transfer is not an expense.
   <li>Reporting depreciation, lost income, or other kinds of write-offs as an expense in Line B. For the purpose of our allocation formula, depreciation, lost income, and other kinds of write-offs should not be included in Line B. Unfulfilled pledges are not expenses. Parishes should not be booking pledges as income and should not be reporting unfulfilled pledges as an expense.
+  <li>Deducting expenses that are not included in Line B. It’s very important to verify that every deduction corresponds to an expense that was included in Line B. For example, if mortgage principal payments were not included in Line B, then they cannot be deducted. Another common example would be deducting capital improvement expenses when those expenses were capitalized – in the Balance Sheet - and not included in Line B.
+  <li>Deducting expenses that do not qualify for any deductible category according to the Archdiocese’s guidelines. A common case is trying to deduct a portion of undifferentiated parish operational expenses as fundraising expenses.
 </ul>
 <p><b>Calculation errors and typos.</b> Please double check the values entered on the allocation forms to make sure there is no typo or transposition. Also, please check the sums and the additions for accuracy. 
 <p><b>Looking for Consistency or Does This Make Sense?</b> Look for the following signs that something may be amiss:
@@ -494,7 +654,7 @@ expenses are posted in the parish’s income statement.
 <p>If you as the preparer of the Allocation Form are just not comfortable with the instructions or are concerned that the compilation is incorrect, you should call your member of the Metropolis Allocation Committee to assist with preparation of the Allocation Form. The Metropolis Allocation Committee members are there to assist the parishes.
 
 <h3>Signatures</h3>
-<p>We certify that the information on this data submission form is, to the best of our knowledge, complete and accurate: And further certify: All expenses incurred and paid by a supporting foundation, private foundation, public charity, an individual, or any other entity; (i) on behalf of the parish, (ii) as required to operate the parish, or (iii) to maintain parish related assests are included on Line B above, as required.  The Archdiocese Finance Committee shall have the discretion to work with the parissh to impute expenses to the parish and such discretion shall be binding.
+<p>We certify that the information on this data submission form is, to the best of our knowledge, complete and accurate: And further certify: All expenses incurred and paid by a supporting foundation, private foundation, public charity, an individual, or any other entity; (i) on behalf of the parish, (ii) as required to operate the parish, or (iii) to maintain parish related assests are included on Line B above, as required.  The Archdiocese Finance Committee shall have the discretion to work with the parish to impute expenses to the parish and such discretion shall be binding.
 <p><strong>Parish Priest:</strong> <input style="width: 18em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.priest_approval_name placeholder="Name">
 <p><strong>Parish Council President:</strong> <input style="width: 18em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.pres_approval_name placeholder="Name">
 <p><strong>Parish Council Treasurer:</strong> <input style="width: 18em" ng-readonly="!editing()" ng-change="firebaseData.$save()" ng-model=firebaseData.treas_approval_name placeholder="Name">
@@ -504,11 +664,11 @@ expenses are posted in the parish’s income statement.
   <li>Submit profit &amp; loss statements and balance sheets for {{ year - 2 }} 
     <span ng-if="upload_link"><a target="upload-site" ng-href="{{upload_link}}">at this link</a>.</span>
     <span ng-if="!upload_link">by emailing them to your metropolis.</span>
-    You usually do not need to submit reports for {{ year - 3 }} since they should already have been submitted
-    last year.
+    Most parishes do not need to submit reports for {{ year - 3 }} since they would already have done so last year, but if your
+    parish didn't then please include them this year as well.
   <li>Print a copy of this form for your records.
 </ol>
-<p>Your form data is automatically saved to an online database. Once all approvals have been entered, your form is complete.
+<p>Your form data is automatically saved to an online database. Once all questions have been answered and all approvals have been entered, your form is complete.
 </section>
 
 </form>
