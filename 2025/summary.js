@@ -253,16 +253,22 @@ function contactSheet($scope, $filter, reviewData) {
   for (i = 0; i < parishesInOrder.length; i++) {
     var parishId = parishesInOrder[i].id;
     var parishData = $scope.parishIds[parishId];
-    var parishFormData = $scope.formData.parish ? $scope.formData.parish[parishId] : {};
-    if (!parishFormData) parishFormData = {};
-    var parishReviewStatus = $scope.reviewStatus.parish ? $scope.reviewStatus.parish[parishId] : {};
-    if (!parishReviewStatus) parishReviewStatus = {};
+    var parishFormData = $scope.formData.parish ? $scope.formData.parish[parishId] : null;
+    if (!parishFormData) {
+      rows.push(row(i+1, parishData.name, parishData.city, parishData.parish_code));
+      continue;
+    }
+    var reviewerName = "";
+    var parishReviewStatus = $scope.reviewStatus.parish ? $scope.reviewStatus.parish[parishId] : null;
+    if (parishReviewStatus) {
+      reviewerName = parishReviewStatus.reviewer_name;
+    }
     var r = row(i+1, parishData.name, parishData.city, parishData.parish_code, 
       parishFormData.priest_name, parishFormData.priest_email, parishFormData.priest_phone, 
       parishFormData.pres_name, parishFormData.pres_email, parishFormData.pres_phone,
       parishFormData.treas_name, parishFormData.treas_email, parishFormData.treas_phone,
       parishFormData.preparer_name, parishFormData.preparer_email, parishFormData.preparer_phone,
-      parishReviewStatus.reviewer_name, parishData.access_key, 
+      reviewerName, parishData.access_key, 
       'https://easy-nmc.appspot.com/metropolis/SF/parish/' + parishId + '/data-form/' + shared.FOR_YEAR + '?key=' + parishData.access_key,
       parishData.upload_link);
     rows.push(r);
