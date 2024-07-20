@@ -1,0 +1,95 @@
+{
+  "rules": {
+    "easy-nmc": {
+      "public": {
+        ".read": true,
+        ".write": "root.hasChild('easy-nmc/super-user/' + auth.uid)",
+        "metropolis": {
+          "$metropolis_id": {
+	          ".write": "root.hasChild('easy-nmc/metropolis/' + $metropolis_id + '/committee/' + auth.uid)",
+          },
+        },
+      },
+      "user": {
+        "$user_id": {
+          ".read": "$user_id === auth.uid",
+          ".write": "$user_id === auth.uid",
+          "access-key": {
+            "$key": {
+              ".validate": "newData.isBoolean() && newData.val() === true && $key.length <= 50"
+            }
+          },
+          "email": {
+            ".validate": "newData.val() === auth.google.email"
+          }
+        }
+      },
+      "metropolis": {
+        ".read": "root.hasChild('easy-nmc/super-user/' + auth.uid)",
+        ".write": "root.hasChild('easy-nmc/super-user/' + auth.uid)",
+        "$metropolis_id": {
+          ".read": "root.hasChild('easy-nmc/metropolis/' + $metropolis_id + '/committee/' + ('google:' + auth.token.firebase.identities['google.com'][0]))",
+          ".write": "root.hasChild('easy-nmc/metropolis/' + $metropolis_id + '/committee/' + ('google:' + auth.token.firebase.identities['google.com'][0]))",
+          "committee": {
+            "$user_id": {
+              ".write": "$user_id === ('google:' + auth.token.firebase.identities['google.com'][0]) && root.hasChild('easy-nmc/metropolis/' + $metropolis_id + '/committee-invite/' + newData.val())"
+            }
+          },
+          "data-form": {
+            "$year": {
+              "parish": {
+                "$parish_id": {
+                  ".read": "root.child('easy-nmc/user/' + auth.uid + '/access-key').hasChild(root.child('easy-nmc/metropolis/' + $metropolis_id + '/parish-id/' + $parish_id + '/access_key').val())",
+                  ".write": "$year == '2025' && root.child('easy-nmc/user/' + auth.uid + '/access-key').hasChild(root.child('easy-nmc/metropolis/' + $metropolis_id + '/parish-id/' + $parish_id + '/access_key').val()) &&
+                             root.child('easy-nmc/metropolis/' + $metropolis_id + '/review-status/' + $year + '/parish/' + $parish_id + '/form_edit_mode').val() !== 'locked'",
+                  "editing_user": {
+                    ".write": "$year == '2025' && root.child('easy-nmc/user/' + auth.uid + '/access-key').hasChild(root.child('easy-nmc/metropolis/' + $metropolis_id + '/parish-id/' + $parish_id + '/access_key').val())"
+                  },
+                  "priest_approval_name": {
+                    ".write": "$year == '2025' && root.child('easy-nmc/user/' + auth.uid + '/access-key').hasChild(root.child('easy-nmc/metropolis/' + $metropolis_id + '/parish-id/' + $parish_id + '/access_key').val())"
+                  },
+                  "pres_approval_name": {
+                    ".write": "$year == '2025' && root.child('easy-nmc/user/' + auth.uid + '/access-key').hasChild(root.child('easy-nmc/metropolis/' + $metropolis_id + '/parish-id/' + $parish_id + '/access_key').val())"
+                  },
+                  "treas_approval_name": {
+                    ".write": "$year == '2025' && root.child('easy-nmc/user/' + auth.uid + '/access-key').hasChild(root.child('easy-nmc/metropolis/' + $metropolis_id + '/parish-id/' + $parish_id + '/access_key').val())"
+                  },
+                  "audit_approval_name": {
+                    ".write": "$year == '2025' && root.child('easy-nmc/user/' + auth.uid + '/access-key').hasChild(root.child('easy-nmc/metropolis/' + $metropolis_id + '/parish-id/' + $parish_id + '/access_key').val())"
+                  },
+                }
+              }
+            }
+          },
+          "parish-id": {
+            "$parish_id": {
+              ".read": "root.child('easy-nmc/user/' + auth.uid + '/access-key').hasChild(root.child('easy-nmc/metropolis/' + $metropolis_id + '/parish-id/' + $parish_id + '/access_key').val())"
+            }
+          },
+          "review-data": {
+            "2016": {
+              "parish": {
+                "$parish_id": {
+                  "form_edit_mode": {
+                    ".read": "root.child('easy-nmc/user/' + auth.uid + '/access-key').hasChild(root.child('easy-nmc/metropolis/' + $metropolis_id + '/parish-id/' + $parish_id + '/access_key').val())"
+                  }
+                }
+              }
+            }
+          },
+          "review-status": {
+            "$year": {
+              "parish": {
+                "$parish_id": {
+                  "form_edit_mode": {
+                    ".read": "root.child('easy-nmc/user/' + auth.uid + '/access-key').hasChild(root.child('easy-nmc/metropolis/' + $metropolis_id + '/parish-id/' + $parish_id + '/access_key').val())"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -9,7 +9,8 @@ base.firebaseConfig = {
   databaseURL: "https://easy-nmc-dev.firebaseio.com",
   projectId: "easy-nmc-dev",
   storageBucket: "easy-nmc-dev.appspot.com",
-  messagingSenderId: "27452413795"
+  messagingSenderId: "27452413795",
+  appId: "1:27452413795:web:7f82455a1552e5d1d6e556"
 };
 base.firebaseBackend = base.firebaseConfig.databaseURL;
 
