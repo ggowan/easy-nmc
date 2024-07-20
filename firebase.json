@@ -8,7 +8,11 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ]
+    ],
+    "rewrites": [ {
+      "regex": "/metropolis/[A-Z]+/admin",
+      "destination": "/2025/admin.html"
+    } ]
   },
   "emulators": {
     "auth": {
