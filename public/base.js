@@ -5,7 +5,7 @@ var base = {};
 // deployment branch.
 base.firebaseConfig = {
   apiKey: "AIzaSyDneNgUkYqKBo0zuzqqket6tx705_O08Ug",
-  authDomain: "easy-nmc-dev.web.app",
+  authDomain: "easy-nmc-dev.firebaseapp.com",
   databaseURL: "https://easy-nmc-dev.firebaseio.com",
   projectId: "easy-nmc-dev",
   storageBucket: "easy-nmc-dev.appspot.com",
