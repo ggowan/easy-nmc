@@ -1,5 +1,16 @@
 {
   "projects": {
-    "default": "easy-nmc-dev"
-  }
+    "default": "intense-heat-7228"
+  },
+  "targets": {
+    "intense-heat-7228": {
+      "hosting": {
+        "easy-nmc": [
+          "easy-nmc"
+        ]
+      }
+    }
+  },
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
 }
