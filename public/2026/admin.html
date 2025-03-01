@@ -57,7 +57,7 @@
 <p><label>New Parish ID: <input type="text" ng-model=new_parish_id size=20></label><button ng-click="addParish(new_parish_id)">Add Parish</button>
 <p>
 <div>Committee Invitations:</div>
-<div ng-repeat="(token, name) in committeeInvites" class="small">{{ name }}: https://easy-nmc.appspot.com/metropolis/SF/summary?invite={{token}}</div>
+<div ng-repeat="(token, name) in committeeInvites" class="small">{{ name }}: https://easy-nmc.web.app/metropolis/SF/summary?invite={{token}}</div>
 <p><input type="text" ng-model="recipientName" size=20 placeholder="Name of Recipient">
 <button ng-click="createInvitation(recipientName)">Create Invitation</button>
 <h2>Export</h2>
@@ -93,7 +93,7 @@
 <td>{{ parish_data.short_rector }}</td>
 <td>{{ parish_data.long_rector }}</td>
 <td>{{ parish_data.access_key }}</td>
-<td>{{ 'https://easy-nmc.appspot.com/metropolis/SF/parish/' + parish_id + '/data-form/2026?key=' + parish_data.access_key }}</td>
+<td>{{ 'https://easy-nmc.web.app/metropolis/SF/parish/' + parish_id + '/data-form/2026?key=' + parish_data.access_key }}</td>
 <td>{{ parish_data.upload_link }}</td>
 </tr>
 </tbody>
