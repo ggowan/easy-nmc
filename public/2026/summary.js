@@ -269,7 +269,7 @@ function contactSheet($scope, $filter, reviewData) {
       parishFormData.treas_name, parishFormData.treas_email, parishFormData.treas_phone,
       parishFormData.preparer_name, parishFormData.preparer_email, parishFormData.preparer_phone,
       reviewerName, parishData.access_key, 
-      'https://easy-nmc.appspot.com/metropolis/SF/parish/' + parishId + '/data-form/' + shared.FOR_YEAR + '?key=' + parishData.access_key,
+      'https://easy-nmc.web.app/metropolis/SF/parish/' + parishId + '/data-form/' + shared.FOR_YEAR + '?key=' + parishData.access_key,
       parishData.upload_link);
     rows.push(r);
   }
