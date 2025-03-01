@@ -231,7 +231,7 @@
         "destination": "/2016/stewardship.html"
       },
       {
-        "regex": "/.*",
+        "regex": "/",
         "destination": "/2026/index.html"
       }
     ]
