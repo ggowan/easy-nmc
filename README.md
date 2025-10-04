@@ -41,13 +41,14 @@ Do this for both dev and prod at the same time so you don't forget to do product
 
     c. Submit your changes and wait for them to be pushed to the dev site.
 
-    d. Open a web browser pointed at https://easy-nmc.web.app/metropolis/SF/admin.
+    d. Open a web browser pointed at https://easy-nmc-dev.web.app/metropolis/SF/admin.
        Refresh your browser to make sure you got the latest changes.
 
     e. Click "Copy Last Year's Data" on the admin screen.  
 
     f. Once you are happy with how things copied on the dev instance, you can merge your changes into the prod
-       branch, push them, open the prod admin page and click the same button there.
+       branch, push them, open the prod admin page at https://easy-nmc.web.app/metropolis/SF/admin and click 
+       the same button there.
 
    Copying data from last year is supposed to provide the following:
 
