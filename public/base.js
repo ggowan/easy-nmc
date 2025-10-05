@@ -54,7 +54,7 @@ base.initGoogleApi = function (scopes, discoveryUrl, callback) {
 // Authorizes and loads the Google Drive API, and then executes the specified function.
 base.initDriveApi = function (callback) {
   var CLIENT_ID = '540806466980-i5mifkaf6utq2g8k3p3opbj6gd4jv9oj.apps.googleusercontent.com';
-  var SCOPES = 'https://www.googleapis.com/auth/drive';
+  var SCOPES = 'https://www.googleapis.com/auth/drive.file';
   gapi.auth.authorize(
       {'client_id': CLIENT_ID, 'scope': SCOPES, 'immediate': true},
       function handleAuthResult(authResult) {
