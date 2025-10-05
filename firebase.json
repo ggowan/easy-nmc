@@ -11,6 +11,10 @@
     ],
     "rewrites": [
       {
+        "source": "/privacy",
+        "destination": "/privacy_policy.html"
+      },
+      {
         "regex": "/metropolis/[A-Z]+/admin",
         "destination": "/2026/admin.html"
       },
