@@ -4,13 +4,13 @@ var base = {};
 // Left unspecified in master branch so that it must be specified in the
 // deployment branch.
 base.firebaseConfig = {
-  apiKey: "AIzaSyDneNgUkYqKBo0zuzqqket6tx705_O08Ug",
-  authDomain: "easy-nmc-dev.web.app",
-  databaseURL: "https://easy-nmc-dev.firebaseio.com",
-  projectId: "easy-nmc-dev",
-  storageBucket: "easy-nmc-dev.appspot.com",
-  messagingSenderId: "27452413795",
-  appId: "1:27452413795:web:7f82455a1552e5d1d6e556"
+  apiKey: "AIzaSyCnUOMJEjzdYiHsY4KIC47EPgSPIRDZjLY",
+  authDomain: "easy-nmc.web.app",
+  databaseURL: "https://intense-heat-7228.firebaseio.com",
+  projectId: "intense-heat-7228",
+  storageBucket: "intense-heat-7228.appspot.com",
+  messagingSenderId: "850593089657",
+  appId: "1:850593089657:web:2b2a3e83ced4276238aca8"
 };
 base.firebaseBackend = base.firebaseConfig.databaseURL;
 
