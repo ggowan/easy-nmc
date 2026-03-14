@@ -40,22 +40,22 @@
               "parish": {
                 "$parish_id": {
                   ".read": "root.child('easy-nmc/user/' + auth.uid + '/access-key').hasChild(root.child('easy-nmc/metropolis/' + $metropolis_id + '/parish-id/' + $parish_id + '/access_key').val())",
-                  ".write": "$year == '2025' && root.child('easy-nmc/user/' + auth.uid + '/access-key').hasChild(root.child('easy-nmc/metropolis/' + $metropolis_id + '/parish-id/' + $parish_id + '/access_key').val()) &&
+                  ".write": "$year == '2027' && root.child('easy-nmc/user/' + auth.uid + '/access-key').hasChild(root.child('easy-nmc/metropolis/' + $metropolis_id + '/parish-id/' + $parish_id + '/access_key').val()) &&
                              root.child('easy-nmc/metropolis/' + $metropolis_id + '/review-status/' + $year + '/parish/' + $parish_id + '/form_edit_mode').val() !== 'locked'",
                   "editing_user": {
-                    ".write": "$year == '2025' && root.child('easy-nmc/user/' + auth.uid + '/access-key').hasChild(root.child('easy-nmc/metropolis/' + $metropolis_id + '/parish-id/' + $parish_id + '/access_key').val())"
+                    ".write": "$year == '2027' && root.child('easy-nmc/user/' + auth.uid + '/access-key').hasChild(root.child('easy-nmc/metropolis/' + $metropolis_id + '/parish-id/' + $parish_id + '/access_key').val())"
                   },
                   "priest_approval_name": {
-                    ".write": "$year == '2025' && root.child('easy-nmc/user/' + auth.uid + '/access-key').hasChild(root.child('easy-nmc/metropolis/' + $metropolis_id + '/parish-id/' + $parish_id + '/access_key').val())"
+                    ".write": "$year == '2027' && root.child('easy-nmc/user/' + auth.uid + '/access-key').hasChild(root.child('easy-nmc/metropolis/' + $metropolis_id + '/parish-id/' + $parish_id + '/access_key').val())"
                   },
                   "pres_approval_name": {
-                    ".write": "$year == '2025' && root.child('easy-nmc/user/' + auth.uid + '/access-key').hasChild(root.child('easy-nmc/metropolis/' + $metropolis_id + '/parish-id/' + $parish_id + '/access_key').val())"
+                    ".write": "$year == '2027' && root.child('easy-nmc/user/' + auth.uid + '/access-key').hasChild(root.child('easy-nmc/metropolis/' + $metropolis_id + '/parish-id/' + $parish_id + '/access_key').val())"
                   },
                   "treas_approval_name": {
-                    ".write": "$year == '2025' && root.child('easy-nmc/user/' + auth.uid + '/access-key').hasChild(root.child('easy-nmc/metropolis/' + $metropolis_id + '/parish-id/' + $parish_id + '/access_key').val())"
+                    ".write": "$year == '2027' && root.child('easy-nmc/user/' + auth.uid + '/access-key').hasChild(root.child('easy-nmc/metropolis/' + $metropolis_id + '/parish-id/' + $parish_id + '/access_key').val())"
                   },
                   "audit_approval_name": {
-                    ".write": "$year == '2025' && root.child('easy-nmc/user/' + auth.uid + '/access-key').hasChild(root.child('easy-nmc/metropolis/' + $metropolis_id + '/parish-id/' + $parish_id + '/access_key').val())"
+                    ".write": "$year == '2027' && root.child('easy-nmc/user/' + auth.uid + '/access-key').hasChild(root.child('easy-nmc/metropolis/' + $metropolis_id + '/parish-id/' + $parish_id + '/access_key').val())"
                   },
                 }
               }

@@ -16,7 +16,11 @@
       },
       {
         "regex": "/metropolis/[A-Z]+/admin",
-        "destination": "/2026/admin.html"
+        "destination": "/2027/admin.html"
+      },
+      {
+        "regex": "/metropolis/[A-Z]+/summary/2027",
+        "destination": "/2027/summary.html"
       },
       {
         "regex": "/metropolis/[A-Z]+/summary/2026",
@@ -56,7 +60,23 @@
       },
       {
         "regex": "/metropolis/[A-Z]+/summary",
-        "destination": "/2026/summary.html"
+        "destination": "/2027/summary.html"
+      },
+      {
+        "regex": "/metropolis/[A-Z]+/parish/[-a-z0-9]*/data-form/2027",
+        "destination": "/2027/data-form.html"
+      },
+      {
+        "regex": "/metropolis/[A-Z]+/parish/[-a-z0-9]*/review/2027",
+        "destination": "/2027/review.html"
+      },
+      {
+        "regex": "/metropolis/[A-Z]+/parish/[-a-z0-9]*/report/2027",
+        "destination": "/2027/report.html"
+      },
+      {
+        "regex": "/metropolis/[A-Z]+/stewardship/2027",
+        "destination": "/2027/stewardship.html"
       },
       {
         "regex": "/metropolis/[A-Z]+/parish/[-a-z0-9]*/data-form/2026",
@@ -236,7 +256,7 @@
       },
       {
         "regex": "/",
-        "destination": "/2026/index.html"
+        "destination": "/2027/index.html"
       }
     ]
   },

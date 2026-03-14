@@ -26,11 +26,10 @@ This is a summary of the steps needed to update the form for a new year.
 
     b. Update the "Changes Since Last Year" section in data-form.html with whatever changes have occurred.
 
-5. There are security rules that needs to be updated each year in the Firebase realtime database.
-To do that, go to the Firebase admin console located at console.firebase.google.com, change to the Rules tab,
-click inside the rules to get your cursor there, press CTRL+H to find and replace the current year with next year.
-This will allow the data for next year to be written to and prevent writes to older data.
-Do this for both dev and prod at the same time so you don't forget to do production on rollout!
+5. Update the security rules in the database.rules.json file by finding and replacing the current year with the next year.
+Then you can manually deploy them by going to the Firebase admin console located at console.firebase.google.com, clicking into the realtime database component, changing to the Rules tab,
+then copy-pasting the entire file to replace all of the rules. Then click the Publish button. This will allow the data for next year to be written to and prevent writes to older data.
+Do this for both "Easy NMC Dev" and "Easy NMC Prod" projects at the same time so you don't forget to do production on rollout!
 
 6. We can automatically copy a lot of data from the prior year. The way to do this is to follow this sequence:
 
