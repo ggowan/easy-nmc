@@ -41,7 +41,8 @@ Do this for both "Easy NMC Dev" and "Easy NMC Prod" projects at the same time so
     c. Submit your changes and wait for them to be pushed to the dev site.
 
     d. Open a web browser pointed at https://easy-nmc-dev.web.app/metropolis/SF/admin.
-       Refresh your browser to make sure you got the latest changes.
+       Refresh your browser to make sure you got the latest changes. 
+       You can confirm it's updated if you see the next year in the form links on that page.
 
     e. Click "Copy Last Year's Data" on the admin screen.  
 
