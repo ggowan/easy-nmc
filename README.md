@@ -7,7 +7,7 @@ Easy NMC is an application for collecting financial reports from parishes that w
 Easy NMC is written entirely in HTML & JavaScript. It uses [Firebase Realtime Database](https://firebase.google.com/products/database/) as its database & backend. It is deployed using Firebase Hosting.
 
 ## Basic Development Guide
-I used [Project IDX](https://idx.dev/) as my IDE for working on this project, though Visual Studio Code or pretty much any other IDE that integrates with Github would work fine. All development should be done in the `firebase-dev` branch. When changes are pushed to this branch, the changes will automatically be pushed by Github to the dev site a minute or two later. All testing is done manually on the dev site. It's recommended to test in a Guest profile in Chrome to make sure unauthenticated users can access the data form using the access key.
+I used [Firebase Studio](https://firebase.studio/) as my IDE for working on this project, though Visual Studio Code or pretty much any other IDE that integrates with Github would work fine. All development should be done in the `firebase-dev` branch. When changes are pushed to this branch, the changes will automatically be pushed by Github to the dev site a minute or two later. All testing is done manually on the dev site. It's recommended to test in a Guest profile in Chrome to make sure unauthenticated users can access the data form using the access key.
 
 ## Release Process
 Once you have tested your changes on the dev site and you want to release them to prod, merge your changes into the `firebase-prod` branch and push them. They will be pushed automatically to the production site a minute or two later. Make sure to refresh your browser and verify your changes are working in production as expected.
